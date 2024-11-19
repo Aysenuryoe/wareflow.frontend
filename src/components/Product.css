@@ -1,0 +1,221 @@
+.products-page {
+    padding: 20px;
+    background-color: #f5f7fa;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    min-height: 80vh;
+    position: relative;
+}
+
+.products-page h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+.products-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.products-header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.delete-selected-button {
+    background-color: #a0a0a0;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    visibility: visible; /* Sichtbar, wenn mindestens ein Produkt ausgewählt ist */
+}
+
+.delete-selected-button.hidden {
+    visibility: hidden; /* Unsichtbar, wenn kein Produkt ausgewählt ist */
+}
+
+.delete-selected-button:hover {
+    background-color: #5e5e5e;
+}
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Verhindert Anpassung der Spaltenbreiten an den Inhalt */
+    margin-top: 40px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+.product-table th,
+.product-table td {
+    padding: 8px 10px; /* Kompaktes Padding für schmalere Zellen */
+    text-align: left; /* Standardausrichtung für die meisten Zellen */
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.product-table th {
+    background-color: #f0f0f0;
+    color: #4a4a4a;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* Zentrierte Ausrichtung für Size, Price, Stock und Actions */
+.product-table th:nth-child(3), .product-table td:nth-child(3),
+.product-table th:nth-child(4), .product-table td:nth-child(4),
+.product-table th:nth-child(6), .product-table td:nth-child(6),
+.product-table th:nth-child(7), .product-table td:nth-child(7) {
+    text-align: center;
+}
+
+/* Erlaubt Umbruch für "Product Number" */
+.product-table th:nth-child(5) {
+    white-space: normal; /* Erlaubt Zeilenumbruch */
+    word-wrap: break-word;
+    font-size: 13px;
+}
+
+/* Festgelegte Breiten für spezifische Spalten */
+.product-table th:first-child, .product-table td:first-child {
+    width: 5%; /* Checkbox-Spalte */
+}
+
+.product-table th:nth-child(2), .product-table td:nth-child(2) {
+    width: 20%; /* Artikel-Spalte */
+}
+
+.product-table th:nth-child(3), .product-table td:nth-child(3) {
+    width: 12%; /* Größe-Spalte */
+}
+
+.product-table th:nth-child(4), .product-table td:nth-child(4) {
+    width: 12%; /* Preis-Spalte */
+}
+
+.product-table th:nth-child(5), .product-table td:nth-child(5) {
+    width: 15%; /* Produktnummer-Spalte */
+}
+
+.product-table th:nth-child(6), .product-table td:nth-child(6) {
+    width: 8%; /* Lagerbestand-Spalte */
+}
+
+.product-table th:nth-child(7), .product-table td:nth-child(7) {
+    width: 15%; /* Aktionen-Spalte */
+}
+
+/* Einheitliche Zeilenhöhe */
+.product-table tr {
+    height: 50px; /* Feste Zeilenhöhe */
+}
+
+/* Hover-Effekt für Zeilen */
+.product-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.update-icon,
+.delete-icon {
+    cursor: pointer;
+    font-size: 18px;
+    margin-right: 8px;
+    transition: color 0.2s ease;
+}
+
+.update-icon {
+    color: #007bff;
+}
+
+.update-icon:hover {
+    color: #0056b3;
+}
+
+.delete-icon {
+    color: #dc3545;
+}
+
+.delete-icon:hover {
+    color: #b32b39;
+}
+
+.add-product-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.close-button:hover {
+    color: #ff0000;
+}
+
+
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+.view-icon {
+    color: #007bff;
+}
+
+.view-icon:hover {
+    color: #0056b3;
+}
+
+.edit-icon {
+    color: #007bff;
+}
+
+.edit-icon:hover {
+    color: #0056b3;
+
+}
+
+.delete-icon {
+    color: #dc3545;
+}
+
+.delete-icon:hover {
+    color: #b32b39;
+}
