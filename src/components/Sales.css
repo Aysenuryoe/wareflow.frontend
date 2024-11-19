@@ -1,105 +1,57 @@
 .sales-page {
   padding: 20px;
-  background-color: #f5f7fa;
-  font-family: 'Roboto', sans-serif;
-  color: #333;
-  min-height: 80vh;
-  position: relative;
-}
-
-.sales-page h1 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  background-color: #f9f9f9;
 }
 
 .sales-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-.add-sale-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease;
-}
-
-.add-sale-button:hover {
-  background-color: #218838;
+.sales-header h1 {
+  font-size: 2rem;
+  color: #333;
 }
 
 .sales-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
-  margin-top: 40px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
-  background-color: #ffffff;
+  margin-bottom: 20px;
+  background-color: #fff;
   border-radius: 8px;
+  overflow: hidden;
 }
 
 .sales-table th,
 .sales-table td {
-  padding: 10px;
+  border: 1px solid #ddd;
   text-align: left;
-  border-bottom: 1px solid #ddd;
-  font-size: 14px;
+  padding: 12px;
+  font-size: 1rem;
+  color: #555;
 }
 
 .sales-table th {
-  background-color: #f0f0f0;
-  color: #4a4a4a;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-bottom: 2px solid #e0e0e0;
+  background-color: #007bff;
+  color: white;
 }
 
-.sales-table tr:hover {
-  background-color: #f9f9f9;
+.sales-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
-.icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  margin-right: 8px;
-  transition: color 0.3s ease;
+.sales-table tbody tr:hover {
+  background-color: #e0e0e0;
 }
 
-.edit-icon {
-  color: #007bff;
+.sales-table tbody tr {
+  transition: background-color 0.3s ease;
 }
 
-.edit-icon:hover {
-  color: #0056b3;
+.error-message {
+  color: red;
+  font-size: 1.2rem;
 }
 
-.delete-icon {
-  color: #dc3545;
-}
-
-.delete-icon:hover {
-  color: #b32b39;
-}
-
-.no-data {
-  text-align: center;
-  font-style: italic;
-  color: #999;
-}

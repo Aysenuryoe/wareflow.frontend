@@ -1,0 +1,135 @@
+/* Modal-Overlay */
+.sales-add-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  /* Modal-Inhalt */
+  .sales-add-modal {
+    background: white;
+    width: 400px; /* Feste Breite */
+    height: 500px; /* Feste Höhe */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Kreuz zum Schließen */
+  .sales-add-modal .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+  }
+  
+  .sales-add-modal .close:hover {
+    color: #000;
+  }
+  
+  .form-control {
+    flex: 1; /* Nimmt den verfügbaren Platz ein */
+    overflow-y: auto; /* Ermöglicht vertikales Scrollen */
+    padding-right: 10px; /* Scroll-Leiste etwas vom Inhalt entfernt */
+    margin-bottom: 60px; /* Platz für die fixierten Buttons */
+  }
+  
+  /* Formular-Gruppen */
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  /* Dynamische Produktauswahl */
+  .product-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .product-group select {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .remove-product {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .remove-product:hover {
+    background-color: #a71d2a;
+  }
+  
+  /* Add Product Button */
+  .add-product-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .add-product-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .modal-actions {
+    position: absolute; /* Fixiert die Buttons am unteren Rand */
+    bottom: 10px; /* Abstand vom unteren Rand */
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .cancel-btn,
+  .create-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancel-btn {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #5a6268;
+  }
+  
+  .create-btn {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .create-btn:hover {
+    background-color: #0056b3;
+  }
+  

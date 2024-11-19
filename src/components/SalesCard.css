@@ -1,86 +1,66 @@
-/* Gesamtes Card-Design */
 .sales-card {
-  position: relative; /* Für die Positionierung der Icons */
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
   width: 200px;
   height: 300px;
+  padding: 16px;
   margin: 16px;
+  background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Icons für Edit und Delete oben rechts */
+.sales-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
 .card-icons {
-  position: absolute;
-  top: 8px;
-  right: 8px;
   display: flex;
   gap: 8px;
 }
 
 .icon {
   cursor: pointer;
-  font-size: 16px;
-  transition: color 0.3s;
-}
-
-.icon:hover {
-  color: #333;
+  font-size: 1.2rem;
 }
 
 .edit-icon {
-  color: var(--primary-color); 
+  color: #007bff;
 }
 
 .delete-icon {
-  color: #f44336; /* Rot für Delete */
+  color: #dc3545;
 }
 
-/* Datum oben in der Karte */
-.sales-card h3 {
-  font-size: 1.1em;
-  margin-bottom: 16px;
-  color: #333;
-}
-
-/* Produkte Liste */
 .products-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-height: 150px; /* Maximalhöhe der Produktliste */
-  overflow-y: auto; /* Scrollen aktivieren */
-  padding-right: 4px; /* Platz für den Scrollbalken */
+  margin: 16px 0;
+  border-top: 1px solid #ddd;
+  padding-top: 16px;
+  overflow: scroll;
 }
 
-/* Stil für jedes einzelne Produkt */
 .product-item {
-  background-color: #fff;
-  padding: 12px;
+  margin-bottom: 12px;
+  padding: 8px;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 5px;
+  background-color: #ffffff;
 }
 
-/* Abstände für die Produktdetails */
 .product-item p {
   margin: 4px 0;
-  font-size: 0.9em;
 }
 
-/* Unterer Bereich für den Gesamtbetrag */
-.total-amount {
-  background-color: #a0bcd4;
-  color: #333;
+.sales-card-footer {
   text-align: center;
-  padding: 12px;
-  border-radius: 0 0 12px 12px;
+  background-color: #e0e7ff; 
+  padding: 8px;
+  border-radius: 5px;
   font-weight: bold;
-  margin-top: 16px;
-  font-size: 1em;
+ 
 }

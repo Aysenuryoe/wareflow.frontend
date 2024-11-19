@@ -1,7 +1,7 @@
 import React from "react";
 
 const SalesDeleteModal = ({ isOpen, onClose, onSubmit, sale, title = "Delete Sale" }) => {
-    if (!isOpen) return null;  // Modal wird nur angezeigt, wenn `isOpen` true ist
+    if (!isOpen) return null;  
 
     const handleDelete = async () => {
         await onSubmit();
