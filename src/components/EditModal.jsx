@@ -14,14 +14,13 @@ function EditModal({
 
   useEffect(() => {
     if (item) {
-      console.log("EditModal received item:", item); 
       const updatedItem = { ...item };
-      if (item.orderDate) {
-        updatedItem.orderDate = item.orderDate.split("T")[0];
+      if (item.orderDate || item.saleDate) {
+        const dateField = item.orderDate ? "orderDate" : "saleDate";
+        updatedItem[dateField] = item[dateField].split("T")[0];
       }
       setFormData(updatedItem);
 
-      
       if (!fields || fields.length === 0) {
         const generatedFields = Object.keys(updatedItem)
           .filter((key) => key !== "id" && key !== "products")
@@ -37,7 +36,6 @@ function EditModal({
     }
   }, [item, fields]);
 
-  // Handle changes in input fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -46,13 +44,12 @@ function EditModal({
     }));
   };
 
-  // Handle changes in product quantities
-  const handleProductQuantityChange = (index, value) => {
+  const handleProductQuantityChange = (index, field, value) => {
     setFormData((prevData) => {
       const updatedProducts = prevData.products ? [...prevData.products] : [];
       updatedProducts[index] = {
         ...updatedProducts[index],
-        quantity: parseInt(value, 10),
+        [field]: field === "quantity" || field === "price" ? parseFloat(value) : value,
       };
       return {
         ...prevData,
@@ -61,28 +58,25 @@ function EditModal({
     });
   };
 
-  // Convert form data back to API-friendly format before submitting
   const prepareFormDataForSubmit = (data) => {
     const preparedData = { ...data };
-    if (preparedData.orderDate) {
-      preparedData.orderDate = `${preparedData.orderDate}T00:00:00.000Z`; // Append time part to make it ISO-compliant
+    if (preparedData.orderDate || preparedData.saleDate) {
+      const dateField = preparedData.orderDate ? "orderDate" : "saleDate";
+      preparedData[dateField] = `${preparedData[dateField]}T00:00:00.000Z`;
     }
     return preparedData;
   };
 
-  // Submit the form data
   const handleSubmit = async () => {
     const preparedData = prepareFormDataForSubmit(formData);
     await onSubmit(preparedData);
     onClose();
   };
 
-  // Close the modal
   const handleClose = () => {
     onClose();
   };
 
-  // Render nothing if modal is not open
   if (!isOpen) return null;
 
   const fieldsToRender = fields && fields.length > 0 ? fields : dynamicFields;
@@ -95,14 +89,12 @@ function EditModal({
         </span>
         <h2>{title}</h2>
         <div className="form-group">
-          {/* Render each field dynamically based on the fields prop or dynamicFields */}
           {fieldsToRender &&
           Array.isArray(fieldsToRender) &&
           fieldsToRender.length > 0 ? (
             fieldsToRender.map((field) => (
               <div key={field.name} className="form-row">
                 <label htmlFor={field.name}>{field.label}</label>
-
                 {field.type === "select" ? (
                   <select
                     name={field.name}
@@ -131,11 +123,8 @@ function EditModal({
               </div>
             ))
           ) : (
-            <div>
-              No fields available for editing. Please provide valid fields.
-            </div>
+            <div>No fields available for editing. Please provide valid fields.</div>
           )}
-          {/* Render products with editable quantities */}
           {formData.products &&
             Array.isArray(formData.products) &&
             formData.products.length > 0 && (
@@ -143,22 +132,63 @@ function EditModal({
                 <h3>Products</h3>
                 {formData.products.map((product, index) => (
                   <div key={product.barcode} className="form-row">
-                    <label htmlFor={`product-${index}`}>
-                      {product.barcode}
-                    </label>
+                    <label htmlFor={`product-${index}`}>{product.barcode}</label>
                     <input
                       type="number"
                       name={`product-${index}-quantity`}
                       value={product.quantity}
                       onChange={(e) =>
-                        handleProductQuantityChange(index, e.target.value)
+                        handleProductQuantityChange(index, "quantity", e.target.value)
                       }
                       className="p-2.5 rounded-md"
                     />
+                    {product.price !== undefined && (
+                      <input
+                        type="number"
+                        name={`product-${index}-price`}
+                        value={product.price}
+                        onChange={(e) =>
+                          handleProductQuantityChange(index, "price", e.target.value)
+                        }
+                        placeholder="Price"
+                        className="p-2.5 rounded-md"
+                      />
+                    )}
                   </div>
                 ))}
               </div>
             )}
+          {formData.status && (
+            <div className="form-row">
+              <label htmlFor="status">Status</label>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                className="p-2.5 rounded-md"
+              >
+                <option value="">Select Status</option>
+                {["Ordered", "Pending", "Arrived", "Cancelled"].map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+          {formData.source && (
+            <div className="form-row">
+              <label htmlFor="source">Source</label>
+              <select
+                name="source"
+                value={formData.source}
+                onChange={handleInputChange}
+                className="p-2.5 rounded-md"
+              >
+                <option value="store">Store</option>
+              </select>
+            </div>
+          )}
           <div className="btn-control">
             <button className="cancel-btn" onClick={handleClose}>
               Cancel
@@ -173,11 +203,9 @@ function EditModal({
   );
 }
 
-
 EditModal.defaultProps = {
   fields: [],
 };
-
 
 EditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -197,7 +225,19 @@ EditModal.propTypes = {
     })
   ),
   title: PropTypes.string,
-  item: PropTypes.object,
+  item: PropTypes.shape({
+    products: PropTypes.arrayOf(
+      PropTypes.shape({
+        barcode: PropTypes.string.isRequired,
+        quantity: PropTypes.number.isRequired,
+        price: PropTypes.number, // Optional für SalesOrder
+      })
+    ),
+    orderDate: PropTypes.string, // Für PurchaseOrder
+    saleDate: PropTypes.string, // Für SalesOrder
+    status: PropTypes.oneOf(["Ordered", "Pending", "Arrived", "Cancelled"]), // Für PurchaseOrder
+    source: PropTypes.oneOf(["store"]), // Für SalesOrder
+  }),
 };
 
 export default EditModal;

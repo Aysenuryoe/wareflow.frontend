@@ -74,13 +74,16 @@ const handleCloseModal = () => {
 
   const handleEditSale = async (saleData) => {
     try {
-      const response = await fetch(`${BASE_URL}/sale/${saleData.id}`, {
+      const response = await fetch(`${BASE_URL}/sales/${saleData.id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(saleData),
     });
+
+    console.log(response);
+    console.log(saleData);
 
     if (!response.ok) {
         throw new Error("Error updating sale");
@@ -102,7 +105,7 @@ const handleCloseModal = () => {
     if (!selectedSale) return;
 
     try {
-        const response = await fetch(`${BASE_URL}/sale/${selectedSale.id}`, {
+        const response = await fetch(`${BASE_URL}/sales/${selectedSale.id}`, {
             method: "DELETE",
         });
 
