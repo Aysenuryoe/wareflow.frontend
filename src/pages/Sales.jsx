@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "./Sales.css";
-import SalesAddModal from "./SalesAddModal";
+import "../styles/Sales.css";
+import SalesAddModal from "../components/Modal/SalesAddModal";
+import SaleCard from "../components/SaleCard";
 
-import EditModal from "./EditModal";
-import SalesDeleteModal from "./SalesDeleteModal";
+import EditModal from "../components/Modal/EditModal";
+import DeleteModal from "../components/Modal/DeleteModal";
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
@@ -52,6 +53,7 @@ const handleCloseModal = () => {
 };
 
   const handleAddSale = async (saleData) => {
+   
     try {
       const response = await fetch(`${BASE_URL}/sales`,{
         method: "POST",
@@ -126,6 +128,22 @@ const saleFields = [
   { name: "products", label: "Products", type: "select"},
 ];
 
+const calculateTotalAmount = (products) => {
+  return products.reduce((total, product) => {
+    return total + product.price * product.quantity;
+  }, 0);
+};
+
+const handleEditClick = (sale) => {
+  setSelectedSale(sale);
+  setShowEditModal(true);
+};
+
+const handleDeleteClick = (sale) => {
+  setSelectedSale(sale);
+  setShowDeleteModal(true);
+};
+
 
   return(
 
@@ -138,48 +156,20 @@ const saleFields = [
         </button>
 
       </div>
-      <table className="sales-table">
-        <thead>
-          <tr>
-            <th>Sale Date</th>
-            <th>Products</th>
-            <th>Total Amount</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-       
+     
+      <div className="sales-content">
+        <div className="sales-cards">
           {sales.map((sale) => (
-            
-            <tr key= {sale.id}>
-               <td>{new Date(sale.saleDate).toLocaleDateString()}</td>
-              <td>
-              {sale.products.map((product, index) => (
-               
-                                    <div key={index}>
-                                        <span>{product.barcode} - {product.price} (x{product.quantity})</span>
-                                    </div>
-                                ))}
-              </td>
-              <td>30.99$</td>
-              <td>
-                                <button
-                                    onClick={() => handleOpenModal("edit", sale)}
-                                    className="icon-button edit-icon"
-                                >
-                                    <i className="fas fa-edit"></i>
-                                </button>
-                                <button
-                                    onClick={() => handleOpenModal("delete", sale)}
-                                    className="icon-button delete-icon"
-                                >
-                                    <i className="fas fa-trash"></i>
-                                </button>
-                            </td>
-            </tr>
+            <SaleCard
+              key={sale.id}
+              sale={sale}
+              onEdit={handleEditClick}
+              onDelete={handleDeleteClick}
+              calculateTotalAmount={calculateTotalAmount}
+            />
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
 
       {showAddModal && (
         <SalesAddModal
@@ -201,13 +191,12 @@ const saleFields = [
        fields={saleFields}
      />
       )}
-       {showAddModal && (
-        <SalesDeleteModal
+       {showDeleteModal && (
+        <DeleteModal
           isOpen={showDeleteModal}
           onClose={handleCloseModal}
-          onSubmit={handleAddSale}
-          fields={saleFields}
-          title="Create New Sale"
+          onSubmit={handleDeleteSale}
+          itemName="sale"
         />
       )}
 

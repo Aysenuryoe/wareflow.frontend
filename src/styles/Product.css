@@ -81,7 +81,6 @@
     text-align: center;
 }
 
-/* Erlaubt Umbruch für "Product Number" */
 .product-table th:nth-child(5) {
     white-space: normal; /* Erlaubt Zeilenumbruch */
     word-wrap: break-word;

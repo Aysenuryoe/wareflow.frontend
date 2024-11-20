@@ -1,33 +1,23 @@
 import React, { useState, useEffect } from "react";
-import "./SalesAddModal.css";
+import "../../styles/SalesEditModal.css";
 
-function SalesAddModal({
+function SalesEditModal({
   isOpen,
   onClose,
   onSubmit,
-  fetchProducts,
-  title = "Create a new Sale",
+  sale, 
+  title = "Edit Sale",
 }) {
-  const [products, setProducts] = useState([]); // Verfügbare Produkte
-  const [selectedProducts, setSelectedProducts] = useState([]); // Ausgewählte Produkte
-  const [saleDate, setSaleDate] = useState(""); // Verkaufsdatum
+  const [saleDate, setSaleDate] = useState(""); 
+  const [selectedProducts, setSelectedProducts] = useState([]);
 
-  // Lädt Produkte, wenn das Modal geöffnet wird
+  
   useEffect(() => {
-    const loadProducts = async () => {
-        try {
-            const response = await fetch(`https://localhost:3001/api/product/all`);
-            if (!response.ok) {
-                throw new Error("Error loading products");
-            }
-            const data = await response.json();
-            setProducts(data);
-        } catch (error) {
-            console.error("Error fetching products:", error);
-        }
-    };
-    loadProducts();
-  }, []);
+    if (isOpen && sale) {
+      setSaleDate(sale.saleDate); 
+      setSelectedProducts(sale.products.map(product => product.barcode));
+    }
+  }, [isOpen, sale]);
 
   // Produkt auswählen
   const handleProductSelect = (e, index) => {
@@ -42,7 +32,7 @@ function SalesAddModal({
     setSelectedProducts(updatedSelectedProducts);
   };
 
-  // Formular absenden (Verkauf anlegen)
+  // Formular absenden (Verkauf bearbeiten)
   const handleSubmit = async () => {
     if (!saleDate || selectedProducts.length === 0) {
       alert("Bitte alle Felder ausfüllen!");
@@ -51,7 +41,7 @@ function SalesAddModal({
 
     // Produktobjekte vorbereiten
     const selectedProductDetails = selectedProducts.map((barcode) => {
-      const product = products.find((prod) => prod.barcode === barcode);
+      const product = sale.products.find((prod) => prod.barcode === barcode);
       return product ? { ...product, quantity: 1 } : null; // Füge 'quantity' hinzu
     }).filter(Boolean); // Entfernt ungültige Produkte
 
@@ -60,7 +50,7 @@ function SalesAddModal({
       products: selectedProductDetails,  // Die detaillierte Liste der Produkte
     };
 
-    // Senden der Verkauf-Daten an die übergebene onSubmit-Funktion
+    // Senden der Bearbeitungsdaten an die übergebene onSubmit-Funktion
     await onSubmit(saleData);
     onClose();  // Schließt das Modal
   };
@@ -72,8 +62,8 @@ function SalesAddModal({
 
   return (
     isOpen && (
-      <div className="sales-add-modal-overlay">
-        <div className="sales-add-modal">
+      <div className="sales-edit-modal-overlay">
+        <div className="sales-edit-modal">
           <span className="close" onClick={onClose}>
             &times;
           </span>
@@ -92,13 +82,13 @@ function SalesAddModal({
             {/* Dynamisch hinzuzufügende Produkt-Auswahlfelder */}
             {selectedProducts.map((product, index) => (
               <div key={index} className="product-group">
-                <label>Select:</label>
+                <label>Select a product:</label>
                 <select
                   value={product}
                   onChange={(e) => handleProductSelect(e, index)}
                 >
                   <option value="">Select a product</option>
-                  {products.map((product) => (
+                  {sale.products.map((product) => (
                     <option key={product.barcode} value={product.barcode}>
                       {product.article} - {product.size} - (Price: {product.price})
                     </option>
@@ -124,15 +114,16 @@ function SalesAddModal({
                 Add Product
               </button>
             </div>
-          </div>
 
-          <div className="modal-actions">
-            <button className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button className="create-btn" onClick={handleSubmit}>
-              Create Sale
-            </button>
+            {/* Buttons für Cancel und Edit Sale */}
+            <div className="modal-actions">
+              <button className="cancel-btn" onClick={onClose}>
+                Cancel
+              </button>
+              <button className="create-btn" onClick={handleSubmit}>
+                Edit Sale
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -140,4 +131,4 @@ function SalesAddModal({
   );
 }
 
-export default SalesAddModal;
+export default SalesEditModal;

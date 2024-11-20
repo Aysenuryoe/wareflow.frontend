@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import AddModal from "./AddModal";
-import EditModal from "./EditModal";
-import DeleteModal from "./DeleteModal";
-import "./Modal.css";
-import Pagination from "./Pagination.jsx";
-import "./Product.css";
+import AddModal from "../components/Modal/AddModal.jsx";
+import EditModal from "../components/Modal/EditModal.jsx";
+import DeleteModal from "../components/Modal/DeleteModal.jsx";
+import "../styles/Modal.css";
+import Pagination from "../components/Pagination.jsx";
+import "../styles/Product.css";
 
 const Products = () => {
     const [products, setProducts] = useState([]);
@@ -51,7 +51,6 @@ const Products = () => {
         setShowDeleteModal(false);
         setSelectedProduct(null);
     };
-
     const handleAddProduct = async (productData) => {
         try {
             const response = await fetch(`${BASE_URL}/product`, {

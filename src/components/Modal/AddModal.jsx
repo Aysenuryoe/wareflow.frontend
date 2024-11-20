@@ -60,7 +60,7 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
                   <option value="NOSIZE">NOSIZE</option>
              
                 </select>
-              ) : (
+              ) :  (
                 <input
                   type={field.type}
                   name={field.name}

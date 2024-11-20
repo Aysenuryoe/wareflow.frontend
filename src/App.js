@@ -5,10 +5,10 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import './App.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import Products from './components/Product';
-import Sales from './components/Sales';
-import Purchases from './components/Purchase';
-import Inventory from './components/Inventory';
+import Products from './pages/Product';
+import Sales from './pages/Sales';
+import Purchases from './pages/Purchase';
+import Inventory from './pages/Inventory';
 
 function App() {
     return (

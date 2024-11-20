@@ -1,0 +1,186 @@
+
+.purchases-page {
+    padding: 20px;
+    background-color: #f5f7fa;
+    font-family: 'Roboto', sans-serif;
+    color: #333;
+    min-height: 80vh;
+    position: relative;
+}
+
+.purchases-page h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.purchases-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+  margin-bottom: 20px;
+    justify-content: space-between;
+  
+}
+
+.purchases-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+
+.purchase-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; 
+    margin-top: 40px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+    border-radius: 8px;
+}
+
+.purchase-table th,
+.purchase-table td {
+    padding: 8px 10px; 
+    text-align: left; 
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.purchase-table th {
+    background-color: #f0f0f0;
+    color: #4a4a4a;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+
+.purchase-table th:nth-child(2), .purchase-table td:nth-child(2),
+.purchase-table th:nth-child(3), .purchase-table td:nth-child(3),
+.purchase-table th:nth-child(4), .purchase-table td:nth-child(4) {
+    text-align: center;
+}
+
+
+.purchase-table th:first-child, .purchase-table td:first-child {
+    width: 30%; 
+}
+
+.purchase-table th:nth-child(2), .purchase-table td:nth-child(2) {
+    width: 20%; 
+}
+
+.purchase-table th:nth-child(3), .purchase-table td:nth-child(3) {
+    width: 20%; 
+}
+
+.purchase-table th:nth-child(4), .purchase-table td:nth-child(4) {
+    width: 20%; 
+}
+
+.purchase-table tr {
+    height: 50px;
+}
+
+
+.purchase-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    transition: color 0.3s ease;
+}
+
+.edit-icon {
+    color: #007bff;
+}
+
+.edit-icon:hover {
+    color: #0056b3;
+}
+
+.delete-icon {
+    color: #dc3545;
+}
+
+.delete-icon:hover {
+    color: #b32b39;
+}
+
+.add-purchase-button {
+    position: fixed; 
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.add-purchase-button:hover {
+    background-color: #218838;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.close-button:hover {
+    color: #ff0000;
+}
+
+.status-button {
+    display: inline-block;
+    padding: 5px 10px;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 4px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+
+.status-button.status-ordered {
+    background-color: #f0ad4e; 
+}
+
+.status-button.status-pending {
+    background-color: #0275d8; 
+}
+
+.status-button.status-arrived {
+    background-color: #5cb85c; 
+}
+
+.status-button.status-cancelled {
+    background-color: #d9534f;
+}
+
+
+.status-cell {
+    text-align: center;
+}

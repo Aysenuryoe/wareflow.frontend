@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from "react";
-import "./SalesEditModal.css";
+import "../../styles/SalesAddModal.css";
 
-function SalesEditModal({
+function SalesAddModal({
   isOpen,
   onClose,
   onSubmit,
-  sale, 
-  title = "Edit Sale",
+  fetchProducts,
+  title = "Create a new Sale",
 }) {
-  const [saleDate, setSaleDate] = useState(""); 
-  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [products, setProducts] = useState([]); // Verfügbare Produkte
+  const [selectedProducts, setSelectedProducts] = useState([]); // Ausgewählte Produkte
+  const [saleDate, setSaleDate] = useState(""); // Verkaufsdatum
 
-  
+
   useEffect(() => {
-    if (isOpen && sale) {
-      setSaleDate(sale.saleDate); 
-      setSelectedProducts(sale.products.map(product => product.barcode));
-    }
-  }, [isOpen, sale]);
+    const loadProducts = async () => {
+        try {
+            const response = await fetch(`https://localhost:3001/api/product/all`);
+            if (!response.ok) {
+                throw new Error("Error loading products");
+            }
+            const data = await response.json();
+            setProducts(data);
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
+    };
+    loadProducts();
+  }, []);
 
   // Produkt auswählen
   const handleProductSelect = (e, index) => {
@@ -32,7 +42,7 @@ function SalesEditModal({
     setSelectedProducts(updatedSelectedProducts);
   };
 
-  // Formular absenden (Verkauf bearbeiten)
+  // Formular absenden (Verkauf anlegen)
   const handleSubmit = async () => {
     if (!saleDate || selectedProducts.length === 0) {
       alert("Bitte alle Felder ausfüllen!");
@@ -41,16 +51,18 @@ function SalesEditModal({
 
     // Produktobjekte vorbereiten
     const selectedProductDetails = selectedProducts.map((barcode) => {
-      const product = sale.products.find((prod) => prod.barcode === barcode);
-      return product ? { ...product, quantity: 1 } : null; // Füge 'quantity' hinzu
-    }).filter(Boolean); // Entfernt ungültige Produkte
+      const product = products.find((prod) => prod.barcode === barcode);
+      return product ? { ...product, quantity: 1 } : null; 
+    }).filter(Boolean); 
 
     const saleData = {
+      
+      products: selectedProductDetails,  
       saleDate,
-      products: selectedProductDetails,  // Die detaillierte Liste der Produkte
+      source: "store"
     };
 
-    // Senden der Bearbeitungsdaten an die übergebene onSubmit-Funktion
+  
     await onSubmit(saleData);
     onClose();  // Schließt das Modal
   };
@@ -62,14 +74,14 @@ function SalesEditModal({
 
   return (
     isOpen && (
-      <div className="sales-edit-modal-overlay">
-        <div className="sales-edit-modal">
+      <div className="sales-add-modal-overlay">
+        <div className="sales-add-modal">
           <span className="close" onClick={onClose}>
             &times;
           </span>
           <h2>{title}</h2>
           <div className="form-group">
-            {/* Sale Date Eingabefeld */}
+            
             <div className="form">
               <label>Sale Date:</label>
               <input
@@ -79,16 +91,16 @@ function SalesEditModal({
               />
             </div>
 
-            {/* Dynamisch hinzuzufügende Produkt-Auswahlfelder */}
+          
             {selectedProducts.map((product, index) => (
               <div key={index} className="product-group">
-                <label>Select a product:</label>
+                <label>Select:</label>
                 <select
                   value={product}
                   onChange={(e) => handleProductSelect(e, index)}
                 >
                   <option value="">Select a product</option>
-                  {sale.products.map((product) => (
+                  {products.map((product) => (
                     <option key={product.barcode} value={product.barcode}>
                       {product.article} - {product.size} - (Price: {product.price})
                     </option>
@@ -104,7 +116,6 @@ function SalesEditModal({
               </div>
             ))}
 
-            {/* Add Product Button */}
             <div className="form">
               <button
                 type="button"
@@ -114,16 +125,15 @@ function SalesEditModal({
                 Add Product
               </button>
             </div>
+          </div>
 
-            {/* Buttons für Cancel und Edit Sale */}
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={onClose}>
-                Cancel
-              </button>
-              <button className="create-btn" onClick={handleSubmit}>
-                Edit Sale
-              </button>
-            </div>
+          <div className="modal-actions">
+            <button className="cancel-btn" onClick={onClose}>
+              Cancel
+            </button>
+            <button className="create-btn" onClick={handleSubmit}>
+              Create Sale
+            </button>
           </div>
         </div>
       </div>
@@ -131,4 +141,4 @@ function SalesEditModal({
   );
 }
 
-export default SalesEditModal;
+export default SalesAddModal;
