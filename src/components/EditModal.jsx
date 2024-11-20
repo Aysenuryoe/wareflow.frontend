@@ -12,17 +12,16 @@ function EditModal({
   const [formData, setFormData] = useState({});
   const [dynamicFields, setDynamicFields] = useState([]);
 
-  // Set initial form data when item changes
   useEffect(() => {
     if (item) {
-      console.log("EditModal received item:", item); // Debugging output to ensure item is correctly passed
+      console.log("EditModal received item:", item); 
       const updatedItem = { ...item };
       if (item.orderDate) {
-        updatedItem.orderDate = item.orderDate.split("T")[0]; // Extract the date part before 'T'
+        updatedItem.orderDate = item.orderDate.split("T")[0];
       }
       setFormData(updatedItem);
 
-      // Generate fields dynamically if fields prop is not provided
+      
       if (!fields || fields.length === 0) {
         const generatedFields = Object.keys(updatedItem)
           .filter((key) => key !== "id" && key !== "products")
@@ -174,12 +173,12 @@ function EditModal({
   );
 }
 
-// Default props to ensure fields is always an array
+
 EditModal.defaultProps = {
   fields: [],
 };
 
-// PropTypes to validate the props passed to EditModal
+
 EditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,

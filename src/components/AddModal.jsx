@@ -44,15 +44,22 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
           {fields.map((field) => (
             <div key={field.name} className="form">
               <label>{field.label}:</label>
-              {field.type === "textarea" ? (
-                <textarea
+              {field.type === "select" ? (
+                <select
                   name={field.name}
                   value={formData[field.name]}
                   onChange={handleInputChange}
-                  placeholder={field.placeholder}
                   className="p-2.5 rounded-md"
-                  rows={field.rows || 2}
-                />
+                >
+                  <option value="">Select size</option>
+                  <option value="XS">XS</option>
+                  <option value="S">S</option>
+                  <option value="M">M</option>
+                  <option value="L">L</option>
+                  <option value="XL">XL</option>
+                  <option value="NOSIZE">NOSIZE</option>
+             
+                </select>
               ) : (
                 <input
                   type={field.type}
@@ -66,19 +73,12 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
             </div>
           ))}
           <div className="btn-control">
-          <button
-              className="cancel-btn"
-              onClick={handleClose}
-            >
+            <button className="cancel-btn" onClick={handleClose}>
               Cancel
             </button>
-            <button
-              className="add-btn"
-              onClick={handleSubmit}
-            >
+            <button className="add-btn" onClick={handleSubmit}>
               Add
             </button>
-            
           </div>
         </div>
       </div>

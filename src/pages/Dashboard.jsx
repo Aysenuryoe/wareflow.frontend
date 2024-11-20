@@ -1,4 +1,4 @@
-// src/pages/Dashboard.js
+
 import React from "react";
 import Overview from "../components/Overview";
 import Charts from "../components/Charts";

@@ -148,7 +148,7 @@ const Products = () => {
 
     const productFields = [
         { name: "article", label: "Article", type: "text", placeholder: "Enter article name" },
-        { name: "size", label: "Size", type: "text", placeholder: "Enter size" },
+        { name: "size", label: "Size", type: "select" },
         { name: "barcode", label: "Barcode", type: "text", placeholder: "Enter barcode" },
         { name: "price", label: "Price", type: "number", placeholder: "Enter price" },
         { name: "productNum", label: "Product Number", type: "text", placeholder: "Enter product number" },
