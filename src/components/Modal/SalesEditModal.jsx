@@ -5,57 +5,54 @@ function SalesEditModal({
   isOpen,
   onClose,
   onSubmit,
-  sale, 
+  sale,
   title = "Edit Sale",
 }) {
-  const [saleDate, setSaleDate] = useState(""); 
+  const [saleDate, setSaleDate] = useState("");
   const [selectedProducts, setSelectedProducts] = useState([]);
 
-  
   useEffect(() => {
     if (isOpen && sale) {
-      setSaleDate(sale.saleDate); 
-      setSelectedProducts(sale.products.map(product => product.barcode));
+      setSaleDate(sale.saleDate);
+      setSelectedProducts(sale.products.map((product) => product.barcode));
     }
   }, [isOpen, sale]);
 
-  // Produkt auswählen
   const handleProductSelect = (e, index) => {
     const updatedSelectedProducts = [...selectedProducts];
     updatedSelectedProducts[index] = e.target.value;
     setSelectedProducts(updatedSelectedProducts);
   };
 
-  // Produkt entfernen
   const handleProductRemove = (index) => {
-    const updatedSelectedProducts = selectedProducts.filter((_, i) => i !== index);
+    const updatedSelectedProducts = selectedProducts.filter(
+      (_, i) => i !== index
+    );
     setSelectedProducts(updatedSelectedProducts);
   };
 
-  // Formular absenden (Verkauf bearbeiten)
   const handleSubmit = async () => {
     if (!saleDate || selectedProducts.length === 0) {
       alert("Bitte alle Felder ausfüllen!");
       return;
     }
 
-    // Produktobjekte vorbereiten
-    const selectedProductDetails = selectedProducts.map((barcode) => {
-      const product = sale.products.find((prod) => prod.barcode === barcode);
-      return product ? { ...product, quantity: 1 } : null; // Füge 'quantity' hinzu
-    }).filter(Boolean); // Entfernt ungültige Produkte
+    const selectedProductDetails = selectedProducts
+      .map((barcode) => {
+        const product = sale.products.find((prod) => prod.barcode === barcode);
+        return product ? { ...product, quantity: 1 } : null;
+      })
+      .filter(Boolean);
 
     const saleData = {
       saleDate,
-      products: selectedProductDetails,  // Die detaillierte Liste der Produkte
+      products: selectedProductDetails,
     };
 
-    // Senden der Bearbeitungsdaten an die übergebene onSubmit-Funktion
     await onSubmit(saleData);
-    onClose();  // Schließt das Modal
+    onClose();
   };
 
-  // Neuen Select hinzufügen
   const handleAddProduct = () => {
     setSelectedProducts([...selectedProducts, ""]);
   };
@@ -69,7 +66,6 @@ function SalesEditModal({
           </span>
           <h2>{title}</h2>
           <div className="form-group">
-            {/* Sale Date Eingabefeld */}
             <div className="form">
               <label>Sale Date:</label>
               <input
@@ -79,7 +75,6 @@ function SalesEditModal({
               />
             </div>
 
-            {/* Dynamisch hinzuzufügende Produkt-Auswahlfelder */}
             {selectedProducts.map((product, index) => (
               <div key={index} className="product-group">
                 <label>Select a product:</label>
@@ -90,7 +85,8 @@ function SalesEditModal({
                   <option value="">Select a product</option>
                   {sale.products.map((product) => (
                     <option key={product.barcode} value={product.barcode}>
-                      {product.article} - {product.size} - (Price: {product.price})
+                      {product.article} - {product.size} - (Price:{" "}
+                      {product.price})
                     </option>
                   ))}
                 </select>
@@ -104,7 +100,6 @@ function SalesEditModal({
               </div>
             ))}
 
-            {/* Add Product Button */}
             <div className="form">
               <button
                 type="button"
@@ -115,7 +110,6 @@ function SalesEditModal({
               </button>
             </div>
 
-            {/* Buttons für Cancel und Edit Sale */}
             <div className="modal-actions">
               <button className="cancel-btn" onClick={onClose}>
                 Cancel

@@ -68,37 +68,26 @@ function PurchaseAddModal({
     setSelectedProducts(updatedSelectedProducts);
   };
 
-  // Neuen Produktselektor hinzufügen
+
   const handleAddProduct = () => {
     setSelectedProducts([...selectedProducts, { barcode: "", quantity: 1 }]);
   };
 
-  // Formular absenden (Einkauf erstellen)
+
   const handleSubmit = async () => {
-    if (!orderDate || selectedProducts.length === 0) {
-      alert("Bitte alle Felder ausfüllen!");
-      return;
-    }
 
-    // Überprüfen, ob alle Produkte ausgewählt sind und gültige Mengen haben
-    for (let prod of selectedProducts) {
-      if (!prod.barcode || prod.quantity <= 0) {
-        alert("Bitte wählen Sie ein Produkt aus und geben Sie eine gültige Menge an.");
-        return;
-      }
-    }
-
-    // Produktdetails vorbereiten
     const selectedProductDetails = selectedProducts.map((selectedProduct) => {
       return {
         barcode: selectedProduct.barcode,
         quantity: selectedProduct.quantity,
       };
     });
+    const formattedOrderDate = new Date(orderDate).toISOString();
+
 
     const purchaseData = {
       products: selectedProductDetails,
-      orderDate,
+      orderDate: formattedOrderDate,
       status,
     };
 
@@ -127,14 +116,15 @@ function PurchaseAddModal({
             <div className="form">
               <label>Status:</label>
               <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option value="ORDERED">ORDERED</option>
-                <option value="PENDING">PENDING</option>
-                <option value="ARRIVED">ARRIVED</option>
-                <option value="CANCELLED">CANCELLED</option>
-              </select>
+  value={status}
+  onChange={(e) => setStatus(e.target.value)}
+>
+  <option value="Ordered">Ordered</option>
+  <option value="Pending">Pending</option>
+  <option value="Arrived">Arrived</option>
+  <option value="Cancelled">Cancelled</option>
+</select>
+
             </div>
 
             {selectedProducts.map((product, index) => (

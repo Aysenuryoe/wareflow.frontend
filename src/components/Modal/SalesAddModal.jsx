@@ -8,66 +8,57 @@ function SalesAddModal({
   fetchProducts,
   title = "Create a new Sale",
 }) {
-  const [products, setProducts] = useState([]); // Verfügbare Produkte
-  const [selectedProducts, setSelectedProducts] = useState([]); // Ausgewählte Produkte
-  const [saleDate, setSaleDate] = useState(""); // Verkaufsdatum
-
+  const [products, setProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [saleDate, setSaleDate] = useState("");
 
   useEffect(() => {
     const loadProducts = async () => {
-        try {
-            const response = await fetch(`https://localhost:3001/api/product/all`);
-            if (!response.ok) {
-                throw new Error("Error loading products");
-            }
-            const data = await response.json();
-            setProducts(data);
-        } catch (error) {
-            console.error("Error fetching products:", error);
+      try {
+        const response = await fetch(`https://localhost:3001/api/product/all`);
+        if (!response.ok) {
+          throw new Error("Error loading products");
         }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
     };
     loadProducts();
   }, []);
 
-  // Produkt auswählen
   const handleProductSelect = (e, index) => {
     const updatedSelectedProducts = [...selectedProducts];
     updatedSelectedProducts[index] = e.target.value;
     setSelectedProducts(updatedSelectedProducts);
   };
 
-  // Produkt entfernen
   const handleProductRemove = (index) => {
-    const updatedSelectedProducts = selectedProducts.filter((_, i) => i !== index);
+    const updatedSelectedProducts = selectedProducts.filter(
+      (_, i) => i !== index
+    );
     setSelectedProducts(updatedSelectedProducts);
   };
 
-  // Formular absenden (Verkauf anlegen)
   const handleSubmit = async () => {
-    if (!saleDate || selectedProducts.length === 0) {
-      alert("Bitte alle Felder ausfüllen!");
-      return;
-    }
-
-    // Produktobjekte vorbereiten
-    const selectedProductDetails = selectedProducts.map((barcode) => {
-      const product = products.find((prod) => prod.barcode === barcode);
-      return product ? { ...product, quantity: 1 } : null; 
-    }).filter(Boolean); 
+    const selectedProductDetails = selectedProducts
+      .map((barcode) => {
+        const product = products.find((prod) => prod.barcode === barcode);
+        return product ? { ...product, quantity: 1 } : null;
+      })
+      .filter(Boolean);
 
     const saleData = {
-      
-      products: selectedProductDetails,  
+      products: selectedProductDetails,
       saleDate,
-      source: "store"
+      source: "store",
     };
 
-  
     await onSubmit(saleData);
-    onClose();  // Schließt das Modal
+    onClose();
   };
 
-  // Neuen Select hinzufügen
   const handleAddProduct = () => {
     setSelectedProducts([...selectedProducts, ""]);
   };
@@ -81,7 +72,6 @@ function SalesAddModal({
           </span>
           <h2>{title}</h2>
           <div className="form-group">
-            
             <div className="form">
               <label>Sale Date:</label>
               <input
@@ -91,7 +81,6 @@ function SalesAddModal({
               />
             </div>
 
-          
             {selectedProducts.map((product, index) => (
               <div key={index} className="product-group">
                 <label>Select:</label>
@@ -102,7 +91,8 @@ function SalesAddModal({
                   <option value="">Select a product</option>
                   {products.map((product) => (
                     <option key={product.barcode} value={product.barcode}>
-                      {product.article} - {product.size} - (Price: {product.price})
+                      {product.article} - {product.size} - (Price:{" "}
+                      {product.price})
                     </option>
                   ))}
                 </select>

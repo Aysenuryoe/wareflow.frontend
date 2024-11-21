@@ -17,13 +17,12 @@ function DeleteModal({ isOpen, onClose, onSubmit, itemName = "item" }) {
         <h2>{`Delete ${itemName}`}</h2>
         <p>Are you sure you want to delete this {itemName}?</p>
         <div className="btn-control">
-        <button className="cancel-btn" onClick={onClose}>
+          <button className="cancel-btn" onClick={onClose}>
             Cancel
           </button>
           <button className="delete-btn" onClick={handleDelete}>
             Delete
           </button>
-          
         </div>
       </div>
     </div>

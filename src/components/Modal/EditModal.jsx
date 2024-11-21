@@ -5,7 +5,7 @@ function EditModal({
   isOpen,
   onClose,
   onSubmit,
-  fields,
+  fields = [],
   title = "Edit Item",
   item,
 }) {
@@ -49,7 +49,8 @@ function EditModal({
       const updatedProducts = prevData.products ? [...prevData.products] : [];
       updatedProducts[index] = {
         ...updatedProducts[index],
-        [field]: field === "quantity" || field === "price" ? parseFloat(value) : value,
+        [field]:
+          field === "quantity" || field === "price" ? parseFloat(value) : value,
       };
       return {
         ...prevData,
@@ -104,11 +105,17 @@ function EditModal({
                   >
                     <option value="">Select {field.label}</option>
                     {field.options &&
-                      field.options.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
+                      field.options.map((option) =>
+                        typeof option === "string" ? (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ) : (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        )
+                      )}
                   </select>
                 ) : (
                   <input
@@ -123,7 +130,9 @@ function EditModal({
               </div>
             ))
           ) : (
-            <div>No fields available for editing. Please provide valid fields.</div>
+            <div>
+              No fields available for editing. Please provide valid fields.
+            </div>
           )}
           {formData.products &&
             Array.isArray(formData.products) &&
@@ -132,13 +141,19 @@ function EditModal({
                 <h3>Products</h3>
                 {formData.products.map((product, index) => (
                   <div key={product.barcode} className="form-row">
-                    <label htmlFor={`product-${index}`}>{product.barcode}</label>
+                    <label htmlFor={`product-${index}`}>
+                      {product.barcode}
+                    </label>
                     <input
                       type="number"
                       name={`product-${index}-quantity`}
                       value={product.quantity}
                       onChange={(e) =>
-                        handleProductQuantityChange(index, "quantity", e.target.value)
+                        handleProductQuantityChange(
+                          index,
+                          "quantity",
+                          e.target.value
+                        )
                       }
                       className="p-2.5 rounded-md"
                     />
@@ -148,7 +163,11 @@ function EditModal({
                         name={`product-${index}-price`}
                         value={product.price}
                         onChange={(e) =>
-                          handleProductQuantityChange(index, "price", e.target.value)
+                          handleProductQuantityChange(
+                            index,
+                            "price",
+                            e.target.value
+                          )
                         }
                         placeholder="Price"
                         className="p-2.5 rounded-md"
@@ -168,11 +187,13 @@ function EditModal({
                 className="p-2.5 rounded-md"
               >
                 <option value="">Select Status</option>
-                {["Ordered", "Pending", "Arrived", "Cancelled"].map((status) => (
-                  <option key={status} value={status}>
-                    {status}
-                  </option>
-                ))}
+                {["Ordered", "Pending", "Arrived", "Cancelled"].map(
+                  (status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  )
+                )}
               </select>
             </div>
           )}
@@ -203,10 +224,6 @@ function EditModal({
   );
 }
 
-EditModal.defaultProps = {
-  fields: [],
-};
-
 EditModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -217,10 +234,13 @@ EditModal.propTypes = {
       label: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       options: PropTypes.arrayOf(
-        PropTypes.shape({
-          value: PropTypes.string.isRequired,
-          label: PropTypes.string.isRequired,
-        })
+        PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.shape({
+            value: PropTypes.string.isRequired,
+            label: PropTypes.string.isRequired,
+          }),
+        ])
       ),
     })
   ),
@@ -230,13 +250,13 @@ EditModal.propTypes = {
       PropTypes.shape({
         barcode: PropTypes.string.isRequired,
         quantity: PropTypes.number.isRequired,
-        price: PropTypes.number, // Optional für SalesOrder
+        price: PropTypes.number,
       })
     ),
-    orderDate: PropTypes.string, // Für PurchaseOrder
-    saleDate: PropTypes.string, // Für SalesOrder
-    status: PropTypes.oneOf(["Ordered", "Pending", "Arrived", "Cancelled"]), // Für PurchaseOrder
-    source: PropTypes.oneOf(["store"]), // Für SalesOrder
+    orderDate: PropTypes.string,
+    saleDate: PropTypes.string,
+    status: PropTypes.oneOf(["Ordered", "Pending", "Arrived", "Cancelled"]),
+    source: PropTypes.oneOf(["store"]),
   }),
 };
 

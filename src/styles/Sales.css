@@ -1,6 +1,4 @@
-
 :root {
-
   margin: 0;
   padding: 0;
 }
@@ -8,15 +6,14 @@
 .sales-page {
   display: flex;
   flex-direction: column;
-  height: 80vh; 
+  height: 80vh;
   padding: 20px;
   background-color: #f9f9f9;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
-
 .sales-header {
-  flex: 0 0 auto; 
+  flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -32,10 +29,9 @@
   margin: 0;
 }
 
-
 .sales-content {
-  flex: 1 1 auto; 
-  overflow-y: auto; 
+  flex: 1 1 auto;
+  overflow-y: auto;
 }
 
 .sales-cards {
@@ -46,12 +42,10 @@
   align-items: flex-start;
 }
 
-
 .error-message {
   color: red;
   font-size: 1.2rem;
 }
-
 
 .add-sale-button {
   position: fixed;

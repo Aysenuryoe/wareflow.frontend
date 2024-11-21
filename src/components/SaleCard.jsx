@@ -1,5 +1,5 @@
-import React from 'react';
-import '../styles/SalesCard.css';
+import React from "react";
+import "../styles/SalesCard.css";
 
 const SaleCard = ({ sale, onEdit, onDelete, calculateTotalAmount }) => {
   return (

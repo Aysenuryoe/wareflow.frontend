@@ -130,7 +130,12 @@ const Purchase = () => {
       name: "status",
       label: "Status",
       type: "select",
-      options: ["ORDERED", "PENDING", "ARRIVED", "CANCELLED"],
+      options: [
+        { label: "Ordered", value: "Ordered" },
+        { label: "Pending", value: "Pending" },
+        { label: "Arrived", value: "Arrived" },
+        { label: "Cancelled", value: "Cancelled" },
+      ],
     },
     {
       name: "orderDate",

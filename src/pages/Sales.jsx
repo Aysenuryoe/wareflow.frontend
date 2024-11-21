@@ -15,63 +15,58 @@ const Sales = () => {
 
   const BASE_URL = `https://localhost:3001/api`;
 
-
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-          const response = await fetch(`${BASE_URL}/sales/all`);
-          if (!response.ok) {
-              throw new Error("Error loading purchases");
-          }
-          const data = await response.json();
-          setSales(data);
+        const response = await fetch(`${BASE_URL}/sales/all`);
+        if (!response.ok) {
+          throw new Error("Error loading purchases");
+        }
+        const data = await response.json();
+        setSales(data);
       } catch (error) {
-          console.error("Error fetching purchases:", error);
+        console.error("Error fetching purchases:", error);
       }
-  };
+    };
     fetchSalesData();
   }, []);
 
-
   const handleOpenModal = (type, sale = null) => {
     if (type === "create") {
-        setShowAddModal(true);
+      setShowAddModal(true);
     } else if (type === "edit") {
       setSelectedSale(sale);
-        setShowEditModal(true);
+      setShowEditModal(true);
     } else if (type === "delete") {
       setSelectedSale(sale);
-        setShowDeleteModal(true);
+      setShowDeleteModal(true);
     }
-};
+  };
 
-const handleCloseModal = () => {
+  const handleCloseModal = () => {
     setShowAddModal(false);
     setShowEditModal(false);
     setShowDeleteModal(false);
     setSelectedSale(null);
-};
+  };
 
   const handleAddSale = async (saleData) => {
-   
     try {
-      const response = await fetch(`${BASE_URL}/sales`,{
+      const response = await fetch(`${BASE_URL}/sales`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(saleData),
       });
       if (!response.ok) {
         throw new Error("Error creating sale");
-    }
+      }
 
-    const newSale = await response.json();
-    setSales([...sales, newSale]);
-    handleCloseModal();
-    } catch (error) {
-      
-    } 
+      const newSale = await response.json();
+      setSales([...sales, newSale]);
+      handleCloseModal();
+    } catch (error) {}
   };
 
   const handleEditSale = async (saleData) => {
@@ -79,84 +74,91 @@ const handleCloseModal = () => {
       const response = await fetch(`${BASE_URL}/sales/${saleData.id}`, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(saleData),
-    });
+      });
 
-    console.log(response);
-    console.log(saleData);
+      console.log(response);
+      console.log(saleData);
 
-    if (!response.ok) {
+      if (!response.ok) {
         throw new Error("Error updating sale");
-    }
+      }
 
-    const updatedSale = await response.json();
-    setSales(
-        sales.map((s) => (s.id === saleData.id ? updatedSale : s))
-    );
-    handleCloseModal();
+      const updatedSale = await response.json();
+      setSales(sales.map((s) => (s.id === saleData.id ? updatedSale : s)));
+      handleCloseModal();
     } catch (error) {
       console.error("Error updating sale:", error);
     }
-
   };
-
 
   const handleDeleteSale = async () => {
     if (!selectedSale) return;
 
     try {
-        const response = await fetch(`${BASE_URL}/sales/${selectedSale.id}`, {
-            method: "DELETE",
-        });
+      const response = await fetch(`${BASE_URL}/sales/${selectedSale.id}`, {
+        method: "DELETE",
+      });
 
-        if (!response.ok) {
-            throw new Error("Error deleting sale");
-        }
+      if (!response.ok) {
+        throw new Error("Error deleting sale");
+      }
 
-        setSales(sales.filter((p) => p.id !== selectedSale.id));
-        handleCloseModal();
+      setSales(sales.filter((p) => p.id !== selectedSale.id));
+      handleCloseModal();
     } catch (error) {
-        console.error("Error deleting sale:", error);
+      console.error("Error deleting sale:", error);
     }
-};
+  };
 
-const saleFields = [
-  { name: "saleDate", label: "Sale Date", type: "date", placeholder: "Select sale date" },
-  { name: "source", label: "Source", type: "text", placeholder: "Enter source (e.g. store)", defaultValue: "store", disabled: true },
-  { name: "products", label: "Products", type: "select"},
-];
+  const saleFields = [
+    {
+      name: "saleDate",
+      label: "Sale Date",
+      type: "date",
+      placeholder: "Select sale date",
+    },
+    {
+      name: "source",
+      label: "Source",
+      type: "text",
+      placeholder: "Enter source (e.g. store)",
+      defaultValue: "store",
+      disabled: true,
+    },
+    { name: "products", label: "Products", type: "select" },
+  ];
 
-const calculateTotalAmount = (products) => {
-  return products.reduce((total, product) => {
-    return total + product.price * product.quantity;
-  }, 0);
-};
+  const calculateTotalAmount = (products) => {
+    return products.reduce((total, product) => {
+      return total + product.price * product.quantity;
+    }, 0);
+  };
 
-const handleEditClick = (sale) => {
-  setSelectedSale(sale);
-  setShowEditModal(true);
-};
+  const handleEditClick = (sale) => {
+    setSelectedSale(sale);
+    setShowEditModal(true);
+  };
 
-const handleDeleteClick = (sale) => {
-  setSelectedSale(sale);
-  setShowDeleteModal(true);
-};
+  const handleDeleteClick = (sale) => {
+    setSelectedSale(sale);
+    setShowDeleteModal(true);
+  };
 
-
-  return(
-
+  return (
     <div className="sales-page">
       <div className="sales-header">
         <h1>Sales Management</h1>
-        <button className="add-sale-button" onClick={() => handleOpenModal("create")}>
-          <i className="fas fa-plus">
-          </i>
+        <button
+          className="add-sale-button"
+          onClick={() => handleOpenModal("create")}
+        >
+          <i className="fas fa-plus"></i>
         </button>
-
       </div>
-     
+
       <div className="sales-content">
         <div className="sales-cards">
           {sales.map((sale) => (
@@ -182,16 +184,16 @@ const handleDeleteClick = (sale) => {
       )}
 
       {showEditModal && (
-       <EditModal
-       isOpen={showEditModal}
-       onClose={handleCloseModal}
-       onSubmit={handleEditSale}
-       item={selectedSale} 
-       title="Edit Sale"
-       fields={saleFields}
-     />
+        <EditModal
+          isOpen={showEditModal}
+          onClose={handleCloseModal}
+          onSubmit={handleEditSale}
+          item={selectedSale}
+          title="Edit Sale"
+          fields={saleFields}
+        />
       )}
-       {showDeleteModal && (
+      {showDeleteModal && (
         <DeleteModal
           isOpen={showDeleteModal}
           onClose={handleCloseModal}
@@ -199,11 +201,7 @@ const handleDeleteClick = (sale) => {
           itemName="sale"
         />
       )}
-
-
     </div>
-
-  
   );
 };
 
