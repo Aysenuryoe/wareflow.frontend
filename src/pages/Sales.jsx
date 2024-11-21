@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "../styles/Sales.css";
 import SalesAddModal from "../components/Modal/SalesAddModal";
 import SaleCard from "../components/SaleCard";
-
 import EditModal from "../components/Modal/EditModal";
 import DeleteModal from "../components/Modal/DeleteModal";
 
@@ -79,11 +78,9 @@ const Sales = () => {
         body: JSON.stringify(saleData),
       });
 
-      console.log(response);
-      console.log(saleData);
-
       if (!response.ok) {
-        throw new Error("Error updating sale");
+        const errorText = await response.text();
+        throw new Error(`Error updating sale: ${errorText}`);
       }
 
       const updatedSale = await response.json();

@@ -33,14 +33,15 @@
 
 .sale-actions {
   display: flex;
-  gap: 10px;
+  gap: 5px;
+
 }
 
 .icon-button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
+
 }
 
 .icon-button i {

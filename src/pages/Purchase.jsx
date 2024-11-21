@@ -120,23 +120,7 @@ const Purchase = () => {
   };
 
   const purchaseFields = [
-    {
-      name: "products",
-      label: "Products",
-      type: "text",
-      placeholder: "Enter product barcodes and quantities",
-    },
-    {
-      name: "status",
-      label: "Status",
-      type: "select",
-      options: [
-        { label: "Ordered", value: "Ordered" },
-        { label: "Pending", value: "Pending" },
-        { label: "Arrived", value: "Arrived" },
-        { label: "Cancelled", value: "Cancelled" },
-      ],
-    },
+
     {
       name: "orderDate",
       label: "Order Date",

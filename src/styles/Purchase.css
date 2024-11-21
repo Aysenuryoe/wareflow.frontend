@@ -100,10 +100,12 @@
   font-size: 18px;
   padding: 5px;
   transition: color 0.3s ease;
+ 
 }
 
 .edit-icon {
   color: #007bff;
+  
 }
 
 .edit-icon:hover {
@@ -112,6 +114,7 @@
 
 .delete-icon {
   color: #dc3545;
+ 
 }
 
 .delete-icon:hover {
@@ -158,10 +161,12 @@
   display: inline-block;
   padding: 5px 10px;
   color: #fff;
+  width: 60px;
   font-size: 14px;
   border-radius: 4px;
   text-align: center;
   white-space: nowrap;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .status-button.status-ordered {
