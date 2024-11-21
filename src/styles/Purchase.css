@@ -1,4 +1,4 @@
-.purchases-page {
+.purchases {
   padding: 20px;
   background-color: #f5f7fa;
   font-family: "Roboto", sans-serif;
@@ -7,121 +7,22 @@
   position: relative;
 }
 
-.purchases-page h1 {
+.purchases__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.purchases__title {
   font-size: 2rem;
   font-weight: bold;
   color: #333;
-}
-
-.purchases-header {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  margin-bottom: 20px;
-  justify-content: space-between;
-}
-
-.purchases-header h1 {
   margin: 0;
-  font-size: 2rem;
-  font-weight: bold;
 }
 
-.purchase-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  margin-top: 40px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
-  background-color: #ffffff;
-  border-radius: 8px;
-}
-
-.purchase-table th,
-.purchase-table td {
-  padding: 8px 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 14px;
-}
-
-.purchase-table th {
-  background-color: #f0f0f0;
-  color: #4a4a4a;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.purchase-table th:nth-child(2),
-.purchase-table td:nth-child(2),
-.purchase-table th:nth-child(3),
-.purchase-table td:nth-child(3),
-.purchase-table th:nth-child(4),
-.purchase-table td:nth-child(4) {
-  text-align: center;
-}
-
-.purchase-table th:first-child,
-.purchase-table td:first-child {
-  width: 30%;
-}
-
-.purchase-table th:nth-child(2),
-.purchase-table td:nth-child(2) {
-  width: 20%;
-}
-
-.purchase-table th:nth-child(3),
-.purchase-table td:nth-child(3) {
-  width: 20%;
-}
-
-.purchase-table th:nth-child(4),
-.purchase-table td:nth-child(4) {
-  width: 20%;
-}
-
-.purchase-table tr {
-  height: 50px;
-}
-
-.purchase-table tr:hover {
-  background-color: #f9f9f9;
-}
-
-.icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 5px;
-  transition: color 0.3s ease;
- 
-}
-
-.edit-icon {
-  color: #007bff;
-  
-}
-
-.edit-icon:hover {
-  color: #0056b3;
-}
-
-.delete-icon {
-  color: #dc3545;
- 
-}
-
-.delete-icon:hover {
-  color: #b32b39;
-}
-
-.add-purchase-button {
+.purchases__add-button {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -137,27 +38,64 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.add-purchase-button:hover {
+.purchases__add-button:hover {
   background-color: #218838;
 }
 
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
-  cursor: pointer;
-  color: #333;
+.purchases__add-button--primary {
+  background-color: #28a745;
 }
 
-.close-button:hover {
-  color: #ff0000;
+.purchases__table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin-top: 40px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
+  border-radius: 8px;
 }
 
-.status-button {
+.purchases__table-header th {
+  background-color: #f0f0f0;
+  color: #4a4a4a;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 10px;
+  border-bottom: 2px solid #e0e0e0;
+  text-align: left;
+}
+
+.purchases__table-body tr:nth-child(even) {
+  background-color: #ecf0f1;
+}
+
+.purchases__table-row:hover {
+  background-color: #f9f9f9;
+}
+
+.purchases__table-cell {
+  padding: 8px 10px;
+  border-bottom: 1px solid #ddd;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.purchases__product {
+  margin-bottom: 4px;
+}
+
+.purchases__product-info {
+  font-size: 14px;
+  color: #555;
+}
+
+.purchases__status-button {
   display: inline-block;
   padding: 5px 10px;
   color: #fff;
@@ -169,22 +107,88 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.status-button.status-ordered {
+.purchases__status-button--ordered {
   background-color: #f0ad4e;
 }
 
-.status-button.status-pending {
+.purchases__status-button--pending {
   background-color: #0275d8;
 }
 
-.status-button.status-arrived {
+.purchases__status-button--arrived {
   background-color: #5cb85c;
 }
 
-.status-button.status-cancelled {
+.purchases__status-button--cancelled {
   background-color: #d9534f;
 }
 
-.status-cell {
+.purchases__action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.purchases__action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px;
+  transition: color 0.3s ease;
+}
+
+.purchases__action-button--edit {
+  color: #007bff;
+}
+
+.purchases__action-button--edit:hover {
+  color: #0056b3;
+}
+
+.purchases__action-button--delete {
+  color: #dc3545;
+}
+
+.purchases__action-button--delete:hover {
+  color: #b32b39;
+}
+
+.purchases__pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.purchases__status-cell {
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .purchases__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .purchases__add-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .purchases__table {
+    margin-top: 20px;
+  }
+
+  .purchases__table-header th,
+  .purchases__table-body tr,
+  .purchases__table-cell {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .purchases__status-button {
+    width: auto;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
 }

@@ -1,4 +1,7 @@
+
 import React, { useState } from "react";
+import PropTypes from "prop-types";
+
 
 function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
   const initialFormState = fields.reduce((acc, field) => {
@@ -20,7 +23,8 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     await onSubmit(formData);
     resetForm();
     onClose();
@@ -34,55 +38,90 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal large">
-      <div className="modal-content">
-        <span className="close" onClick={handleClose}>
+    <div className="modal modal--large">
+      <div className="modal__content">
+        <span className="modal__close" onClick={handleClose}>
           &times;
         </span>
-        <h2>{title}</h2>
-        <div className="form-group">
+        <h2 className="modal__title">{title}</h2>
+        <form className="modal__form" onSubmit={handleSubmit}>
           {fields.map((field) => (
-            <div key={field.name} className="form">
-              <label>{field.label}:</label>
-              {field.type === "select" ? (
-                <select
-                  name={field.name}
-                  value={formData[field.name]}
-                  onChange={handleInputChange}
-                  className="p-2.5 rounded-md"
-                >
-                  <option value="">Select size</option>
-                  <option value="XS">XS</option>
-                  <option value="S">S</option>
-                  <option value="M">M</option>
-                  <option value="L">L</option>
-                  <option value="XL">XL</option>
-                  <option value="NOSIZE">NOSIZE</option>
-                </select>
-              ) : (
-                <input
-                  type={field.type}
-                  name={field.name}
-                  value={formData[field.name]}
-                  onChange={handleInputChange}
-                  placeholder={field.placeholder}
-                  className="p-2.5 rounded-md"
-                />
-              )}
+            <div key={field.name} className="modal__form-group">
+              <div className="modal__form-row">
+                <label htmlFor={field.name} className="modal__label">
+                  {field.label}:
+                </label>
+                {field.type === "select" ? (
+                  <select
+                    name={field.name}
+                    id={field.name}
+                    value={formData[field.name]}
+                    onChange={handleInputChange}
+                    className="modal__select"
+                  >
+                    <option value="">Select {field.label.toLowerCase()}</option>
+                    {field.options &&
+                      field.options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                  </select>
+                ) : (
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    id={field.name}
+                    value={formData[field.name]}
+                    onChange={handleInputChange}
+                    placeholder={field.placeholder}
+                    className="modal__input"
+                  />
+                )}
+              </div>
             </div>
           ))}
-          <div className="btn-control">
-            <button className="cancel-btn" onClick={handleClose}>
+          <div className="modal__button-group">
+            <button
+              type="button"
+              className="modal__button modal__button--cancel"
+              onClick={handleClose}
+            >
               Cancel
             </button>
-            <button className="add-btn" onClick={handleSubmit}>
+            <button
+              type="submit"
+              className="modal__button modal__button--add"
+            >
               Add
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
 }
+
+AddModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  fields: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+      placeholder: PropTypes.string,
+      defaultValue: PropTypes.string,
+      options: PropTypes.arrayOf(
+        PropTypes.shape({
+          value: PropTypes.string.isRequired,
+          label: PropTypes.string.isRequired,
+        })
+      ),
+    })
+  ).isRequired,
+  title: PropTypes.string,
+};
 
 export default AddModal;

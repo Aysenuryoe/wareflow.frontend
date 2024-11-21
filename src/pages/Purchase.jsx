@@ -137,19 +137,19 @@ const Purchase = () => {
   const totalPages = Math.ceil(purchases.length / purchasesPerPage);
 
   return (
-    <div className="purchases-page">
-      <div className="purchases-header">
-        <h1>Purchases</h1>
+    <div className="purchases">
+      <div className="purchases__header">
+        <h1 className="purchases__tile">Purchases</h1>
         <button
-          className="add-purchase-button"
+          className="purchases__add-button purchases__add-button--primary"
           onClick={() => handleOpenModal("create")}
         >
           <i className="fas fa-plus"></i>
         </button>
       </div>
 
-      <table className="purchase-table">
-        <thead>
+      <table className="purchases__table">
+        <thead className="purchases__table-header">
           <tr>
             <th>Products</th>
             <th>Status</th>
@@ -157,39 +157,41 @@ const Purchase = () => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="purchases__table-body">
           {currentPurchases.map((purchase) => (
-            <tr key={purchase.id}>
-              <td>
+            <tr key={purchase.id} className="purchases__table-row">
+              <td className="purchases__table-cell">
                 {purchase.products.map((product, index) => (
-                  <div key={index}>
+                  <div key={index} className="purchases__products">
                     <span>
                       {product.barcode} (x{product.quantity})
                     </span>
                   </div>
                 ))}
               </td>
-              <td className="status-cell">
+              <td className="purchases__table-cell">
                 <span
-                  className={`status-button status-${purchase.status.toLowerCase()}`}
+                  className={`purchases__status-button purchases__status-button--${purchase.status.toLowerCase()}`}
                 >
                   {purchase.status}
                 </span>
               </td>
-              <td>{new Date(purchase.orderDate).toLocaleDateString()}</td>
-              <td>
-                <button
-                  onClick={() => handleOpenModal("edit", purchase)}
-                  className="icon-button edit-icon"
-                >
-                  <i className="fas fa-edit"></i>
-                </button>
-                <button
-                  onClick={() => handleOpenModal("delete", purchase)}
-                  className="icon-button delete-icon"
-                >
-                  <i className="fas fa-trash"></i>
-                </button>
+              <td className="purchases__table-cell">{new Date(purchase.orderDate).toLocaleDateString()}</td>
+              <td className="purchases__table-cell">
+                <div className="purchases__action-buttons">
+                  <button
+                    onClick={() => handleOpenModal("edit", purchase)}
+                    className="purchases__action-button purchases__action-button--edit"
+                  >
+                    <i className="fas fa-edit"></i>
+                  </button>
+                  <button
+                    onClick={() => handleOpenModal("delete", purchase)}
+                    className="purchases__action-button purchases__action-button--delete"
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
@@ -200,15 +202,10 @@ const Purchase = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
+        className="purchases__pagination"
       />
 
-      <button
-        className="add-purchase-button"
-        onClick={() => handleOpenModal("create")}
-      >
-        <i className="fas fa-plus"></i>
-      </button>
-
+  
       {showAddModal && (
         <PurchaseAddModal
           isOpen={showAddModal}

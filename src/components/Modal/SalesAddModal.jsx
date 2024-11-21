@@ -64,70 +64,91 @@ function SalesAddModal({
   };
 
   return (
-    isOpen && (
-      <div className="sales-add-modal-overlay">
-        <div className="sales-add-modal">
-          <span className="close" onClick={onClose}>
-            &times;
-          </span>
-          <h2>{title}</h2>
-          <div className="form-group">
-            <div className="form">
-              <label>Sale Date:</label>
-              <input
-                type="date"
-                value={saleDate}
-                onChange={(e) => setSaleDate(e.target.value)}
-              />
-            </div>
+    <div className="sales-add-modal__overlay">
+      <div className="sales-add-modal">
+        <span className="sales-add-modal__close" onClick={onClose}>
+          &times;
+        </span>
+        <h2 className="sales-add-modal__title">{title}</h2>
+        <div className="sales-add-modal__form-group">
+          <div className="sales-add-modal__form">
+            <label className="sales-add-modal__label" htmlFor="saleDate">
+              Sale Date:
+            </label>
+            <input
+              type="date"
+              id="saleDate"
+              name="saleDate"
+              value={saleDate}
+              onChange={(e) => setSaleDate(e.target.value)}
+              className="sales-add-modal__input"
+            />
+          </div>
 
-            {selectedProducts.map((product, index) => (
-              <div key={index} className="product-group">
-                <label>Select:</label>
+          {selectedProducts.map((product, index) => (
+            <div key={index} className="sales-add-modal__product-group">
+              <div className="sales-add-modal__form-row">
+                <label
+                  className="sales-add-modal__label"
+                  htmlFor={`product-${index}`}
+                >
+                  Select:
+                </label>
                 <select
+                  id={`product-${index}`}
+                  name={`product-${index}`}
                   value={product}
                   onChange={(e) => handleProductSelect(e, index)}
+                  className="sales-add-modal__select"
                 >
                   <option value="">Select a product</option>
-                  {products.map((product) => (
-                    <option key={product.barcode} value={product.barcode}>
-                      {product.article} - {product.size} - (Price:{" "}
-                      {product.price})
+                  {products.map((prod) => (
+                    <option key={prod.barcode} value={prod.barcode}>
+                      {prod.article} - {prod.size} - (Price: {prod.price})
                     </option>
                   ))}
                 </select>
-                <button
-                  type="button"
-                  onClick={() => handleProductRemove(index)}
-                  className="remove-product"
-                >
-                  Remove
-                </button>
               </div>
-            ))}
 
-            <div className="form">
               <button
                 type="button"
-                onClick={handleAddProduct}
-                className="add-product-btn"
+                onClick={() => handleProductRemove(index)}
+                className="sales-add-modal__remove-button"
               >
-                Add Product
+                Remove
               </button>
             </div>
-          </div>
+          ))}
 
-          <div className="modal-actions">
-            <button className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button className="create-btn" onClick={handleSubmit}>
-              Create Sale
+          <div className="sales-add-modal__form">
+            <button
+              type="button"
+              onClick={handleAddProduct}
+              className="sales-add-modal__add-product-btn"
+            >
+              Add Product
             </button>
           </div>
         </div>
+
+        <div className="sales-add-modal__actions">
+          <button
+            type="button"
+            className="sales-add-modal__button sales-add-modal__button--cancel"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="sales-add-modal__button sales-add-modal__button--create"
+            onClick={handleSubmit}
+          >
+            Create Sale
+          </button>
+        </div>
       </div>
-    )
+    </div>
   );
 }
 

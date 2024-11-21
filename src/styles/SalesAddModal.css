@@ -1,4 +1,4 @@
-.sales-add-modal-overlay {
+.sales-add-modal__overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -13,10 +13,12 @@
 
 .sales-add-modal {
   background: white;
-  width: 400px;
-  height: 400px;
+  width: 90%;
+  max-width: 600px;
+  height: 90vh;
+  max-height: 90vh;
   border-radius: 10px;
-  padding: 20px;
+  padding: 20px 30px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   position: relative;
   display: flex;
@@ -24,7 +26,7 @@
   overflow-y: auto;
 }
 
-.sales-add-modal .close {
+.sales-add-modal__close {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -33,33 +35,57 @@
   color: #555;
 }
 
-.sales-add-modal .close:hover {
+.sales-add-modal__close:hover {
   color: #000;
 }
 
-.form-group {
+.sales-add-modal__form-group {
   margin-bottom: 16px;
   overflow-y: auto;
   max-height: calc(100% - 100px);
 }
 
-.product-group {
+.sales-add-modal__form {
+  margin-bottom: 15px;
+}
+
+.sales-add-modal__label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.sales-add-modal__input,
+.sales-add-modal__select {
+  width: 100%;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+}
+
+.sales-add-modal__input:focus,
+.sales-add-modal__select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.sales-add-modal__product-group {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
 }
 
-.product-group select {
-  width: 100%;
+.sales-add-modal__product-group-select {
+  flex: 1;
   max-width: 100%;
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
 }
 
-.remove-product {
+.sales-add-modal__remove-button {
   background-color: #dc3545;
   color: white;
   border: none;
@@ -67,13 +93,14 @@
   padding: 5px 10px;
   cursor: pointer;
   font-size: 14px;
+  transition: background-color 0.3s;
 }
 
-.remove-product:hover {
+.sales-add-modal__remove-button:hover {
   background-color: #a71d2a;
 }
 
-.add-product-btn {
+.sales-add-modal__add-product-btn {
   background-color: #007bff;
   color: white;
   border: none;
@@ -82,44 +109,74 @@
   font-size: 14px;
   cursor: pointer;
   margin-bottom: 20px;
+  transition: background-color 0.3s;
 }
 
-.add-product-btn:hover {
+.sales-add-modal__add-product-btn:hover {
   background-color: #0056b3;
 }
 
-.modal-actions {
+.sales-add-modal__actions {
+  display: flex;
+  justify-content: space-between;
   position: absolute;
   bottom: 10px;
   left: 20px;
   right: 20px;
-  display: flex;
-  justify-content: space-between;
 }
 
-.cancel-btn,
-.create-btn {
+.sales-add-modal__button {
   padding: 10px 20px;
   font-size: 14px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.cancel-btn {
+.sales-add-modal__button--cancel {
   background-color: #b0b0b0;
   color: #fff;
 }
 
-.cancel-btn:hover {
+.sales-add-modal__button--cancel:hover {
   background-color: #999;
 }
 
-.create-btn {
+.sales-add-modal__button--create {
   background-color: #28a745;
   color: white;
 }
 
-.create-btn:hover {
+.sales-add-modal__button--create:hover {
   background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  .sales-add-modal {
+    width: 95%;
+    padding: 15px 20px;
+  }
+
+  .sales-add-modal__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    position: static;
+  }
+
+  .sales-add-modal__button--cancel,
+  .sales-add-modal__button--create {
+    width: 100%;
+    text-align: center;
+  }
+
+  .sales-add-modal__product-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sales-add-modal__remove-button {
+    align-self: flex-end;
+  }
 }

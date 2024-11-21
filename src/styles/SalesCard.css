@@ -2,7 +2,7 @@
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
   border-radius: 10px;
-  padding: 20px;
+  padding: 20px 20px 60px 20px;
   flex: 1 1 200px;
   max-width: 200px;
   height: 250px;
@@ -12,68 +12,77 @@
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .sale-card:hover {
   transform: translateY(-5px);
 }
 
-.sale-card-header {
+.sale-card__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
 
-.sale-card-header h2 {
+.sale-card__date {
   font-size: 18px;
   margin: 0;
   color: #333333;
 }
 
-.sale-actions {
+.sale-card__actions {
   display: flex;
   gap: 5px;
-
 }
 
-.icon-button {
+.sale-card__icon-button {
   background: none;
   border: none;
   cursor: pointer;
-
+  padding: 0;
+  transition: color 0.3s ease;
 }
 
-.icon-button i {
+.sale-card__icon-button i {
   font-size: 14px;
 }
 
-.edit-icon i {
+.sale-card__icon-button--edit i {
   color: #007bff;
 }
 
-.delete-icon i {
+.sale-card__icon-button--edit:hover i {
+  color: #0056b3;
+}
+
+.sale-card__icon-button--delete i {
   color: #dc3545;
 }
 
-.sale-products {
+.sale-card__icon-button--delete:hover i {
+  color: #a71d2a;
+}
+
+.sale-card__products {
   flex: 1;
   overflow-y: auto;
   max-height: 100px;
   margin-bottom: 15px;
 }
 
-.product-item {
+.sale-card__product-item {
   margin-bottom: 8px;
   font-size: 1em;
   color: #555555;
 }
 
-.product-item span {
+.sale-card__product-details {
   display: block;
 }
 
-.sale-total {
+.sale-card__total {
   font-weight: bold;
   font-size: 1.1em;
   color: #000000;
@@ -83,8 +92,46 @@
   right: 20px;
   background-color: #ffffff;
   padding: 10px 0;
+  text-align: center;
+  border-top: 1px solid #e0e0e0;
 }
 
-.sale-card {
-  padding-bottom: 60px;
+@media (max-width: 768px) {
+  .sale-card {
+    width: 95%;
+    padding: 15px 20px 60px 20px;
+    max-width: none;
+    height: auto;
+  }
+
+  .sale-card__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .sale-card__date {
+    font-size: 16px;
+  }
+
+  .sale-card__icon-button i {
+    font-size: 12px;
+  }
+
+  .sale-card__products {
+    max-height: 80px;
+  }
+
+  .sale-card__product-item {
+    font-size: 0.9em;
+  }
+
+  .sale-card__total {
+    padding: 8px 0;
+    font-size: 1em;
+    left: 10px;
+    right: 10px;
+    border-top: none;
+    text-align: left;
+  }
 }

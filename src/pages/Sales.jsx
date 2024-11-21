@@ -4,6 +4,7 @@ import SalesAddModal from "../components/Modal/SalesAddModal";
 import SaleCard from "../components/SaleCard";
 import EditModal from "../components/Modal/EditModal";
 import DeleteModal from "../components/Modal/DeleteModal";
+import "../styles/Modal.css";
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
@@ -145,19 +146,19 @@ const Sales = () => {
   };
 
   return (
-    <div className="sales-page">
-      <div className="sales-header">
-        <h1>Sales Management</h1>
+    <div className="sales">
+      <div className="sales__header">
+        <h1 className="sales__title">Sales Management</h1>
         <button
-          className="add-sale-button"
+          className="sales__add-button sales__add-button--primary"
           onClick={() => handleOpenModal("create")}
         >
           <i className="fas fa-plus"></i>
         </button>
       </div>
 
-      <div className="sales-content">
-        <div className="sales-cards">
+      <div className="sales__content">
+        <div className="sales__cards">
           {sales.map((sale) => (
             <SaleCard
               key={sale.id}

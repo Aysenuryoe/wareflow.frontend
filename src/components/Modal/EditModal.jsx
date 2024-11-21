@@ -83,142 +83,151 @@ function EditModal({
   const fieldsToRender = fields && fields.length > 0 ? fields : dynamicFields;
 
   return (
-    <div className="modal large">
-      <div className="modal-content">
-        <span className="close" onClick={handleClose}>
+    <div className="modal modal--large">
+      <div className="modal__content">
+        <span className="modal__close" onClick={handleClose}>
           &times;
         </span>
-        <h2>{title}</h2>
-        <div className="form-group">
-          {fieldsToRender &&
-          Array.isArray(fieldsToRender) &&
-          fieldsToRender.length > 0 ? (
-            fieldsToRender.map((field) => (
-              <div key={field.name} className="form-row">
-                <label htmlFor={field.name}>{field.label}</label>
-                {field.type === "select" ? (
-                  <select
-                    name={field.name}
-                    value={formData[field.name] || ""}
-                    onChange={handleInputChange}
-                    className="p-2.5 rounded-md"
-                  >
-                    <option value="">Select {field.label}</option>
-                    {field.options &&
-                      field.options.map((option) =>
-                        typeof option === "string" ? (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ) : (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        )
-                      )}
-                  </select>
-                ) : (
-                  <input
-                    type={field.type}
-                    name={field.name}
-                    value={formData[field.name] || ""}
-                    onChange={handleInputChange}
-                    placeholder={field.placeholder || ""}
-                    className="p-2.5 rounded-md"
-                  />
-                )}
+        <h2 className="modal__title">{title}</h2>
+        <form className="modal__form" onSubmit={handleSubmit}>
+          <div className="modal__form-group">
+            {fieldsToRender && Array.isArray(fieldsToRender) && fieldsToRender.length > 0 ? (
+              fieldsToRender.map((field) => (
+                <div key={field.name} className="modal__form-row">
+                  <label htmlFor={field.name} className="modal__label">
+                    {field.label}:
+                  </label>
+                  {field.type === "select" ? (
+                    <select
+                      name={field.name}
+                      id={field.name}
+                      value={formData[field.name] || ""}
+                      onChange={handleInputChange}
+                      className="modal__select"
+                    >
+                      <option value="">Select {field.label.toLowerCase()}</option>
+                      {field.options &&
+                        field.options.map((option) =>
+                          typeof option === "string" ? (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ) : (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          )
+                        )}
+                    </select>
+                  ) : (
+                    <input
+                      type={field.type}
+                      name={field.name}
+                      id={field.name}
+                      value={formData[field.name] || ""}
+                      onChange={handleInputChange}
+                      placeholder={field.placeholder || ""}
+                      className="modal__input"
+                      disabled={field.disabled || false}
+                    />
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="modal__no-fields">
+                No fields available for editing. Please provide valid fields.
               </div>
-            ))
-          ) : (
-            <div>
-              No fields available for editing. Please provide valid fields.
-            </div>
-          )}
-          {formData.products &&
-            Array.isArray(formData.products) &&
-            formData.products.length > 0 && (
-              <div className="products-section">
-                <h3>Products</h3>
+            )}
+            {formData.products && Array.isArray(formData.products) && formData.products.length > 0 && (
+              <div className="modal__products-section">
+                <h3 className="modal__section-title">Products</h3>
                 {formData.products.map((product, index) => (
-                  <div key={product.barcode} className="form-row">
-                    <label htmlFor={`product-${index}`}>
-                      {product.barcode}
+                  <div key={product.barcode} className="modal__form-row">
+                    <label htmlFor={`product-${index}`} className="modal__label">
+                      {product.barcode}:
                     </label>
                     <input
                       type="number"
                       name={`product-${index}-quantity`}
+                      id={`product-${index}-quantity`}
                       value={product.quantity}
                       onChange={(e) =>
-                        handleProductQuantityChange(
-                          index,
-                          "quantity",
-                          e.target.value
-                        )
+                        handleProductQuantityChange(index, "quantity", e.target.value)
                       }
-                      className="p-2.5 rounded-md"
+                      className="modal__input"
+                      placeholder="Quantity"
                     />
                     {product.price !== undefined && (
                       <input
                         type="number"
                         name={`product-${index}-price`}
+                        id={`product-${index}-price`}
                         value={product.price}
                         onChange={(e) =>
-                          handleProductQuantityChange(
-                            index,
-                            "price",
-                            e.target.value
-                          )
+                          handleProductQuantityChange(index, "price", e.target.value)
                         }
                         placeholder="Price"
-                        className="p-2.5 rounded-md"
+                        className="modal__input"
                       />
                     )}
                   </div>
                 ))}
               </div>
             )}
-          {formData.status && (
-            <div className="form-row">
-              <label htmlFor="status">Status</label>
-              <select
-                name="status"
-                value={formData.status}
-                onChange={handleInputChange}
-                className="p-2.5 rounded-md"
-              >
-                <option value="">Select Status</option>
-                {["Ordered", "Pending", "Arrived", "Cancelled"].map(
-                  (status) => (
+            {formData.status && (
+              <div className="modal__form-row">
+                <label htmlFor="status" className="modal__label">
+                  Status:
+                </label>
+                <select
+                  name="status"
+                  id="status"
+                  value={formData.status}
+                  onChange={handleInputChange}
+                  className="modal__select"
+                >
+                  <option value="">Select Status</option>
+                  {["Ordered", "Pending", "Arrived", "Cancelled"].map((status) => (
                     <option key={status} value={status}>
                       {status}
                     </option>
-                  )
-                )}
-              </select>
-            </div>
-          )}
-          {formData.source && (
-            <div className="form-row">
-              <label htmlFor="source">Source</label>
-              <select
-                name="source"
-                value={formData.source}
-                onChange={handleInputChange}
-                className="p-2.5 rounded-md"
-              >
-                <option value="store">Store</option>
-              </select>
-            </div>
-          )}
-          <div className="btn-control">
-            <button className="cancel-btn" onClick={handleClose}>
+                  ))}
+                </select>
+              </div>
+            )}
+            {formData.source && (
+              <div className="modal__form-row">
+                <label htmlFor="source" className="modal__label">
+                  Source:
+                </label>
+                <select
+                  name="source"
+                  id="source"
+                  value={formData.source}
+                  onChange={handleInputChange}
+                  className="modal__select"
+                >
+                  <option value="store">Store</option>
+                </select>
+              </div>
+            )}
+          </div>
+          <div className="modal__button-group">
+            <button
+              type="button"
+              className="modal__button modal__button--cancel"
+              onClick={handleClose}
+            >
               Cancel
             </button>
-            <button className="update-btn" onClick={handleSubmit}>
+            <button
+              type="submit"
+              className="modal__button modal__button--update"
+            >
               Update
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
@@ -242,6 +251,9 @@ EditModal.propTypes = {
           }),
         ])
       ),
+      placeholder: PropTypes.string,
+      defaultValue: PropTypes.string,
+      disabled: PropTypes.bool,
     })
   ),
   title: PropTypes.string,

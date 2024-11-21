@@ -1,53 +1,27 @@
-:root {
-  margin: 0;
-  padding: 0;
-}
-
-.sales-page {
-  display: flex;
-  flex-direction: column;
-  height: 80vh;
+.sales {
   padding: 20px;
-  background-color: #f9f9f9;
-  overflow: hidden;
+  background-color: #f5f7fa;
+  font-family: "Roboto", sans-serif;
+  color: #333;
+  min-height: 80vh;
+  position: relative;
 }
 
-.sales-header {
-  flex: 0 0 auto;
+.sales__header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  justify-content: space-between;
   margin-bottom: 20px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #e0e0e0;
 }
 
-.sales-header h1 {
-  font-size: 2rem;
+.sales__title {
+  font-size: 24px;
+  font-weight: bold;
   color: #333;
   margin: 0;
 }
 
-.sales-content {
-  flex: 1 1 auto;
-  overflow-y: auto;
-}
-
-.sales-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
-.error-message {
-  color: red;
-  font-size: 1.2rem;
-}
-
-.add-sale-button {
+.sales__add-button {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -63,4 +37,40 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sales__add-button:hover {
+  background-color: #218838;
+}
+
+.sales__add-button--primary {
+  background-color: #28a745;
+}
+
+.sales__add-button--primary:hover {
+  background-color: #218838;
+}
+
+.sales__cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .sales__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .sales__add-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sales__cards {
+    flex-direction: column;
+  }
 }

@@ -96,92 +96,127 @@ function PurchaseAddModal({
   };
 
   return (
-    isOpen && (
-      <div className="purchase-add-modal-overlay">
-        <div className="purchase-add-modal">
-          <span className="close" onClick={onClose}>
-            &times;
-          </span>
-          <h2>{title}</h2>
-          <div className="form-group">
-            <div className="form">
-              <label>Order Date:</label>
-              <input
-                type="date"
-                value={orderDate}
-                onChange={(e) => setOrderDate(e.target.value)}
-              />
-            </div>
+    <div className="purchase-add-modal__overlay">
+      <div className="purchase-add-modal">
+        <span className="purchase-add-modal__close" onClick={onClose}>
+          &times;
+        </span>
+        <h2 className="purchase-add-modal__title">{title}</h2>
+        <div className="purchase-add-modal__form-group">
+          <div className="purchase-add-modal__form">
+            <label className="purchase-add-modal__label" htmlFor="orderDate">
+              Order Date:
+            </label>
+            <input
+              type="date"
+              id="orderDate"
+              name="orderDate"
+              value={orderDate}
+              onChange={(e) => setOrderDate(e.target.value)}
+              className="purchase-add-modal__input"
+            />
+          </div>
 
-            <div className="form">
-              <label>Status:</label>
-              <select
-  value={status}
-  onChange={(e) => setStatus(e.target.value)}
->
-  <option value="Ordered">Ordered</option>
-  <option value="Pending">Pending</option>
-  <option value="Arrived">Arrived</option>
-  <option value="Cancelled">Cancelled</option>
-</select>
+          <div className="purchase-add-modal__form">
+            <label className="purchase-add-modal__label" htmlFor="status">
+              Status:
+            </label>
+            <select
+              id="status"
+              name="status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="purchase-add-modal__select"
+            >
+              <option value="Ordered">Ordered</option>
+              <option value="Pending">Pending</option>
+              <option value="Arrived">Arrived</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
 
-            </div>
-
-            {selectedProducts.map((product, index) => (
-              <div key={index} className="product-group">
-                <label>Product:</label>
+          {selectedProducts.map((product, index) => (
+            <div key={index} className="purchase-add-modal__product-group">
+              <div className="purchase-add-modal__form-row">
+                <label
+                  className="purchase-add-modal__label"
+                  htmlFor={`product-${index}`}
+                >
+                  Product:
+                </label>
                 <select
+                  id={`product-${index}`}
+                  name={`product-${index}`}
                   value={product.barcode}
                   onChange={(e) => handleProductSelect(e, index)}
+                  className="purchase-add-modal__select"
                 >
                   <option value="">Select a product</option>
-                  {products.map((product) => (
-                    <option key={product.barcode} value={product.barcode}>
-                      {product.article} - {product.size} - (Price: {product.price})
+                  {products.map((prod) => (
+                    <option key={prod.barcode} value={prod.barcode}>
+                      {prod.article} - {prod.size} - (Price: {prod.price})
                     </option>
                   ))}
                 </select>
+              </div>
 
-                <label>Quantity:</label>
+              <div className="purchase-add-modal__form-row">
+                <label
+                  className="purchase-add-modal__label"
+                  htmlFor={`quantity-${index}`}
+                >
+                  Quantity:
+                </label>
                 <input
                   type="number"
+                  id={`quantity-${index}`}
+                  name={`quantity-${index}`}
                   min="1"
                   value={product.quantity}
                   onChange={(e) => handleQuantityChange(e, index)}
+                  className="purchase-add-modal__input"
                 />
-
-                <button
-                  type="button"
-                  onClick={() => handleProductRemove(index)}
-                  className="remove-product"
-                >
-                  Remove
-                </button>
               </div>
-            ))}
 
-            <div className="form">
               <button
                 type="button"
-                onClick={handleAddProduct}
-                className="add-product-btn"
+                onClick={() => handleProductRemove(index)}
+                className="purchase-add-modal__remove-button"
               >
-                Add Product
+                Remove
               </button>
             </div>
-          </div>
+          ))}
 
-          <div className="modal-actions">
-            <button className="cancel-btn" onClick={onClose}>
-              Cancel
-            </button>
-            <button className="create-btn" onClick={handleSubmit}>
-              Create Purchase
+          <div className="purchase-add-modal__form">
+            <button
+              type="button"
+              onClick={handleAddProduct}
+              className="purchase-add-modal__add-product-btn"
+            >
+              Add Product
             </button>
           </div>
         </div>
+
+        <div className="purchase-add-modal__actions">
+          <button
+            type="button"
+            className="purchase-add-modal__button purchase-add-modal__button--cancel"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="purchase-add-modal__button purchase-add-modal__button--create"
+            onClick={handleSubmit}
+          >
+            Create Purchase
+          </button>
+        </div>
       </div>
-    )
+    </div>
   );
 }
 

@@ -1,4 +1,7 @@
+// src/components/Modal/DeleteModal.jsx
+
 import React from "react";
+import PropTypes from "prop-types";
 
 function DeleteModal({ isOpen, onClose, onSubmit, itemName = "item" }) {
   if (!isOpen) return null;
@@ -9,18 +12,26 @@ function DeleteModal({ isOpen, onClose, onSubmit, itemName = "item" }) {
   };
 
   return (
-    <div className="modal large">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>
+    <div className="modal modal--small">
+      <div className="modal__content">
+        <span className="modal__close" onClick={onClose}>
           &times;
         </span>
-        <h2>{`Delete ${itemName}`}</h2>
-        <p>Are you sure you want to delete this {itemName}?</p>
-        <div className="btn-control">
-          <button className="cancel-btn" onClick={onClose}>
+        <h2 className="modal__title">{`Delete ${itemName}`}</h2>
+        <p className="modal__message">{`Are you sure you want to delete this ${itemName}?`}</p>
+        <div className="modal__button-group">
+          <button
+            type="button"
+            className="modal__button modal__button--cancel"
+            onClick={onClose}
+          >
             Cancel
           </button>
-          <button className="delete-btn" onClick={handleDelete}>
+          <button
+            type="button"
+            className="modal__button modal__button--delete"
+            onClick={handleDelete}
+          >
             Delete
           </button>
         </div>
@@ -28,5 +39,12 @@ function DeleteModal({ isOpen, onClose, onSubmit, itemName = "item" }) {
     </div>
   );
 }
+
+DeleteModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  itemName: PropTypes.string,
+};
 
 export default DeleteModal;

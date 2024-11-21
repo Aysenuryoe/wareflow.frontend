@@ -1,18 +1,25 @@
 .sidebar {
   width: 250px;
-  height: 100vh;
+  height: calc(100vh - 70px);
   background-color: var(--sidebar-bg);
   color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
   padding-top: 20px;
+  box-sizing: border-box;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  overflow-y: auto; 
+  transition: width 0.3s ease;
+  z-index: 1000; 
 }
 
-.sidebar-nav {
+.sidebar__nav {
   margin-top: 40px;
 }
 
-.sidebar-nav ul {
+.sidebar__list {
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -21,36 +28,40 @@
   height: 100%;
 }
 
-.sidebar-nav li {
+.sidebar__item {
   margin-bottom: 10px;
 }
-.sidebar-nav li:last-child {
+
+.sidebar__item--last {
   margin-top: 50px;
 }
 
-.sidebar-nav a {
+.sidebar__link {
   display: flex;
   align-items: center;
   text-decoration: none;
   color: var(--sidebar-text);
   padding: 12px 20px;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.sidebar-nav a i {
-  margin-right: 10px;
-  font-size: 18px;
-  width: 30px;
-}
-
-.sidebar-nav a:hover {
+.sidebar__link:hover {
   background-color: var(--sidebar-hover-bg);
   color: #ffffff;
   font-weight: bold;
 }
 
-.logout-button {
+.sidebar__icon {
+  margin-right: 10px;
+  font-size: 18px;
+  width: 30px;
+  transition: margin-right 0.3s ease;
+}
+
+.sidebar__button {
+  display: flex;
+  align-items: center;
   background: none;
   border: none;
   color: var(--sidebar-text);
@@ -59,19 +70,55 @@
   width: 100%;
   cursor: pointer;
   font-size: 16px;
-  display: flex;
-  align-items: center;
   border-radius: 5px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.logout-button i {
-  margin-right: 10px;
-  font-size: 18px;
-  width: 30px;
-}
-
-.logout-button:hover {
+.sidebar__button:hover {
   background-color: var(--sidebar-hover-bg);
-  color: white;
+  color: #ffffff;
+}
+
+.sidebar__button--logout {
+  color: var(--sidebar-text);
+}
+
+.sidebar__button--logout:hover {
+  background-color: var(--sidebar-hover-bg);
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar__link,
+  .sidebar__button {
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    padding-top: 10px;
+  }
+
+  .sidebar__link,
+  .sidebar__button {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .sidebar__icon {
+    margin-right: 0;
+  }
+
+  .sidebar--collapsed .sidebar__link,
+  .sidebar--collapsed .sidebar__button {
+    justify-content: center;
+  }
 }

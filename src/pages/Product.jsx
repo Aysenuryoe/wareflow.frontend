@@ -199,11 +199,11 @@ const Products = () => {
   const totalPages = Math.ceil(products.length / productsPerPage);
 
   return (
-    <div className="products-page">
-      <div className="products-header">
-        <h1>Products</h1>
+    <div className="products">
+      <div className="products__header">
+        <h1 className="products__title">Products</h1>
         <button
-          className={`delete-selected-button ${
+          className={`products__delete-button ${
             selectedProducts.length === 0 ? "hidden" : ""
           }`}
           onClick={handleDeleteSelectedProducts}
@@ -212,8 +212,8 @@ const Products = () => {
         </button>
       </div>
 
-      <table className="product-table">
-        <thead>
+      <table className="products__table">
+        <thead className="products__table-header">
           <tr>
             <th>
               <input
@@ -234,34 +234,37 @@ const Products = () => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="products__table-body">
           {currentProducts.map((product) => (
-            <tr key={product.id}>
-              <td>
+            <tr key={product.id} className="products__table-row">
+              <td className="products__table-cell">
                 <input
                   type="checkbox"
                   checked={selectedProducts.includes(product.id)}
                   onChange={() => handleCheckboxChange(product.id)}
+                  className="products__checkbox"
                 />
               </td>
-              <td>{product.article}</td>
-              <td>{product.size}</td>
-              <td>{product.price}</td>
-              <td>{product.productNum}</td>
-              <td>{product.stock}</td>
-              <td>
-                <button
-                  onClick={() => handleOpenModal("edit", product)}
-                  className="icon-button edit-icon"
-                >
-                  <i className="fas fa-edit"></i>
-                </button>
-                <button
-                  onClick={() => handleOpenModal("delete", product)}
-                  className="icon-button delete-icon"
-                >
-                  <i className="fas fa-trash"></i>
-                </button>
+              <td className="products__table-cell">{product.article}</td>
+              <td className="products__table-cell">{product.size}</td>
+              <td className="products__table-cell">{product.price}</td>
+              <td className="products__table-cell">{product.productNum}</td>
+              <td className="products__table-cell">{product.stock}</td>
+              <td className="products__table-cell">
+                <div className="products__action-buttons">
+                  <button
+                    onClick={() => handleOpenModal("edit", product)}
+                    className="products__action-button products__action-button--edit"
+                  >
+                    <i className="fas fa-edit"></i>
+                  </button>
+                  <button
+                    onClick={() => handleOpenModal("delete", product)}
+                    className="products__action-button products__action-button--delete"
+                  >
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
@@ -272,10 +275,11 @@ const Products = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
+        className="products__pagination"
       />
 
       <button
-        className="add-product-button"
+        className="products__add-button products__add-button--primary"
         onClick={() => handleOpenModal("create")}
       >
         <i className="fas fa-plus"></i>

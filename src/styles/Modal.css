@@ -6,154 +6,154 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
-.modal-content {
-  background-color: #ffffff;
-  padding: 20px;
+.modal__content {
+  background-color: #fff;
+  padding: 20px 30px;
   border-radius: 8px;
-  width: 500px;
-  max-width: 90%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
 }
 
-.close {
+.modal__close {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 24px;
+  top: 15px;
+  right: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
   cursor: pointer;
   color: #333;
 }
 
-.close:hover {
+.modal__close:hover {
   color: #ff0000;
 }
 
-.modal-content h2 {
-  font-size: 24px;
+.modal__title {
+  text-align: center;
   margin-bottom: 20px;
   color: #333;
 }
 
-.form-group {
+.modal__form-group {
+  margin-bottom: 15px;
+}
+
+.modal__form-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 15px;
-}
-
-.form {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.form label {
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-  flex: 1;
-  margin-bottom: 0;
-  text-align: left;
-}
-
-.form input,
-.form textarea,
-.form select {
-  /* Wende das gleiche Styling auf das select an */
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-  flex: 2;
-  width: 100%; /* Setzt die Breite auf 100% */
-}
-
-.form input:focus,
-.form textarea:focus,
-.form select:focus {
-  /* Fokus-Styling für select */
-  outline: none;
-  border-color: #007bff;
-}
-
-.btn-control {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.btn-control button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.add-btn {
-  background-color: #28a745;
-  color: white;
-}
-
-.add-btn:hover {
-  background-color: #218838;
-}
-
-.cancel-btn {
-  background-color: #ccc;
-  color: #333;
-}
-
-.cancel-btn:hover {
-  background-color: #999;
-}
-
-.bg-red-500 {
-  background-color: #dc3545;
-  color: white;
-}
-
-.bg-red-500:hover {
-  background-color: #b32b39;
-}
-
-.form-row {
-  display: flex;
-  align-items: center;
   margin-bottom: 10px;
 }
 
-.form-row label {
-  flex: 1;
-  font-size: 14px;
-  margin-right: 10px;
+.modal__label {
+  flex: 0 0 150px;
+  font-weight: bold;
+  color: #555;
 }
 
-.form-row input {
-  flex: 2;
-  padding: 8px;
-  font-size: 14px;
+.modal__input {
+  flex: 1;
+  padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  transition: border-color 0.3s;
 }
 
-.update-btn {
-  background-color: var(--primary-color);
+.modal__input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.modal__select {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+.modal__select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.modal__products-section {
+  margin-top: 20px;
+}
+
+.modal__section-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.modal__button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal__button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.modal__button--cancel {
+  background-color: #95a5a6;
   color: #fff;
 }
 
-.delete-btn {
-  background-color: #dc3545;
+.modal__button--cancel:hover {
+  background-color: #7f8c8d;
+}
+
+.modal__button--add {
+  background-color: #28a745;
   color: #fff;
 }
 
-.bg-red-500:hover {
-  background-color: #b32b39;
+.modal__button--add:hover {
+  background-color: #218838;
+}
+
+.modal__button--update {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.modal__button--update:hover {
+  background-color: #2980b9;
+}
+
+.modal__button--delete {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.modal__button--delete:hover {
+  background-color: #c0392b;
+}
+
+.modal__no-fields {
+  color: #e74c3c;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.modal__message {
+  margin: 20px 0;
+  font-size: 16px;
+  color: #333;
 }

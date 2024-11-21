@@ -1,22 +1,19 @@
-// src/components/Layout.jsx
 import React from "react";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
-import "../styles/Layout.css"; // Stile für das Layout
+import "../styles/Layout.css";
 
 const Layout = ({ children }) => {
-    return (
-        <div className="layout">
-            {/* Header oben */}
-            <Header />
+  return (
+    <div className="layout">
+      <Header />
 
-            {/* Sidebar links und Hauptinhalt */}
-            <div className="layout-content">
-                <Sidebar />
-                <main className="main-content">{children}</main> {/* Dynamischer Seiteninhalt */}
-            </div>
-        </div>
-    );
+      <div className="layout__content">
+        <Sidebar />
+        <main className="layout__main-content">{children}</main>
+      </div>
+    </div>
+  );
 };
 
 export default Layout;

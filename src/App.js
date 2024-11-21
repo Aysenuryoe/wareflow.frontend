@@ -5,20 +5,20 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import Layout from "./components/Layout"; // Layout-Komponente
-import Dashboard from "./pages/Dashboard"; // Seiten
+import Layout from "./components/Layout";
+import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Product";
 import Sales from "./pages/Sales";
 import Purchases from "./pages/Purchase";
 import Inventory from "./pages/Inventory";
 import Login from "./pages/Login";
-import { AuthProvider, useAuth } from "./context/AuthContext"; // Authentifizierungskontext
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth(); // Prüft, ob der Benutzer angemeldet ist
+  const { isAuthenticated } = useAuth();
   return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
@@ -26,15 +26,11 @@ function App() {
   return (
     <Router>
       {" "}
-      {/* Router für Navigation */}
       <AuthProvider>
         {" "}
-        {/* Kontext für die Authentifizierung */}
         <Routes>
-          {/* Öffentliche Route: Login */}
           <Route path="/login" element={<Login />} />
 
-          {/* Geschützte Routen: */}
           <Route
             path="/"
             element={
