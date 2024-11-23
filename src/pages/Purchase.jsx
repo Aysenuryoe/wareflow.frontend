@@ -52,6 +52,7 @@ const Purchase = () => {
   };
 
   const handleAddPurchase = async (purchaseData) => {
+    console.log("Sende Daten an Server:", purchaseData); 
     try {
       const response = await fetch(`${BASE_URL}/purchase`, {
         method: "POST",
@@ -62,7 +63,9 @@ const Purchase = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Error creating purchase");
+        const errorText = await response.text(); // Lies die Fehlermeldung aus
+        console.error("Server Error:", errorText);
+        throw new Error(`Error creating purchase: ${errorText}`);
       }
 
       const newPurchase = await response.json();

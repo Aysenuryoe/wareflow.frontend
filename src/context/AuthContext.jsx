@@ -10,10 +10,10 @@ export const AuthProvider = ({ children }) => {
 
 
   const login = (token, userData) => {
-    localStorage.setItem("token", token); // Token im localStorage speichern
-    setUser(userData); // Benutzerinformationen setzen
-    setIsAuthenticated(true); // Authentifizierungsstatus setzen
-    navigate("/"); // Benutzer zur Startseite leiten
+    localStorage.setItem("token", token); 
+    setUser(userData);
+    setIsAuthenticated(true);
+    navigate("/"); 
   };
 
 

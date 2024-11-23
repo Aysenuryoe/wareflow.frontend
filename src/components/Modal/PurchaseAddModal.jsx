@@ -204,10 +204,10 @@ function PurchaseAddModal({
               onChange={(e) => setStatus(e.target.value)}
               className="purchase-add-modal__select"
             >
-              <option value="ORDERED">Ordered</option>
-              <option value="PENDING">Pending</option>
-              <option value="ARRIVED">Arrived</option>
-              <option value="CANCELLED">Cancelled</option>
+              <option value="Ordered">Ordered</option>
+  <option value="Pending">Pending</option>
+  <option value="Arrived">Arrived</option>
+  <option value="Cancelled">Cancelled</option>
             </select>
           </div>
 

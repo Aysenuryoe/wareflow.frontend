@@ -8,7 +8,7 @@ import "../styles/Modal.css";
 
 const Sales = () => {
   const [sales, setSales] = useState([]);
-  const [selectedSale, setSelectedSale] = useState([]);
+  const [selectedSale, setSelectedSale] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);

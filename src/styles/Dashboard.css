@@ -1,46 +1,191 @@
-.dashboard {
-  padding: 20px;
-  background-color: #f8f9fa;
-  font-family: "Arial", sans-serif;
-  color: #333;
+
+:root {
+  --color-primary: #2c3e50;
+  --color-secondary: #18bc9c;
+  --color-background: #ecf0f1;
+  --color-white: #ffffff;
+  --color-gray: #7f8c8d;
+  --color-light-gray: #bdc3c7;
+  --color-error: #e74c3c;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-background);
+  font-family: var(--font-family);
+  color: var(--color-primary);
+}
+
+
 .dashboard__header {
+  background-color: var(--color-white);
+  padding: 40px 20px;
   text-align: center;
-  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard__title {
   font-size: 2.5rem;
-  font-weight: bold;
-}
-
-.dashboard__header .dashboard__subtitle {
-  font-size: 1.2rem;
-  color: #666;
-}
-
-.dashboard__content {
-  text-align: center;
-  font-size: 1rem;
-  line-height: 1.8;
-  color: #444;
-}
-
-.dashboard__list {
-  list-style-type: disc;
-  text-align: left;
-  margin: 20px auto;
-  padding: 0 40px;
-  max-width: 600px;
-}
-
-.dashboard__list-item {
   margin-bottom: 10px;
-  list-style: circle;
+  color: var(--color-primary);
 }
 
-.dashboard-content p {
-  max-width: 600px;
-  margin: 0 auto 20px auto;
+.dashboard__subtitle {
+  font-size: 1.2rem;
+  color: var(--color-gray);
+}
+
+.dashboard__main {
+  flex: 1;
+  padding: 20px 40px;
+}
+
+.dashboard__intro p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.dashboard__features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.dashboard__feature-item {
+  background-color: var(--color-white);
+  padding: 15px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard__feature-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard__icon {
+  font-size: 1.5rem;
+  color: var(--color-secondary);
+  margin-right: 10px;
+}
+
+/* Statistics Cards */
+.dashboard__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.dashboard__card {
+  background-color: var(--color-white);
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.dashboard__card:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  transform: translateY(-3px);
+}
+
+.dashboard__card-icon {
+  font-size: 2rem;
+  margin-right: 15px;
+  color: var(--color-secondary);
+}
+
+.dashboard__card-content h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.dashboard__card-content p {
+  margin: 5px 0 0;
+  font-size: 0.95rem;
+  color: var(--color-gray);
+}
+
+.dashboard__card:hover .dashboard__card-content p {
+  color: var(--color-white);
+}
+
+/* Footer Styling */
+.dashboard__footer {
+  background-color: var(--color-white);
+  text-align: center;
+  padding: 15px 20px;
+  font-size: 0.9rem;
+  color: var(--color-gray);
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard__header {
+    padding: 30px 15px;
+  }
+
+  .dashboard__title {
+    font-size: 2rem;
+  }
+
+  .dashboard__subtitle {
+    font-size: 1rem;
+  }
+
+  .dashboard__main {
+    padding: 15px 20px;
+  }
+
+  .dashboard__feature-item {
+    padding: 10px 15px;
+  }
+
+  .dashboard__card {
+    padding: 15px;
+  }
+
+  .dashboard__card-content h3 {
+    font-size: 1rem;
+  }
+
+  .dashboard__card-content p {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard__features {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard__header {
+    padding: 20px 10px;
+  }
+
+  .dashboard__title {
+    font-size: 1.75rem;
+  }
+
+  .dashboard__subtitle {
+    font-size: 0.95rem;
+  }
 }

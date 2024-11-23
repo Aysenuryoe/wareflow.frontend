@@ -21,6 +21,7 @@ function EditModal({
         updatedItem[dateField] = item[dateField].split("T")[0];
       }
       setFormData(updatedItem);
+      setErrors({});
 
       if (!fields || fields.length === 0) {
         const generatedFields = Object.keys(updatedItem)
@@ -29,7 +30,12 @@ function EditModal({
             return {
               name: key,
               label: key.charAt(0).toUpperCase() + key.slice(1),
-              type: typeof updatedItem[key] === "number" ? "number" : "text",
+              type:
+                typeof updatedItem[key] === "number"
+                  ? "number"
+                  : key.toLowerCase().includes("date")
+                  ? "date"
+                  : "text",
               required: true,
             };
           });
@@ -40,6 +46,7 @@ function EditModal({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Feld geändert: ${name} = ${value}`);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -56,7 +63,9 @@ function EditModal({
       updatedProducts[index] = {
         ...updatedProducts[index],
         [field]:
-          field === "quantity" || field === "price" ? parseFloat(value) : value,
+          field === "quantity" || field === "price"
+            ? parseFloat(value)
+            : value,
       };
       return {
         ...prevData,
@@ -68,13 +77,16 @@ function EditModal({
   const prepareFormDataForSubmit = (data) => {
     const preparedData = { ...data };
     if (preparedData.orderDate || preparedData.saleDate) {
-      const dateField = preparedData.orderDate ? "orderDate" : "saleDate";
+      const dateField = preparedData.orderDate
+        ? "orderDate"
+        : "saleDate";
       preparedData[dateField] = `${preparedData[dateField]}T00:00:00.000Z`;
     }
     return preparedData;
   };
 
   const validateField = (field, value) => {
+    console.log(`Validierung für Feld: ${field.name} mit Wert: ${value}`);
     switch (field.name) {
       case "article":
         if (typeof value === "string") {
@@ -91,7 +103,10 @@ function EditModal({
         if (!value) {
           return "Size must be selected.";
         }
-        if (!field.options.map((opt) => opt.value).includes(value)) {
+        if (
+          field.options &&
+          !field.options.map((opt) => opt.value).includes(value)
+        ) {
           return "Invalid size selected.";
         }
         break;
@@ -109,6 +124,7 @@ function EditModal({
         } else {
           return "Barcode must be a valid text.";
         }
+        break;
       case "price":
         if (value === "" || value === null || value === undefined) {
           return "Price is required.";
@@ -134,6 +150,18 @@ function EditModal({
         } else {
           return "Product Number must be a valid text.";
         }
+        break;
+      case "saleDate":
+      case "orderDate":
+        if (!value) {
+          return `${field.label} is required.`;
+        }
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+          return `${field.label} is invalid.`;
+        }
+
+        break;
       default:
         if (field.required) {
           if (typeof value === "string") {
@@ -164,15 +192,19 @@ function EditModal({
     });
 
     setErrors(newErrors);
+    console.log("Validation Errors:", newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("Formular wird gesendet");
     if (validateForm()) {
       const preparedData = prepareFormDataForSubmit(formData);
       onSubmit(preparedData);
       onClose();
+    } else {
+      console.log("Formular enthält Fehler");
     }
   };
 
@@ -207,7 +239,7 @@ function EditModal({
                       id={field.name}
                       value={formData[field.name] || ""}
                       onChange={handleInputChange}
-                      className="modal__select"
+                      className={`modal__select ${errors[field.name] ? "error" : ""}`}
                     >
                       <option value="">
                         Select {field.label.toLowerCase()}
@@ -233,7 +265,7 @@ function EditModal({
                       value={formData[field.name] || ""}
                       onChange={handleInputChange}
                       placeholder={field.placeholder || ""}
-                      className="modal__input"
+                      className={`modal__input ${errors[field.name] ? "error" : ""}`}
                       disabled={field.disabled || false}
                     />
                   )}
@@ -272,7 +304,7 @@ function EditModal({
                             e.target.value
                           )
                         }
-                        className="modal__input"
+                        className={`modal__input ${errors[`product-${index}-quantity`] ? "error" : ""}`}
                         placeholder="Quantity"
                       />
                       {product.price !== undefined && (
@@ -289,8 +321,18 @@ function EditModal({
                             )
                           }
                           placeholder="Price"
-                          className="modal__input"
+                          className={`modal__input ${errors[`product-${index}-price`] ? "error" : ""}`}
                         />
+                      )}
+                      {errors[`product-${index}-quantity`] && (
+                        <span className="modal__error">
+                          {errors[`product-${index}-quantity`]}
+                        </span>
+                      )}
+                      {errors[`product-${index}-price`] && (
+                        <span className="modal__error">
+                          {errors[`product-${index}-price`]}
+                        </span>
                       )}
                     </div>
                   ))}
@@ -306,7 +348,7 @@ function EditModal({
                   id="status"
                   value={formData.status}
                   onChange={handleInputChange}
-                  className="modal__select"
+                  className={`modal__select ${errors["status"] ? "error" : ""}`}
                 >
                   <option value="">Select Status</option>
                   {["Ordered", "Pending", "Arrived", "Cancelled"].map(
@@ -332,7 +374,7 @@ function EditModal({
                   id="source"
                   value={formData.source}
                   onChange={handleInputChange}
-                  className="modal__select"
+                  className={`modal__select ${errors["source"] ? "error" : ""}`}
                 >
                   <option value="store">Store</option>
                 </select>
