@@ -5,12 +5,12 @@ function SalesAddModal({
   isOpen,
   onClose,
   onSubmit,
-  fetchProducts,
   title = "Create a new Sale",
 }) {
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [saleDate, setSaleDate] = useState("");
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -32,6 +32,13 @@ function SalesAddModal({
     const updatedSelectedProducts = [...selectedProducts];
     updatedSelectedProducts[index] = e.target.value;
     setSelectedProducts(updatedSelectedProducts);
+
+    if (errors.selectedProducts) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedProducts: "",
+      }));
+    }
   };
 
   const handleProductRemove = (index) => {
@@ -39,29 +46,77 @@ function SalesAddModal({
       (_, i) => i !== index
     );
     setSelectedProducts(updatedSelectedProducts);
+
+    if (errors.selectedProducts) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedProducts: "",
+      }));
+    }
   };
 
   const handleSubmit = async () => {
-    const selectedProductDetails = selectedProducts
-      .map((barcode) => {
-        const product = products.find((prod) => prod.barcode === barcode);
-        return product ? { ...product, quantity: 1 } : null;
-      })
-      .filter(Boolean);
+    if (validateForm()) {
+      const selectedProductDetails = selectedProducts
+        .filter((barcode) => barcode)
+        .map((barcode) => {
+          const product = products.find((prod) => prod.barcode === barcode);
+          return product ? { ...product, quantity: 1 } : null;
+        })
+        .filter(Boolean);
 
-    const saleData = {
-      products: selectedProductDetails,
-      saleDate,
-      source: "store",
-    };
+      const saleData = {
+        products: selectedProductDetails,
+        saleDate,
+        source: "store",
+      };
 
-    await onSubmit(saleData);
-    onClose();
+      await onSubmit(saleData);
+      onClose();
+
+      setSelectedProducts([]);
+      setSaleDate("");
+      setErrors({});
+    }
   };
 
   const handleAddProduct = () => {
     setSelectedProducts([...selectedProducts, ""]);
+
+    if (errors.selectedProducts) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedProducts: "",
+      }));
+    }
   };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!saleDate) {
+      newErrors.saleDate = "Sale Date is required.";
+    } else {
+      const date = new Date(saleDate);
+      if (isNaN(date.getTime())) {
+        newErrors.saleDate = "Sale Date is invalid.";
+      }
+    }
+
+    const hasAtLeastOneProduct = selectedProducts.some(
+      (barcode) => barcode && barcode.trim() !== ""
+    );
+
+    if (!hasAtLeastOneProduct) {
+      newErrors.selectedProducts = "At least one product must be selected.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div className="sales-add-modal__overlay">
@@ -80,9 +135,24 @@ function SalesAddModal({
               id="saleDate"
               name="saleDate"
               value={saleDate}
-              onChange={(e) => setSaleDate(e.target.value)}
-              className="sales-add-modal__input"
+              onChange={(e) => {
+                setSaleDate(e.target.value);
+
+                if (errors.saleDate) {
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    saleDate: "",
+                  }));
+                }
+              }}
+              className={`sales-add-modal__input ${
+                errors.saleDate ? "error" : ""
+              }`}
             />
+
+            {errors.saleDate && (
+              <span className="sales-add-modal__error">{errors.saleDate}</span>
+            )}
           </div>
 
           {selectedProducts.map((product, index) => (
@@ -128,6 +198,12 @@ function SalesAddModal({
             >
               Add Product
             </button>
+
+            {errors.selectedProducts && (
+              <span className="sales-add-modal__error">
+                {errors.selectedProducts}
+              </span>
+            )}
           </div>
         </div>
 

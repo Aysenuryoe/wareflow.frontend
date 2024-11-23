@@ -39,7 +39,7 @@ const Login = () => {
     if (!password) {
       setPasswordError("Password is required.");
       valid = false;
-    } else if (password.length < 6) {
+    } else if (password.length < 8) {
       setPasswordError("Password must be at least 8 characters long.");
       valid = false;
     }
@@ -61,7 +61,7 @@ const Login = () => {
       }
 
       const data = await response.json();
-      login(data.token);
+      login(data.token, data.user);
       navigate("/");
     } catch (err) {
       setGeneralError(err.message);

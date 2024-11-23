@@ -1,7 +1,5 @@
-
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-
 
 function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
   const initialFormState = fields.reduce((acc, field) => {
@@ -10,6 +8,7 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
   }, {});
 
   const [formData, setFormData] = useState(initialFormState);
+  const [errors, setErrors] = useState({});
 
   const resetForm = () => {
     setFormData(initialFormState);
@@ -21,13 +20,98 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
       ...prevData,
       [name]: value,
     }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
+  };
+
+  const validateField = (field, value) => {
+    switch (field.name) {
+      case "article":
+        if (!value.trim()) {
+          return "Artikel ist erforderlich.";
+        }
+        if (!/^[A-Za-z\s]+$/.test(value)) {
+          return "Article can only contain letters and spaces.";
+        }
+        break;
+
+      case "size":
+        if (!value) {
+          return "Size must be selected.";
+        }
+        if (!field.options.map((opt) => opt.value).includes(value)) {
+          return "Invalid size selected.";
+        }
+        break;
+
+      case "barcode":
+        if (!value.trim()) {
+          return "Barcode is required.";
+        }
+        if (!/^\d+$/.test(value)) {
+          return "Barcode can only contain numbers.";
+        }
+        if (value.length !== 6) {
+          return "Barcode must be exactly 6 digits long.";
+        }
+        break;
+
+      case "price":
+        if (value === "") {
+          return "Price is required.";
+        }
+        if (isNaN(value)) {
+          return "Price can only contain numbers.";
+        }
+        if (Number(value) < 1) {
+          return "Price must be at least 1.";
+        }
+        break;
+
+      case "productNum":
+        if (!value.trim()) {
+          return "Product Number is required.";
+        }
+        if (!/^\d+$/.test(value)) {
+          return "Product Number can only contain numbers.";
+        }
+        if (value.length !== 10) {
+          return "Product Number must be exactly 10 digits long.";
+        }
+        break;
+
+      default:
+        if (field.required && !value.trim()) {
+          return `${field.label} is required.`;
+        }
+        break;
+    }
+    return "";
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    fields.forEach((field) => {
+      const error = validateField(field, formData[field.name]);
+      if (error) {
+        newErrors[field.name] = error;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await onSubmit(formData);
-    resetForm();
-    onClose();
+    if (validateForm()) {
+      onSubmit(formData);
+      resetForm();
+      onClose();
+    }
   };
 
   const handleClose = () => {
@@ -79,6 +163,9 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
                   />
                 )}
               </div>
+              {errors[field.name] && (
+                <span className="modal__error">{errors[field.name]}</span>
+              )}
             </div>
           ))}
           <div className="modal__button-group">
@@ -89,10 +176,7 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="modal__button modal__button--add"
-            >
+            <button type="submit" className="modal__button modal__button--add">
               Add
             </button>
           </div>
@@ -113,6 +197,7 @@ AddModal.propTypes = {
       type: PropTypes.string.isRequired,
       placeholder: PropTypes.string,
       defaultValue: PropTypes.string,
+      required: PropTypes.bool,
       options: PropTypes.arrayOf(
         PropTypes.shape({
           value: PropTypes.string.isRequired,

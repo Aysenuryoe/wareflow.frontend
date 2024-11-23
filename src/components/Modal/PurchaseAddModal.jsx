@@ -7,10 +7,11 @@ function PurchaseAddModal({
   onSubmit,
   title = "Create a new Purchase",
 }) {
-  const [products, setProducts] = useState([]); // Verfügbare Produkte
-  const [selectedProducts, setSelectedProducts] = useState([]); // Ausgewählte Produkte mit Mengen
-  const [orderDate, setOrderDate] = useState(""); // Bestelldatum
-  const [status, setStatus] = useState("ORDERED"); // Status (optional)
+  const [products, setProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [orderDate, setOrderDate] = useState("");
+  const [status, setStatus] = useState("ORDERED");
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -27,15 +28,19 @@ function PurchaseAddModal({
     };
     loadProducts();
 
-    // Fügen Sie ein leeres Produkt hinzu, wenn das Modal geöffnet wird
     if (isOpen) {
       setSelectedProducts([{ barcode: "", quantity: 1 }]);
+      setOrderDate("");
+      setStatus("ORDERED");
+      setErrors({});
     } else {
       setSelectedProducts([]);
+      setOrderDate("");
+      setStatus("ORDERED");
+      setErrors({});
     }
   }, [isOpen]);
 
-  // Produkt auswählen
   const handleProductSelect = (e, index) => {
     const selectedBarcode = e.target.value;
     const product = products.find((p) => p.barcode === selectedBarcode);
@@ -48,52 +53,106 @@ function PurchaseAddModal({
       quantity: updatedSelectedProducts[index]?.quantity || 1,
     };
     setSelectedProducts(updatedSelectedProducts);
+
+    if (errors.selectedProducts) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedProducts: "",
+      }));
+    }
   };
 
-  // Menge ändern
   const handleQuantityChange = (e, index) => {
     const quantity = parseInt(e.target.value, 10);
 
     const updatedSelectedProducts = [...selectedProducts];
     updatedSelectedProducts[index] = {
       ...updatedSelectedProducts[index],
-      quantity: isNaN(quantity) ? 1 : quantity,
+      quantity: isNaN(quantity) || quantity < 1 ? 1 : quantity,
     };
     setSelectedProducts(updatedSelectedProducts);
   };
 
-  // Produkt entfernen
   const handleProductRemove = (index) => {
-    const updatedSelectedProducts = selectedProducts.filter((_, i) => i !== index);
+    const updatedSelectedProducts = selectedProducts.filter(
+      (_, i) => i !== index
+    );
     setSelectedProducts(updatedSelectedProducts);
-  };
 
+    if (updatedSelectedProducts.length === 0) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedProducts: "At least one product must be selected.",
+      }));
+    }
+
+    if (errors.selectedProducts && updatedSelectedProducts.length > 0) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedProducts: "",
+      }));
+    }
+  };
 
   const handleAddProduct = () => {
     setSelectedProducts([...selectedProducts, { barcode: "", quantity: 1 }]);
+
+    if (errors.selectedProducts) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        selectedProducts: "",
+      }));
+    }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!orderDate) {
+      newErrors.orderDate = "Order Date is required.";
+    } else {
+      const date = new Date(orderDate);
+      if (isNaN(date.getTime())) {
+        newErrors.orderDate = "Order Date is invalid.";
+      }
+    }
+
+    const hasAtLeastOneProduct = selectedProducts.some(
+      (product) => product.barcode && product.barcode.trim() !== ""
+    );
+
+    if (!hasAtLeastOneProduct) {
+      newErrors.selectedProducts = "At least one product must be selected.";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async () => {
+    if (validateForm()) {
+      const selectedProductDetails = selectedProducts
+        .filter((product) => product.barcode)
+        .map((selectedProduct) => ({
+          barcode: selectedProduct.barcode,
+          quantity: selectedProduct.quantity,
+        }));
 
-    const selectedProductDetails = selectedProducts.map((selectedProduct) => {
-      return {
-        barcode: selectedProduct.barcode,
-        quantity: selectedProduct.quantity,
+      const formattedOrderDate = new Date(orderDate).toISOString();
+
+      const purchaseData = {
+        products: selectedProductDetails,
+        orderDate: formattedOrderDate,
+        status,
       };
-    });
-    const formattedOrderDate = new Date(orderDate).toISOString();
 
-
-    const purchaseData = {
-      products: selectedProductDetails,
-      orderDate: formattedOrderDate,
-      status,
-    };
-
-    await onSubmit(purchaseData);
-    onClose();
+      await onSubmit(purchaseData);
+      onClose();
+    }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="purchase-add-modal__overlay">
@@ -112,9 +171,26 @@ function PurchaseAddModal({
               id="orderDate"
               name="orderDate"
               value={orderDate}
-              onChange={(e) => setOrderDate(e.target.value)}
-              className="purchase-add-modal__input"
+              onChange={(e) => {
+                setOrderDate(e.target.value);
+
+                if (errors.orderDate) {
+                  setErrors((prevErrors) => ({
+                    ...prevErrors,
+                    orderDate: "",
+                  }));
+                }
+              }}
+              className={`purchase-add-modal__input ${
+                errors.orderDate ? "error" : ""
+              }`}
             />
+
+            {errors.orderDate && (
+              <span className="purchase-add-modal__error">
+                {errors.orderDate}
+              </span>
+            )}
           </div>
 
           <div className="purchase-add-modal__form">
@@ -128,65 +204,75 @@ function PurchaseAddModal({
               onChange={(e) => setStatus(e.target.value)}
               className="purchase-add-modal__select"
             >
-              <option value="Ordered">Ordered</option>
-              <option value="Pending">Pending</option>
-              <option value="Arrived">Arrived</option>
-              <option value="Cancelled">Cancelled</option>
+              <option value="ORDERED">Ordered</option>
+              <option value="PENDING">Pending</option>
+              <option value="ARRIVED">Arrived</option>
+              <option value="CANCELLED">Cancelled</option>
             </select>
           </div>
 
-          {selectedProducts.map((product, index) => (
-            <div key={index} className="purchase-add-modal__product-group">
-              <div className="purchase-add-modal__form-row">
-                <label
-                  className="purchase-add-modal__label"
-                  htmlFor={`product-${index}`}
-                >
-                  Product:
-                </label>
-                <select
-                  id={`product-${index}`}
-                  name={`product-${index}`}
-                  value={product.barcode}
-                  onChange={(e) => handleProductSelect(e, index)}
-                  className="purchase-add-modal__select"
-                >
-                  <option value="">Select a product</option>
-                  {products.map((prod) => (
-                    <option key={prod.barcode} value={prod.barcode}>
-                      {prod.article} - {prod.size} - (Price: {prod.price})
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <div className="purchase-add-modal__products-section">
+            {selectedProducts.map((product, index) => (
+              <div key={index} className="purchase-add-modal__product-group">
+                <div className="purchase-add-modal__form-row">
+                  <label
+                    className="purchase-add-modal__label"
+                    htmlFor={`product-${index}`}
+                  >
+                    Product:
+                  </label>
+                  <select
+                    id={`product-${index}`}
+                    name={`product-${index}`}
+                    value={product.barcode}
+                    onChange={(e) => handleProductSelect(e, index)}
+                    className={`purchase-add-modal__select ${
+                      errors.selectedProducts ? "error" : ""
+                    }`}
+                  >
+                    <option value="">Select a product</option>
+                    {products.map((prod) => (
+                      <option key={prod.barcode} value={prod.barcode}>
+                        {prod.article} - {prod.size} - (Price: {prod.price})
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div className="purchase-add-modal__form-row">
-                <label
-                  className="purchase-add-modal__label"
-                  htmlFor={`quantity-${index}`}
-                >
-                  Quantity:
-                </label>
-                <input
-                  type="number"
-                  id={`quantity-${index}`}
-                  name={`quantity-${index}`}
-                  min="1"
-                  value={product.quantity}
-                  onChange={(e) => handleQuantityChange(e, index)}
-                  className="purchase-add-modal__input"
-                />
-              </div>
+                <div className="purchase-add-modal__form-row">
+                  <label
+                    className="purchase-add-modal__label"
+                    htmlFor={`quantity-${index}`}
+                  >
+                    Quantity:
+                  </label>
+                  <input
+                    type="number"
+                    id={`quantity-${index}`}
+                    name={`quantity-${index}`}
+                    min="1"
+                    value={product.quantity}
+                    onChange={(e) => handleQuantityChange(e, index)}
+                    className="purchase-add-modal__input"
+                  />
+                </div>
 
-              <button
-                type="button"
-                onClick={() => handleProductRemove(index)}
-                className="purchase-add-modal__remove-button"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
+                <button
+                  type="button"
+                  onClick={() => handleProductRemove(index)}
+                  className="purchase-add-modal__remove-button"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {errors.selectedProducts && (
+            <span className="purchase-add-modal__error">
+              {errors.selectedProducts}
+            </span>
+          )}
 
           <div className="purchase-add-modal__form">
             <button

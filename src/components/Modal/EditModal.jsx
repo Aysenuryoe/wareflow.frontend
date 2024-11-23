@@ -11,6 +11,7 @@ function EditModal({
 }) {
   const [formData, setFormData] = useState({});
   const [dynamicFields, setDynamicFields] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (item) {
@@ -29,6 +30,7 @@ function EditModal({
               name: key,
               label: key.charAt(0).toUpperCase() + key.slice(1),
               type: typeof updatedItem[key] === "number" ? "number" : "text",
+              required: true,
             };
           });
         setDynamicFields(generatedFields);
@@ -41,6 +43,10 @@ function EditModal({
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
     }));
   };
 
@@ -68,10 +74,106 @@ function EditModal({
     return preparedData;
   };
 
-  const handleSubmit = async () => {
-    const preparedData = prepareFormDataForSubmit(formData);
-    await onSubmit(preparedData);
-    onClose();
+  const validateField = (field, value) => {
+    switch (field.name) {
+      case "article":
+        if (typeof value === "string") {
+          if (!value.trim()) {
+            return "Article is required.";
+          }
+          if (!/^[A-Za-z\s]+$/.test(value)) {
+            return "Article can only contain letters and spaces.";
+          }
+        } else {
+          return "Article must be a valid text.";
+        }
+      case "size":
+        if (!value) {
+          return "Size must be selected.";
+        }
+        if (!field.options.map((opt) => opt.value).includes(value)) {
+          return "Invalid size selected.";
+        }
+        break;
+      case "barcode":
+        if (typeof value === "string") {
+          if (!value.trim()) {
+            return "Barcode is required.";
+          }
+          if (!/^\d+$/.test(value)) {
+            return "Barcode can only contain numbers.";
+          }
+          if (value.length !== 6) {
+            return "Barcode must be exactly 6 digits long.";
+          }
+        } else {
+          return "Barcode must be a valid text.";
+        }
+      case "price":
+        if (value === "" || value === null || value === undefined) {
+          return "Price is required.";
+        }
+        if (isNaN(value)) {
+          return "Price can only contain numbers.";
+        }
+        if (Number(value) < 1) {
+          return "Price must be at least 1.";
+        }
+        break;
+      case "productNum":
+        if (typeof value === "string") {
+          if (!value.trim()) {
+            return "Product Number is required.";
+          }
+          if (!/^\d+$/.test(value)) {
+            return "Product Number can only contain numbers.";
+          }
+          if (value.length !== 10) {
+            return "Product Number must be exactly 10 digits long.";
+          }
+        } else {
+          return "Product Number must be a valid text.";
+        }
+      default:
+        if (field.required) {
+          if (typeof value === "string") {
+            if (!value.trim()) {
+              return `${field.label} is required.`;
+            }
+          } else if (!value) {
+            return `${field.label} is required.`;
+          }
+        }
+        break;
+    }
+    return "";
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    const fieldsToValidate =
+      fields && fields.length > 0 ? fields : dynamicFields;
+
+    fieldsToValidate.forEach((field) => {
+      const value = formData[field.name];
+      const error = validateField(field, value);
+      if (error) {
+        newErrors[field.name] = error;
+      }
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      const preparedData = prepareFormDataForSubmit(formData);
+      onSubmit(preparedData);
+      onClose();
+    }
   };
 
   const handleClose = () => {
@@ -83,7 +185,7 @@ function EditModal({
   const fieldsToRender = fields && fields.length > 0 ? fields : dynamicFields;
 
   return (
-    <div className="modal modal--large">
+    <div className="modal">
       <div className="modal__content">
         <span className="modal__close" onClick={handleClose}>
           &times;
@@ -91,7 +193,9 @@ function EditModal({
         <h2 className="modal__title">{title}</h2>
         <form className="modal__form" onSubmit={handleSubmit}>
           <div className="modal__form-group">
-            {fieldsToRender && Array.isArray(fieldsToRender) && fieldsToRender.length > 0 ? (
+            {fieldsToRender &&
+            Array.isArray(fieldsToRender) &&
+            fieldsToRender.length > 0 ? (
               fieldsToRender.map((field) => (
                 <div key={field.name} className="modal__form-row">
                   <label htmlFor={field.name} className="modal__label">
@@ -105,7 +209,9 @@ function EditModal({
                       onChange={handleInputChange}
                       className="modal__select"
                     >
-                      <option value="">Select {field.label.toLowerCase()}</option>
+                      <option value="">
+                        Select {field.label.toLowerCase()}
+                      </option>
                       {field.options &&
                         field.options.map((option) =>
                           typeof option === "string" ? (
@@ -131,6 +237,9 @@ function EditModal({
                       disabled={field.disabled || false}
                     />
                   )}
+                  {errors[field.name] && (
+                    <span className="modal__error">{errors[field.name]}</span>
+                  )}
                 </div>
               ))
             ) : (
@@ -138,42 +247,55 @@ function EditModal({
                 No fields available for editing. Please provide valid fields.
               </div>
             )}
-            {formData.products && Array.isArray(formData.products) && formData.products.length > 0 && (
-              <div className="modal__products-section">
-                <h3 className="modal__section-title">Products</h3>
-                {formData.products.map((product, index) => (
-                  <div key={product.barcode} className="modal__form-row">
-                    <label htmlFor={`product-${index}`} className="modal__label">
-                      {product.barcode}:
-                    </label>
-                    <input
-                      type="number"
-                      name={`product-${index}-quantity`}
-                      id={`product-${index}-quantity`}
-                      value={product.quantity}
-                      onChange={(e) =>
-                        handleProductQuantityChange(index, "quantity", e.target.value)
-                      }
-                      className="modal__input"
-                      placeholder="Quantity"
-                    />
-                    {product.price !== undefined && (
+            {formData.products &&
+              Array.isArray(formData.products) &&
+              formData.products.length > 0 && (
+                <div className="modal__products-section">
+                  <h3 className="modal__section-title">Products</h3>
+                  {formData.products.map((product, index) => (
+                    <div key={product.barcode} className="modal__form-row">
+                      <label
+                        htmlFor={`product-${index}`}
+                        className="modal__label"
+                      >
+                        {product.barcode}:
+                      </label>
                       <input
                         type="number"
-                        name={`product-${index}-price`}
-                        id={`product-${index}-price`}
-                        value={product.price}
+                        name={`product-${index}-quantity`}
+                        id={`product-${index}-quantity`}
+                        value={product.quantity}
                         onChange={(e) =>
-                          handleProductQuantityChange(index, "price", e.target.value)
+                          handleProductQuantityChange(
+                            index,
+                            "quantity",
+                            e.target.value
+                          )
                         }
-                        placeholder="Price"
                         className="modal__input"
+                        placeholder="Quantity"
                       />
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
+                      {product.price !== undefined && (
+                        <input
+                          type="number"
+                          name={`product-${index}-price`}
+                          id={`product-${index}-price`}
+                          value={product.price}
+                          onChange={(e) =>
+                            handleProductQuantityChange(
+                              index,
+                              "price",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Price"
+                          className="modal__input"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             {formData.status && (
               <div className="modal__form-row">
                 <label htmlFor="status" className="modal__label">
@@ -187,12 +309,17 @@ function EditModal({
                   className="modal__select"
                 >
                   <option value="">Select Status</option>
-                  {["Ordered", "Pending", "Arrived", "Cancelled"].map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))}
+                  {["Ordered", "Pending", "Arrived", "Cancelled"].map(
+                    (status) => (
+                      <option key={status} value={status}>
+                        {status}
+                      </option>
+                    )
+                  )}
                 </select>
+                {errors["status"] && (
+                  <span className="modal__error">{errors["status"]}</span>
+                )}
               </div>
             )}
             {formData.source && (
@@ -209,6 +336,9 @@ function EditModal({
                 >
                   <option value="store">Store</option>
                 </select>
+                {errors["source"] && (
+                  <span className="modal__error">{errors["source"]}</span>
+                )}
               </div>
             )}
           </div>
@@ -254,6 +384,7 @@ EditModal.propTypes = {
       placeholder: PropTypes.string,
       defaultValue: PropTypes.string,
       disabled: PropTypes.bool,
+      required: PropTypes.bool,
     })
   ),
   title: PropTypes.string,

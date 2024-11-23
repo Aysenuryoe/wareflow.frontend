@@ -13,6 +13,8 @@ import Purchases from "./pages/Purchase";
 import Inventory from "./pages/Inventory";
 import Login from "./pages/Login";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import Profile from "./pages/Profile";
+
 
 import "./App.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -77,6 +79,16 @@ function App() {
               <PrivateRoute>
                 <Layout>
                   <Inventory />
+                </Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Layout>
+                  <Profile />
                 </Layout>
               </PrivateRoute>
             }

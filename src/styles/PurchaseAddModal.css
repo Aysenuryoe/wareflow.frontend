@@ -186,3 +186,14 @@
     align-self: flex-end;
   }
 }
+.purchase-add-modal__error {
+  color: #ff0000;
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
+
+.purchase-add-modal__input.error,
+.purchase-add-modal__select.error {
+  border-color: #ff0000;
+}

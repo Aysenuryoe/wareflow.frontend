@@ -180,3 +180,16 @@
     align-self: flex-end;
   }
 }
+
+
+.sales-add-modal__error {
+  color: #ff0000;
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}
+
+.sales-add-modal__input.error,
+.sales-add-modal__select.error {
+  border-color: #ff0000;
+}

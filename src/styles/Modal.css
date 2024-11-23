@@ -157,3 +157,10 @@
   font-size: 16px;
   color: #333;
 }
+
+.modal__error {
+  color: #ff0000;
+  font-size: 0.9em;
+  margin-top: 4px;
+  display: block;
+}

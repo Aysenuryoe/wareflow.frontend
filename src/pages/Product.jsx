@@ -161,34 +161,53 @@ const Products = () => {
       name: "article",
       label: "Article",
       type: "text",
-      placeholder: "Enter article name",
+      placeholder: "Enter an article",
+      required: true,
     },
-    { name: "size", label: "Size", type: "select" },
+    {
+      name: "size",
+      label: "Size",
+      type: "select",
+      required: true,
+      options: [
+        { value: "XS", label: "XS" },
+        { value: "S", label: "S" },
+        { value: "M", label: "M" },
+        { value: "L", label: "L" },
+        { value: "XL", label: "XL" },
+        { value: "NOSIZE", label: "NO SIZE" },
+      ],
+    },
     {
       name: "barcode",
       label: "Barcode",
       type: "text",
-      placeholder: "Enter barcode",
+      placeholder: "Enter the barcode",
+      required: true,
     },
     {
       name: "price",
       label: "Price",
       type: "number",
-      placeholder: "Enter price",
+      placeholder: "Enter the price",
+      required: true,
     },
     {
       name: "productNum",
-      label: "Product Number",
+      label: "Product number",
       type: "text",
-      placeholder: "Enter product number",
+      placeholder: "Enter a product number",
+      required: true,
     },
     {
       name: "stock",
       label: "Stock",
       type: "number",
-      placeholder: "Enter stock quantity",
+      placeholder: "Enter a stock number",
+      required: true
     },
   ];
+  
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
