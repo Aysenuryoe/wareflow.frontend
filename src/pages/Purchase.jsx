@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import EditModal from "../components/Modal/EditModal.jsx";
+import PurchaseEditModal from "../components/Modal/PurchaseEditModal.jsx";
 import DeleteModal from "../components/Modal/DeleteModal.jsx";
 import Pagination from "../components/Pagination.jsx";
 import "../styles/Purchase.css";
@@ -63,7 +63,7 @@ const Purchase = () => {
       });
 
       if (!response.ok) {
-        const errorText = await response.text(); // Lies die Fehlermeldung aus
+        const errorText = await response.text();
         console.error("Server Error:", errorText);
         throw new Error(`Error creating purchase: ${errorText}`);
       }
@@ -123,13 +123,42 @@ const Purchase = () => {
   };
 
   const purchaseFields = [
-
     {
       name: "orderDate",
       label: "Order Date",
       type: "date",
     },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "Ordered", label: "Ordered" },
+        { value: "Pending", label: "Pending" },
+        { value: "Arrived", label: "Arrived" },
+        { value: "Cancelled", label: "Cancelled" },
+      ],
+    },
+    {
+      name: "products",
+      label: "Products",
+      type: "array", 
+      fields: [
+        {
+          name: "barcode",
+          label: "Barcode",
+          type: "text",
+          readOnly: true,
+        },
+        {
+          name: "quantity",
+          label: "Quantity",
+          type: "number",
+        },
+      ],
+    },
   ];
+  
 
   const indexOfLastPurchase = currentPage * purchasesPerPage;
   const indexOfFirstPurchase = indexOfLastPurchase - purchasesPerPage;
@@ -220,7 +249,7 @@ const Purchase = () => {
       )}
 
       {showEditModal && (
-        <EditModal
+        <PurchaseEditModal
           isOpen={showEditModal}
           onClose={handleCloseModal}
           onSubmit={handleEditPurchase}

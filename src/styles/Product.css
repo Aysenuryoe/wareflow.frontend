@@ -1,16 +1,15 @@
 .products {
   padding: 20px;
-  background-color: #f5f7fa;
   font-family: "Roboto", sans-serif;
   color: #333;
   min-height: 80vh;
   position: relative;
+  padding-top: 0;
 }
 
 .products__title {
-  font-size: 24px;
+  font-size: 2rem;
   font-weight: bold;
-  color: #333;
   margin: 0;
 }
 
@@ -169,9 +168,11 @@
   justify-content: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease, transform 0.3s ease;
+  z-index: 9999;
 }
 
 .products__add-button:hover {
   background-color: #218838;
   transform: scale(1.05);
 }
+ 

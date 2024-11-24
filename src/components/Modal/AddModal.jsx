@@ -30,7 +30,7 @@ function AddModal({ isOpen, onClose, onSubmit, fields, title = "Add Item" }) {
     switch (field.name) {
       case "article":
         if (!value.trim()) {
-          return "Artikel ist erforderlich.";
+          return "Artikel is required.";
         }
         if (!/^[A-Za-z\s]+$/.test(value)) {
           return "Article can only contain letters and spaces.";

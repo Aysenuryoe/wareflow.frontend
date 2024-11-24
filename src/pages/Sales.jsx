@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/Sales.css";
 import SalesAddModal from "../components/Modal/SalesAddModal";
 import SaleCard from "../components/SaleCard";
-import EditModal from "../components/Modal/EditModal";
+import SalesEditModal from "../components/Modal/SalesEditModal";
 import DeleteModal from "../components/Modal/DeleteModal";
 import "../styles/Modal.css";
 
@@ -119,15 +119,27 @@ const Sales = () => {
       placeholder: "Select sale date",
     },
     {
-      name: "source",
-      label: "Source",
-      type: "text",
-      placeholder: "Enter source (e.g. store)",
-      defaultValue: "store",
-      disabled: true,
+      name: "products",
+      label: "Products",
+      type: "array",
+      fields: [
+        {
+          name: "quantity",
+          label: "Quantity",
+          type: "number",
+          placeholder: "Enter quantity",
+        },
+        {
+          name: "price",
+          label: "Price",
+          type: "number",
+          placeholder: "Enter price",
+         
+        },
+      ],
     },
-    { name: "products", label: "Products", type: "select" },
   ];
+  
 
   const calculateTotalAmount = (products) => {
     return products.reduce((total, product) => {
@@ -182,13 +194,13 @@ const Sales = () => {
       )}
 
       {showEditModal && (
-        <EditModal
+        <SalesEditModal
           isOpen={showEditModal}
           onClose={handleCloseModal}
           onSubmit={handleEditSale}
           item={selectedSale}
           title="Edit Sale"
-          fields={saleFields}
+          fields={selectedSale}
         />
       )}
       {showDeleteModal && (
