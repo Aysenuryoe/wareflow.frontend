@@ -61,16 +61,17 @@ export default function PurchaseAddModal({ onClose, onSave }) {
             return;
         }
 
-        // Create the purchase data in the required structure
         const purchaseData = {
             supplier,
             status,
             orderDate,
-            products: purchaseItems.map(({ productId, quantity }) => ({
+            products: purchaseItems.map(({ productId, quantity, name }) => ({
                 productId,
+                name,
                 quantity: parseInt(quantity, 10),
             })),
         };
+        
 
         onSave(purchaseData);
     };

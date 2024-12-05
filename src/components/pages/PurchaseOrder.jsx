@@ -49,7 +49,6 @@ export default function PurchaseOrder() {
     }
 
     const postPurchaseOrder = async (newOrder) => {
-        console.log(newOrder)
         const response = await fetch('https://localhost:3001/api/purchase', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -75,24 +74,22 @@ export default function PurchaseOrder() {
             });
         
             if (!response.ok) {
-                const errorDetails = await response.json(); // Fehlerdetails von der API
+                const errorDetails = await response.json();
                 console.error('Fehlerdetails:', errorDetails);
                 throw new Error(`API-Fehler: ${response.status}`);
             }
         
             const savedOrder = await response.json();
-            console.log('Erfolgreich aktualisiert:', savedOrder);
         
             setPurchaseOrders((prevOrders) =>
                 prevOrders.map((order) =>
                     order._id === savedOrder._id ? savedOrder : order
                 )
-            );
-            setEditModalOpen(false);
+            )
+            setEditModalOpen(false)
         } catch (error) {
-            console.error('Fehler beim Aktualisieren der Bestellung:', error.message);
+            console.error('Fehler beim Aktualisieren der Bestellung:', error.message)
         }
-        
     }
 
     const openAddOrderModal = () => {
@@ -109,7 +106,7 @@ export default function PurchaseOrder() {
         <div className="purchase-order-container">
             <div className="purchase-header">
                 <h1>Wareneinkäufe</h1>
-                <button className="add-purchase-button " onClick={openAddOrderModal}>
+                <button className="add-purchase-button" onClick={openAddOrderModal}>
                     Bestellung Hinzufügen
                 </button>
             </div>
@@ -118,23 +115,24 @@ export default function PurchaseOrder() {
                 <table className="table">
                     <thead>
                         <tr>
+                            <th>Nummer</th> {/* Spalte für Nummer */}
                             <th>Produkte</th>
                             <th>Lieferant</th>
                             <th>Status</th>
                             <th>Bestelldatum</th>
-
                             <th>Aktionen</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {currentOrders.map((order) => (
+                        {currentOrders.map((order, index) => (
                             <tr key={order._id}>
+                                <td>{indexOfFirstOrder + index + 1}</td> {/* Nummer basierend auf Position */}
                                 <td>
                                     {order.products && order.products.length > 0 ? (
                                         <ul className="purchase-list">
                                             {order.products.map((product, index) => (
                                                 <li key={index}>
-                                                    Name: {product.productId}, Menge: {product.quantity}
+                                                    {product.name}, Menge: {product.quantity}
                                                 </li>
                                             ))}
                                         </ul>
