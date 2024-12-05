@@ -1,0 +1,78 @@
+.stats-grid {
+	display: flex;
+	gap: 1rem;
+}
+
+.box-wrapper {
+	background-color: white;
+	border: 1px solid #e5e7eb;
+	border-radius: 4px;
+	padding: 1rem;
+	flex: 1;
+	display: flex;
+	align-items: center;
+}
+
+.icon-wrapper {
+	border-radius: 50%;
+	height: 48px;
+	width: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+}
+
+.icon-wrapper.sky {
+	background-color: #38bdf8;
+}
+
+.icon-wrapper.orange {
+	background-color: #fb923c;
+}
+
+.icon-wrapper.yellow {
+	background-color: #facc15;
+}
+
+.icon-wrapper.green {
+	background-color: #22c55e;
+}
+
+.icon {
+	font-size: 24px;
+}
+
+.details {
+	padding-left: 1rem;
+}
+
+.label {
+	font-size: 0.875rem;
+	color: #6b7280;
+	font-weight: 300;
+}
+
+.stats {
+	display: flex;
+	align-items: center;
+}
+
+.value {
+	font-size: 1.25rem;
+	color: #374151;
+	font-weight: 600;
+}
+
+.change {
+	font-size: 0.875rem;
+	padding-left: 0.5rem;
+}
+
+.change.positive {
+	color: #22c55e;
+}
+
+.change.negative {
+	color: #ef4444;
+}

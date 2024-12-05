@@ -1,83 +1,54 @@
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: var(--header-bg);
-  color: var(--header-text);
-  padding: 15px 25px;
-  box-shadow: var(--box-shadow);
-  height: 70px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1100;
-  box-sizing: border-box;
+    background-color: white;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.header__title {
-  font-size: 1.8em;
-  font-weight: bold;
-  margin: 0;
-  color: var(--primary-color);
+.search-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
-.header__user-profile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--header-bg);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  box-shadow: var(--box-shadow);
+.search-icon {
+    position: absolute;
+    font-size: 20px;
+    color: #9ca3af;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-.header__user-icon {
-  color: var(--user-icon-color);
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: color 0.3s ease;
+.search-input {
+    height: 40px;
+    width: 300px;
+    padding: 0 1rem;
+    padding-left: 40px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    outline: none;
+    color: #374151;
+    background-color: #f9fafb;
 }
 
-.header__user-icon:hover {
-  color: var(--header-hover-text);
+.search-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
-@media (max-width: 768px) {
-  .header {
-    padding: 15px 20px;
-  }
-
-  .header__title {
-    font-size: 1.6em;
-  }
-
-  .header__user-profile {
-    width: 35px;
-    height: 35px;
-  }
-
-  .header__user-icon {
-    font-size: 1rem;
-  }
+.user-icon {
+    font-size: 24px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.2s ease;
 }
 
-@media (max-width: 480px) {
-  .header {
-    padding: 10px 15px;
-  }
-
-  .header__title {
-    font-size: 1.4em;
-  }
-
-  .header__user-profile {
-    width: 30px;
-    height: 30px;
-  }
-
-  .header__user-icon {
-    font-size: 0.9rem;
-  }
+.user-icon:hover {
+    color: #374151;
 }

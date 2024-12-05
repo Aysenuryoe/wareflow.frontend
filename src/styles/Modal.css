@@ -1,172 +1,125 @@
-.modal {
+
+.modal-container {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 1000;
 }
 
-.modal__content {
-  background-color: #fff;
-  padding: 20px 30px;
+/* Modal box */
+.modal {
+  background-color: white;
+  width: 500px;
+  max-width: 90%;
+  padding: 2rem;
   border-radius: 8px;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-.modal__close {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  color: #333;
-}
 
-.modal__close:hover {
-  color: #ff0000;
-}
-
-.modal__title {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.modal__form-group {
-  margin-bottom: 15px;
-}
-
-.modal__form-row {
+.form-group {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
-.modal__label {
-  flex: 0 0 150px;
-  font-weight: bold;
-  color: #555;
+.form-group label {
+  width: 120px;
+  margin-right: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
 }
 
-.modal__input {
+.form-group input,
+.form-group select,
+.form-group textarea {
   flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
   border-radius: 4px;
-  transition: border-color 0.3s;
-}
-
-.modal__input:focus {
-  border-color: #3498db;
   outline: none;
+  transition: border-color 0.2s ease-in-out;
 }
 
-.modal__select {
-  flex: 1;
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s;
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
-.modal__select:focus {
-  border-color: #3498db;
-  outline: none;
+.form-group textarea {
+  resize: none;
+  height: 80px;
 }
 
-.modal__products-section {
-  margin-top: 20px;
-}
-
-.modal__section-title {
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.modal__button-group {
+.button-group {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  margin-top: 20px;
+  justify-content: space-between; 
+  margin-top: 1rem;
 }
 
-.modal__button {
-  padding: 10px 20px;
+.button-group button {
+  flex: 1; 
+  padding: 1rem;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 1em;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: background-color 0.2s ease-in-out;
 }
 
-.modal__button--cancel {
-  background-color: #95a5a6;
+.button-group button:not(:last-child) {
+  margin-right: 0.5rem; 
+}
+
+.button-group .submit-btn {
+  background-color: #1a1a2e;
+  color: white;
+}
+
+.button-group .submit-btn:hover {
+  background-color: #0c0c15;
+}
+
+.cancel-btn {
+  background-color: #d2d2d2;
   color: #fff;
 }
 
-.modal__button--cancel:hover {
-  background-color: #7f8c8d;
+.cancel-btn:hover {
+  background-color: #b5b5b5;
 }
 
-.modal__button--add {
-  background-color: #28a745;
+.danger-btn{
+  background-color: #ff0000;
+  color: #fff;
+}
+.danger-btn:hover{
+  background-color: #bd0000;
   color: #fff;
 }
 
-.modal__button--add:hover {
-  background-color: #218838;
-}
-
-.modal__button--update {
-  background-color: #3498db;
+.add-product{
+  background-color: #2563eb;
   color: #fff;
 }
 
-.modal__button--update:hover {
-  background-color: #2980b9;
-}
-
-.modal__button--delete {
-  background-color: #e74c3c;
+.add-product:hover{
+  background-color: #1f52c2;
   color: #fff;
 }
 
-.modal__button--delete:hover {
-  background-color: #c0392b;
-}
-
-.modal__no-fields {
-  color: #e74c3c;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.modal__message {
-  margin: 20px 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.modal__error {
-  color: #ff0000;
-  font-size: 0.9em;
-  margin-top: 4px;
-  display: block;
-}
-
-.modal__input.error,
-.modal__select.error {
-  border-color: #e74c3c; /* Rote Rahmenfarbe für Fehler */
-  background-color: #fdecea; /* Optional: Hintergrundfarbe für Fehler */
+.remove-product-button{
+  background-color: #d2d2d2;
+  color: #fff;
+  width: 30px;
 }

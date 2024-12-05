@@ -1,0 +1,23 @@
+.transaction-chart {
+    height: 22rem;
+    background-color: white;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.chart-title {
+    color: #374151;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.chart-container {
+    margin-top: 1rem;
+    width: 100%;
+    flex: 1;
+    font-size: 0.875rem;
+}
