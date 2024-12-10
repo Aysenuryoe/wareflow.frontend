@@ -1,7 +1,7 @@
 .table-wrapper {
-  position: relative; /* Wir benötigen relative Position für Sticky-Elemente */
-  overflow-y: auto; /* Ermöglicht vertikales Scrollen */
-  max-height: 400px; /* Setzt eine feste Höhe für die Tabelle */
+  position: relative;
+  overflow-y: auto;
+  max-height: 500px; 
   border-radius: 8px;
   background-color: white;
   border: 1px solid #e5e7eb;
@@ -17,6 +17,7 @@
   font-size: 1rem;
   text-align: left;
   color: #374151;
+  table-layout: fixed;
 }
 
 .table thead th {
@@ -80,4 +81,3 @@
 .edit-btn:hover {
   transform: scale(1.2);
 }
-

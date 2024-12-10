@@ -33,7 +33,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
     },
     {
         key: 'purchase',
-        label: 'Einkäufe',
+        label: 'Wareneinkäufe',
         path: '/purchase',
         icon: <HiOutlineShoppingBag />
     },

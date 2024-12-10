@@ -1,82 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import "../styles/Modal.css";
+import '../styles/Modal.css';
 
-const PurchaseEditModal = ({ closeModal, onSubmit, defaultValue }) => {
-    const [purchase, setPurchase] = useState({
+function PurchaseEditModal ({ closeModal, onSubmit, defaultValue }){
+    const [formData, setFormData] = useState({
         products: [],
         supplier: '',
-        status: 'Pending',
         orderDate: '',
-        receivedDate: '',
-     
     });
 
     useEffect(() => {
         if (defaultValue) {
-            setPurchase({
+            setFormData({
                 ...defaultValue,
+                products: defaultValue.products || [],
+                supplier: defaultValue.supplier || '',
                 orderDate: defaultValue.orderDate
                     ? new Date(defaultValue.orderDate).toISOString().split('T')[0]
-                    : '',
-                receivedDate: defaultValue.receivedDate
-                    ? new Date(defaultValue.receivedDate).toISOString().split('T')[0]
                     : '',
             });
         }
     }, [defaultValue]);
 
-    const handleChange = (e) => {
+    const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setPurchase((prev) => ({ ...prev, [name]: value }));
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleProductChange = (index, field, value) => {
-        const updatedProducts = [...purchase.products];
-        updatedProducts[index] = { ...updatedProducts[index], [field]: value };
-        setPurchase((prev) => ({ ...prev, products: updatedProducts }));
+    const handleProductChange = (index, value) => {
+        const updatedProducts = [...formData.products];
+        updatedProducts[index].quantity = parseInt(value, 10);
+        setFormData((prev) => ({ ...prev, products: updatedProducts }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
-        // Daten formatieren
-        const sanitizedOrder = {
-            products: purchase.products.map((p) => ({
-                productId: p.productId,
-                quantity: parseInt(p.quantity, 10),
-            })),
-            supplier: purchase.supplier.trim(),
-            status: purchase.status,
-            orderDate: new Date(purchase.orderDate).toISOString(),
+        const updatedOrder = {
+            ...formData,
+            orderDate: new Date(formData.orderDate).toISOString(), 
         };
-    
-        // Nur `receivedDate` hinzufügen, wenn es gesetzt ist
-        if (purchase.receivedDate) {
-            sanitizedOrder.receivedDate = new Date(purchase.receivedDate).toISOString();
-        }
-    
-        console.log('Gesendete Daten:', sanitizedOrder);
-    
-        // Daten an die übergebene `onSubmit`-Funktion weitergeben
-        onSubmit(sanitizedOrder);
+        onSubmit(updatedOrder);
+        closeModal();
     };
-    
+
+    if (!defaultValue) return null; 
 
     return (
         <div className="modal-container">
             <div className="modal">
                 <h2>Bestellung bearbeiten</h2>
                 <form onSubmit={handleSubmit}>
-                {purchase.products.map((product, index) => (
-                        <div key={index} className="product-row">
+                    <h3>Produkte</h3>
+                    {formData.products.map((product, index) => (
+                        <div key={index} className="product-group">
                             <div className="form-group">
-                                <label>Produkt:</label>
+                                <label>Produktname:</label>
                                 <input
                                     type="text"
-                                    value={product.productId}
-                                    onChange={(e) =>
-                                        handleProductChange(index, 'productId', e.target.value)
-                                    }
+                                    value={product.name}
+                                    readOnly
+                                    className="form-control"
                                 />
                             </div>
                             <div className="form-group">
@@ -84,57 +66,50 @@ const PurchaseEditModal = ({ closeModal, onSubmit, defaultValue }) => {
                                 <input
                                     type="number"
                                     value={product.quantity}
-                                    onChange={(e) =>
-                                        handleProductChange(index, 'quantity', e.target.value)
-                                    }
+                                    min="1"
+                                    onChange={(e) => handleProductChange(index, e.target.value)}
+                                    className="form-control"
                                 />
                             </div>
                         </div>
                     ))}
+    
                     <div className="form-group">
                         <label>Lieferant:</label>
                         <input
                             type="text"
                             name="supplier"
-                            value={purchase.supplier}
-                            onChange={handleChange}
+                            value={formData.supplier}
+                            onChange={handleInputChange}
+                            className="form-control"
                         />
                     </div>
-                    <div className="form-group">
-                        <label>Status:</label>
-                        <select
-                            name="status"
-                            value={purchase.status}
-                            onChange={handleChange}
-                        >
-                            <option value="Pending">Pending</option>
-                            <option value="Ordered">Ordered</option>
-                            <option value="Arrived">Arrived</option>
-                            <option value="Cancelled">Cancelled</option>
-                        </select>
-                    </div>
+    
                     <div className="form-group">
                         <label>Bestelldatum:</label>
                         <input
                             type="date"
                             name="orderDate"
-                            value={purchase.orderDate}
-                            onChange={handleChange}
+                            value={formData.orderDate}
+                            onChange={handleInputChange}
+                            className="form-control"
                         />
                     </div>
-            
-
-
+    
                     <div className="button-group">
-                        <button type="button" className='cancel-btn' onClick={closeModal}>
+                        <button type="button" className="cancel-btn" onClick={closeModal}>
                             Abbrechen
                         </button>
-                        <button type="submit" className='submit-btn'>Speichern</button>
+                        <button type="submit" className="submit-btn">
+                            Speichern
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     );
+    
 };
 
 export default PurchaseEditModal;
+

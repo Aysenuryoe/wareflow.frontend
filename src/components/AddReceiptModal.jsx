@@ -113,15 +113,15 @@ function AddReceiptModal({ isOpen, onClose, onAdd, initialData = null }) {
     return (
         <div className="modal-container">
             <div className="modal">
-                <h2>{initialData ? 'Edit Goods Receipt' : 'Add Goods Receipt'}</h2>
+                <h2>{initialData ? 'Edit Goods Receipt' : 'Wareneingang hinzufügen'}</h2>
                 {loadingOrders ? (
-                    <div>Loading purchase orders...</div>
+                    <div>Wareneinkäufe werden geladen...</div>
                 ) : error ? (
                     <div>Error: {error}</div>
                 ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Purchase Order:</label>
+                            <label>Warenbestellung:</label>
                             <select
                                 name="purchaseOrderId"
                                 value={formData.purchaseOrderId}
@@ -129,7 +129,7 @@ function AddReceiptModal({ isOpen, onClose, onAdd, initialData = null }) {
                                 required
                                 disabled={!!initialData}
                             >
-                                <option value="Select">Select a Purchase Order</option>
+                                <option value="Select">Wareneinkauf auswählen</option>
                                 {purchaseOrders.map((po, index) => (
                                     <option key={po.id} value={po.id}>
                                         {`Nummer ${index + 1}`}
@@ -139,7 +139,7 @@ function AddReceiptModal({ isOpen, onClose, onAdd, initialData = null }) {
                         </div>
 
                         <div className="form-group">
-                            <label>Received Date:</label>
+                            <label>Empfangsdatum:</label>
                             <input
                                 type="date"
                                 name="receivedDate"
@@ -152,19 +152,19 @@ function AddReceiptModal({ isOpen, onClose, onAdd, initialData = null }) {
                         <div className="form-group">
                             <label>Status:</label>
                             <select name="status" value={formData.status} onChange={handleInputChange}>
-                                <option value="Pending">Auustehend</option>
+                                <option value="Pending">Austehend</option>
                                 <option value="Completed">Vollendet</option>
                                 <option value="Partial">Teilweise</option>
                             </select>
                         </div>
 
                         <div className="form-group">
-                            <label>Remarks:</label>
+                            <label>Bemerkung:</label>
                             <textarea name="remarks" value={formData.remarks} onChange={handleInputChange}></textarea>
                         </div>
 
                         {loadingProducts ? (
-                            <div>Loading products...</div>
+                            <div>Produkte werden geladen...</div>
                         ) : (
                             <>
                                 <h3>Products</h3>
@@ -202,7 +202,7 @@ function AddReceiptModal({ isOpen, onClose, onAdd, initialData = null }) {
 
                         <div className="button-group">
                             <button type="button" className="cancel-btn" onClick={onClose}>
-                                Cancel
+                                Abbrechen
                             </button>
                             <button type="submit" className="submit-btn">
                                 {initialData ? 'Update' : 'Submit'}

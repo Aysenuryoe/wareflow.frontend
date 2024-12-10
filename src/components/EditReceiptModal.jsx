@@ -12,7 +12,7 @@ function EditReceiptModal({ isOpen, onClose, onUpdate, initialData }) {
 
     useEffect(() => {
         if (initialData) {
-            console.log("Initial Data:", initialData);  // Logge initialData, um sicherzustellen, dass die ID da ist
+            console.log("Initial Data:", initialData);  
             setFormData({
                 ...initialData,
                 purchaseOrderId: initialData.purchaseOrderId || '',
@@ -48,7 +48,7 @@ function EditReceiptModal({ isOpen, onClose, onUpdate, initialData }) {
     return (
         <div className="modal-container">
             <div className="modal">
-                <h2>Edit Goods Receipt</h2>
+                <h2>Wareneingang bearbeiten</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label>Purchase Order:</label>
@@ -75,9 +75,9 @@ function EditReceiptModal({ isOpen, onClose, onUpdate, initialData }) {
                     <div className="form-group">
                         <label>Status:</label>
                         <select name="status" value={formData.status} onChange={handleInputChange}>
-                            <option value="Pending">Pending</option>
-                            <option value="Completed">Completed</option>
-                            <option value="Partial">Partial</option>
+                            <option value="Pending">Ausstehend</option>
+                            <option value="Completed">Abgeschlossen</option>
+                            <option value="Partial">Teilweise</option>
                         </select>
                     </div>
 
@@ -121,10 +121,10 @@ function EditReceiptModal({ isOpen, onClose, onUpdate, initialData }) {
 
                     <div className="button-group">
                         <button type="button" className="cancel-btn" onClick={onClose}>
-                            Cancel
+                            Abbrechen
                         </button>
                         <button type="submit" className="submit-btn">
-                            Update
+                            Aktualisieren
                         </button>
                     </div>
                 </form>

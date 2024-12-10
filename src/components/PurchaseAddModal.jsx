@@ -99,10 +99,10 @@ export default function PurchaseAddModal({ onClose, onSave }) {
                             <label>Status:</label>
                             <select name="status" className="form-control">
                                 <option value="">Status auswählen</option>
-                                <option value="Ordered">Ordered</option>
-                                <option value="Pending">Pending</option>
-                                <option value="Arrived">Arrived</option>
-                                <option value="Cancelled">Cancelled</option>
+                                <option value="Ordered">Bestellt</option>
+                                <option value="Pending">Ausstehend</option>
+                                <option value="Arrived">Angekommen</option>
+                                <option value="Cancelled">Storniert</option>
                             </select>
                         </div>
                         <div className="form-group">
@@ -158,7 +158,7 @@ export default function PurchaseAddModal({ onClose, onSave }) {
                             Neues Produkt hinzufügen
                         </button>
 
-                        <div className="modal-actions">
+                        <div className="button-group">
                             <button type="button" onClick={onClose} className="cancel-btn">
                                 Abbrechen
                             </button>

@@ -162,25 +162,25 @@ export default function Products() {
                     <tbody>
                         {currentProducts.map((row) => (
                             <tr key={row.id}>
-                                <td>{row.name}</td>
-                                <td>{row.size}</td>
-                                <td>{row.price ? row.price.toFixed(2) : '-'}</td>
-                                <td>{row.color}</td>
-                                <td>{row.sku}</td>
-                                <td>{row.stock}</td>
-                                <td>
-                                    <span className="actions">
-                                        <BsFillPencilFill
-                                            className="edit-btn"
-                                            onClick={() => openEditProductModal(row.id)}
-                                        />
-                                        <BsFillTrashFill
-                                            className="delete-btn"
-                                            onClick={() => openDeleteProductModal(row.id)}
-                                        />
-                                    </span>
-                                </td>
-                            </tr>
+                            <td className="column-name">{row.name}</td>
+                            <td className="column-size">{row.size}</td>
+                            <td className="column-price">{row.price ? row.price.toFixed(2) : '-'}</td>
+                            <td className="column-color">{row.color}</td>
+                            <td className="column-sku">{row.sku}</td>
+                            <td className="column-stock">{row.stock}</td>
+                            <td className="column-actions">
+                                <span className="actions">
+                                    <BsFillPencilFill
+                                        className="edit-btn"
+                                        onClick={() => openEditProductModal(row.id)}
+                                    />
+                                    <BsFillTrashFill
+                                        className="delete-btn"
+                                        onClick={() => openDeleteProductModal(row.id)}
+                                    />
+                                </span>
+                            </td>
+                        </tr>
                         ))}
                     </tbody>
                 </table>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "../../styles/Return.css";
 
 export default function Return() {
-  // Zustand für die Rückgabe
   const [salesId, setSalesId] = useState("");
   const [products, setProducts] = useState([{ productId: "", quantity: 1, reason: "" }]);
   const [status, setStatus] = useState("Pending");
@@ -24,7 +23,6 @@ export default function Return() {
     setProducts(updatedProducts);
   };
 
-  // Formular absenden
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!salesId || products.some((p) => !p.productId || !p.quantity || !p.reason)) {
@@ -127,8 +125,8 @@ export default function Return() {
         value={status}
         onChange={(e) => setStatus(e.target.value)}
       >
-        <option value="Pending">Pending</option>
-        <option value="Completed">Completed</option>
+        <option value="Pending">Ausstehend</option>
+        <option value="Completed">Abgeschlossen</option>
       </select>
     </div>
 
