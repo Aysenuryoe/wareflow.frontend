@@ -1,4 +1,6 @@
-
+.complaint-container{
+    padding: 5%;
+}
 .complaints-header {
     display: flex;
     justify-content: space-between;

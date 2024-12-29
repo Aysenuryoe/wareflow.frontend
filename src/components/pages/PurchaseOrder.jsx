@@ -34,9 +34,45 @@ export default function PurchaseOrder() {
             console.error('Fehler beim Abrufen der Daten:', error)
         }
     }
+
     const closeDeleteModal = () => {
-        setDeleteModalOpen(false);
-    };
+        setDeleteModalOpen(false)
+    }
+
+    const createNewPurchase = async (purchaseData) => {
+        const response = await fetch('https://localhost:3001/api/purchase', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(purchaseData)
+        })
+        if (!response.ok) {
+            console.error('Fehler beim Erstellen des Einkaufs')
+        } else {
+            console.log('Einkauf erfolgreich erstellt')
+            fetchPurchaseOrders()
+            setAddModalOpen(false)
+        }
+    }
+
+    const updatePurchaseOrder = async (updatedData) => {
+        console.log('Updated Data:', updatedData)
+        console.log('Updated Data ID:', updatedData.id)
+
+        const response = await fetch(`https://localhost:3001/api/purchase/${updatedData.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData)
+        })
+        if (!response.ok) {
+            console.error('Fehler beim Aktualisieren des Einkaufs')
+        } else {
+            console.log('Einkauf erfolgreich aktualisiert')
+            fetchPurchaseOrders()
+            setEditModalOpen(false)
+        }
+    }
 
     const deletePurchaseOrder = async (orderId) => {
         try {
@@ -59,12 +95,19 @@ export default function PurchaseOrder() {
         setDeleteModalOpen(true)
     }
 
+    const statusMap = {
+        Ordered: 'Bestellt',
+        Pending: 'Ausstehend',
+        Arrived: 'Angekommen',
+        Cancelled: 'Storniert'
+    }
+
     return (
         <div className="purchase-order-container">
             <div className="purchase-header">
-                <h1>Wareneinkäufe</h1>
+                <h1 className="purchase-order-title">Wareneinkäufe</h1>
                 <button className="add-purchase-button" onClick={() => setAddModalOpen(true)}>
-                    Bestellung Hinzufügen
+                    Wareneinkauf Hinzufügen
                 </button>
             </div>
 
@@ -72,11 +115,12 @@ export default function PurchaseOrder() {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th>Nummer</th>
+                            <th className="row-number">Nummer</th>
                             <th>Produkte</th>
                             <th>Lieferant</th>
                             <th>Status</th>
                             <th>Bestelldatum</th>
+                            <th>Empfangsdatum</th>
                             <th>Aktionen</th>
                         </tr>
                     </thead>
@@ -89,7 +133,7 @@ export default function PurchaseOrder() {
                                         <ul className="purchase-list">
                                             {order.products.map((product, idx) => (
                                                 <li key={idx}>
-                                                    {product.name}, Menge: {product.quantity}
+                                                    {product.name}, {product.size}, <br/> Menge: {product.quantity}
                                                 </li>
                                             ))}
                                         </ul>
@@ -98,8 +142,10 @@ export default function PurchaseOrder() {
                                     )}
                                 </td>
                                 <td>{order.supplier}</td>
-                                <td>{order.status}</td>
+                                <td>{statusMap[order.status] || order.status}</td>
                                 <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+                                <td>{order.receivedDate ? new Date(order.receivedDate).toLocaleDateString() : '-'}</td>
+
                                 <td>
                                     <span className="actions">
                                         <BsFillPencilFill
@@ -127,23 +173,21 @@ export default function PurchaseOrder() {
                 onPageChange={setCurrentPage}
             />
 
-            {isAddModalOpen && (
-                <PurchaseAddModal onClose={() => setAddModalOpen(false)} onSave={() => fetchPurchaseOrders()} />
-            )}
+            {isAddModalOpen && <PurchaseAddModal onClose={() => setAddModalOpen(false)} onSave={createNewPurchase} />}
 
             {isEditModalOpen && currentOrder && (
                 <PurchaseEditModal
                     closeModal={() => setEditModalOpen(false)}
-                    onSubmit={() => fetchPurchaseOrders()}
+                    onSubmit={updatePurchaseOrder}
                     defaultValue={currentOrder}
                 />
             )}
 
-            {isDeleteModalOpen && (
+            {isDeleteModalOpen && orderToDelete && (
                 <DeleteModal
                     isOpen={isDeleteModalOpen}
                     closeModal={closeDeleteModal}
-                    onConfirm={deletePurchaseOrder}
+                    onConfirm={() => deletePurchaseOrder(orderToDelete.id)}
                     title="Wareneinkauf löschen"
                     message="Möchten Sie diesen Wareneinkauf wirklich löschen?"
                     confirmText="Ja, löschen"
@@ -152,4 +196,4 @@ export default function PurchaseOrder() {
             )}
         </div>
     )
-}
+} 

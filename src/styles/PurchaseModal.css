@@ -38,34 +38,4 @@
     box-sizing: border-box;
 }
 
-.button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
 
-.cancel-btn,
-.submit-btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.cancel-btn {
-    background-color: #ccc;
-    color: #333;
-}
-
-.submit-btn {
-    background-color: #4CAF50;
-    color: #fff;
-}
-
-.cancel-btn:hover {
-    background-color: #bbb;
-}
-
-.submit-btn:hover {
-    background-color: #45a049;
-}

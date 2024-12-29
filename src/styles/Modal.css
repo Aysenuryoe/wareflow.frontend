@@ -10,9 +10,9 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow: hidden;
 }
 
-/* Modal box */
 .modal {
   background-color: white;
   width: 500px;
@@ -20,17 +20,28 @@
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 0.3s ease-in-out;
+ 
+}
+
+.form-container {
+  height: 400px;
+  overflow-y: scroll; 
+  padding-right: 0.5rem; 
 }
 
 
 .form-group {
   display: flex;
-  align-items: center;
+  flex-direction: column; 
   margin-bottom: 1rem;
 }
 
-.form-group label {
+.input-row {
+  display: flex;
+  align-items: center;
+}
+
+.input-row label {
   width: 120px;
   margin-right: 1rem;
   font-size: 0.875rem;
@@ -38,67 +49,75 @@
   color: #374151;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.input-row input,
+.input-row select,
+.input-row textarea {
   flex: 1;
   font-size: 0.875rem;
   padding: 0.5rem;
   border: 1px solid #d1d5db;
   border-radius: 4px;
   outline: none;
-  transition: border-color 0.2s ease-in-out;
+
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.input-row input:focus,
+.input-row select:focus,
+.input-row textarea:focus {
   border-color: #2563eb;
   box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
-.form-group textarea {
+.input-row textarea {
   resize: none;
   height: 80px;
 }
 
 .button-group {
   display: flex;
-  justify-content: space-between; 
+  gap: 0.5rem; 
   margin-top: 1rem;
+  align-items: center;
 }
 
+
 .button-group button {
-  flex: 1; 
-  padding: 1rem;
+  flex: 1;
+  padding: 0.75rem; 
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  font-size: 1rem; /* Einheitliche Schriftgröße */
+  display: flex; /* Flexbox für innere Ausrichtung */
+  align-items: center; /* Vertikale Zentrierung des Inhalts */
+  justify-content: center; /* Horizontale Zentrierung des Inhalts */
+  position: relative;
+  overflow: hidden;
+  
 }
 
-.button-group button:not(:last-child) {
-  margin-right: 0.5rem; 
+.button-group .cancel-btn {
+  background-color: #b1b1b1; /* Graue Farbe */
+  color: #fff; /* Weißer Text */
 }
 
+.button-group .cancel-btn:hover {
+  background-color: #a0a0a0; /* Dunkleres Grau beim Hover */
+
+}
+
+/* Speichern Button */
 .button-group .submit-btn {
-  background-color: #1f2d3b;
-  color: white;
+  background-color: #28a745; /* Grüne Farbe */
+  color: #fff; /* Weißer Text */
 }
 
 .button-group .submit-btn:hover {
-  background-color: #18232e;
+  background-color: #218838; /* Dunkleres Grün beim Hover */
+ 
 }
 
-.cancel-btn {
-  background-color: #b1b1b1;
-  color: #fff;
-}
-
-.cancel-btn:hover {
-  background-color: #b5b5b5;
-}
-
+/* Weitere Button-Klassen */
 .danger-btn{
   background-color: #ff0000;
   color: #fff;
@@ -122,5 +141,40 @@
   background-color: #d2d2d2;
   color: #fff;
   width: 30px;
+}
+
+/* Fehlerstile */
+.input-error {
+  border: 1px solid red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 0.25em;
+  display: block;
+}
+
+.submit-error-message {
+  color: red;
+  font-size: 1em;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.success-message {
+  color: #003f00;
+  font-size: 1em;
+  margin-top: 10px;
+  text-align: center;
+  background-color: #dfffdf;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.input-row input.input-error,
+.input-row select.input-error,
+.input-row textarea.input-error {
+  border: 1px solid red;
 }
 

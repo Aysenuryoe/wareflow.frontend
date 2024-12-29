@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Modal from '../Modal'
+import AddModal from '../AddModal'
 import EditModal from '../EditModal'
 import Pagination from '../Pagination'
 import { BsFillTrashFill, BsFillPencilFill } from 'react-icons/bs'
@@ -17,6 +17,7 @@ export default function Products() {
     const [currentPage, setCurrentPage] = useState(1)
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
     const [productToDelete, setProductToDelete] = useState(null)
+    const [successMessage, setSuccessMessage] = useState('') // Zustand für Erfolgsmeldungen
 
     const productsPerPage = 7
 
@@ -43,6 +44,67 @@ export default function Products() {
         }
     }
 
+    // Anpassung: addProduct gibt ein Objekt mit Erfolg oder Fehler zurück
+    const addProduct = async (newProduct) => {
+        try {
+            const response = await fetch(`https://localhost:3001/api/product`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newProduct)
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.message || 'Failed to add product')
+            }
+            const savedProduct = await response.json()
+            setProducts((prevProducts) => [...prevProducts, savedProduct])
+
+            // Setze die Erfolgsmeldung
+            setSuccessMessage('Produkt erfolgreich erstellt.')
+
+            // Entferne die Erfolgsmeldung nach 3 Sekunden
+            setTimeout(() => setSuccessMessage(''), 3000)
+
+            return { success: true, product: savedProduct }
+        } catch (err) {
+            console.error(err)
+            return { success: false, message: err.message }
+        }
+    }
+
+    // Anpassung: editProduct gibt ein Objekt mit Erfolg oder Fehler zurück
+    const editProduct = async (updatedProduct) => {
+        try {
+            const response = await fetch(`https://localhost:3001/api/product/${updatedProduct.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedProduct)
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.message || 'Failed to update product')
+            }
+            const savedProduct = await response.json()
+
+            setProducts((prevProducts) =>
+                prevProducts.map((product) => (product.id === savedProduct.id ? savedProduct : product))
+            )
+
+            // Setze die Erfolgsmeldung
+            setSuccessMessage('Produkt erfolgreich aktualisiert.')
+
+            // Entferne die Erfolgsmeldung nach 3 Sekunden
+            setTimeout(() => setSuccessMessage(''), 3000)
+
+            return { success: true, product: savedProduct }
+        } catch (err) {
+            console.error(err)
+            return { success: false, message: err.message }
+        }
+    }
+
     const deleteProduct = async (product) => {
         try {
             const response = await fetch(`https://localhost:3001/api/product/${product.id}`, {
@@ -54,51 +116,6 @@ export default function Products() {
             setProducts((prevProducts) => prevProducts.filter((p) => p.id !== product.id))
             setDeleteModalOpen(false)
             setProductToDelete(null)
-        } catch (err) {
-            console.error(err)
-        }
-    }
-
-    const addProduct = async (newProduct) => {
-        try {
-            console.log('Gesendete Daten:', newProduct)
-            const response = await fetch(`https://localhost:3001/api/product`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newProduct)
-            })
-
-            if (!response.ok) {
-                throw new Error('Failed to add product')
-            }
-            const savedProduct = await response.json()
-            setProducts((prevProducts) => [...prevProducts, savedProduct])
-
-            setModalOpen(false)
-        } catch (err) {
-            console.error(err)
-        }
-    }
-
-    const editProduct = async (updatedProduct) => {
-        try {
-            const response = await fetch(`https://localhost:3001/api/product/${updatedProduct.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedProduct)
-            })
-
-            if (!response.ok) {
-                throw new Error('Failed to update product')
-            }
-            const savedProduct = await response.json()
-
-            setProducts((prevProducts) =>
-                prevProducts.map((product) => (product.id === savedProduct.id ? savedProduct : product))
-            )
-
-            setEditModalOpen(false)
-            setCurrentProduct(null)
         } catch (err) {
             console.error(err)
         }
@@ -119,6 +136,7 @@ export default function Products() {
         setCurrentProduct(productToEdit)
         setEditModalOpen(true)
     }
+
     const openDeleteProductModal = (productId) => {
         const product = products.find((product) => product.id === productId)
         if (product) {
@@ -129,12 +147,14 @@ export default function Products() {
         }
     }
 
-    const saveProduct = (productData) => {
-        addProduct(productData)
+    const saveProduct = async (productData) => {
+        const result = await addProduct(productData)
+        return result
     }
 
-    const updateProduct = (productData) => {
-        editProduct(productData)
+    const updateProduct = async (productData) => {
+        const result = await editProduct(productData)
+        return result
     }
 
     return (
@@ -145,7 +165,6 @@ export default function Products() {
                     Neues Produkt hinzufügen
                 </button>
             </div>
-
             <div className="table-wrapper">
                 <table className="table">
                     <thead>
@@ -162,25 +181,25 @@ export default function Products() {
                     <tbody>
                         {currentProducts.map((row) => (
                             <tr key={row.id}>
-                            <td className="column-name">{row.name}</td>
-                            <td className="column-size">{row.size}</td>
-                            <td className="column-price">{row.price ? row.price.toFixed(2) : '-'}</td>
-                            <td className="column-color">{row.color}</td>
-                            <td className="column-sku">{row.sku}</td>
-                            <td className="column-stock">{row.stock}</td>
-                            <td className="column-actions">
-                                <span className="actions">
-                                    <BsFillPencilFill
-                                        className="edit-btn"
-                                        onClick={() => openEditProductModal(row.id)}
-                                    />
-                                    <BsFillTrashFill
-                                        className="delete-btn"
-                                        onClick={() => openDeleteProductModal(row.id)}
-                                    />
-                                </span>
-                            </td>
-                        </tr>
+                                <td className="column-name">{row.name}</td>
+                                <td className="column-size">{row.size}</td>
+                                <td className="column-price">{row.price ? row.price.toFixed(2) : '-'}</td>
+                                <td className="column-color">{row.color}</td>
+                                <td className="column-sku">{row.sku}</td>
+                                <td className="column-stock">{row.stock}</td>
+                                <td className="column-actions">
+                                    <span className="actions">
+                                        <BsFillPencilFill
+                                            className="edit-btn"
+                                            onClick={() => openEditProductModal(row.id)}
+                                        />
+                                        <BsFillTrashFill
+                                            className="delete-btn"
+                                            onClick={() => openDeleteProductModal(row.id)}
+                                        />
+                                    </span>
+                                </td>
+                            </tr>
                         ))}
                     </tbody>
                 </table>
@@ -194,7 +213,8 @@ export default function Products() {
                 onPageChange={(page) => setCurrentPage(page)}
             />
 
-            {isModalOpen && <Modal closeModal={() => setModalOpen(false)} onSubmit={saveProduct} />}
+            {isModalOpen && 
+                <AddModal closeModal={() => setModalOpen(false)} onSubmit={saveProduct} />}
 
             {isEditModalOpen && (
                 <EditModal

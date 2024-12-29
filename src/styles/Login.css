@@ -34,7 +34,7 @@
     border-radius: 4px;
   }
   
-  button.submit-btn {
+  button.login-btn {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -46,7 +46,7 @@
     transition: background-color 0.2s ease;
   }
   
-  button.submit-btn:hover {
+  button.login-btn:hover {
     background-color: #0056b3;
   }
   

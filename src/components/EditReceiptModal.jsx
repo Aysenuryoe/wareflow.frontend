@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/Modal.css';
+import React, { useState, useEffect } from 'react'
+import '../styles/Modal.css'
 
 function EditReceiptModal({ isOpen, onClose, onUpdate, initialData }) {
     const [formData, setFormData] = useState({
@@ -7,114 +7,101 @@ function EditReceiptModal({ isOpen, onClose, onUpdate, initialData }) {
         products: [],
         receivedDate: '',
         status: 'Pending',
-        remarks: '',
-    });
+        remarks: ''
+    })
 
     useEffect(() => {
         if (initialData) {
-            console.log("Initial Data:", initialData);  
+            console.log('Initial Data:', initialData)
             setFormData({
                 ...initialData,
                 purchaseOrderId: initialData.purchaseOrderId || '',
                 receivedDate: initialData.receivedDate || '',
                 status: initialData.status || 'Pending',
                 remarks: initialData.remarks || '',
-                products: initialData.products || [],
-            });
+                products: initialData.products || []
+            })
         }
-    }, [initialData]);
+    }, [initialData])
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+        const { name, value } = e.target
+        setFormData({ ...formData, [name]: value })
+    }
 
     const handleProductChange = (index, e) => {
-        const { name, value } = e.target;
-        const updatedProducts = [...formData.products];
-        updatedProducts[index][name] = name === 'receivedQuantity' ? parseInt(value, 10) : value;
-        setFormData({ ...formData, products: updatedProducts });
-    };
-    
+        const { name, value } = e.target
+        const updatedProducts = [...formData.products]
+        updatedProducts[index][name] = name === 'receivedQuantity' ? parseInt(value, 10) : value
+        setFormData({ ...formData, products: updatedProducts })
+    }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        onUpdate(formData);  
-        onClose();  
-    };
+        e.preventDefault()
+        onUpdate(formData)
+        onClose()
+    }
 
-    if (!isOpen) return null;
+    if (!isOpen) return null
 
     return (
         <div className="modal-container">
             <div className="modal">
                 <h2>Wareneingang bearbeiten</h2>
+                <div className='form-container'>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
-                        <label>Purchase Order:</label>
-                        <input
-                            type="text"
-                            name="purchaseOrderId"
-                            value={formData.purchaseOrderId}
-                            disabled
-                            className="form-control"
-                        />
+                        <div className="input-row">
+                            <label>Empfangsdatum:</label>
+                            <input
+                                type="date"
+                                name="receivedDate"
+                                value={formData.receivedDate}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </div>
                     </div>
 
                     <div className="form-group">
-                        <label>Received Date:</label>
-                        <input
-                            type="date"
-                            name="receivedDate"
-                            value={formData.receivedDate}
-                            onChange={handleInputChange}
-                            required
-                        />
+                        <div className="input-row">
+                            <label>Status:</label>
+                            <select name="status" value={formData.status} onChange={handleInputChange}>
+                                <option value="Pending">Ausstehend</option>
+                                <option value="Completed">Abgeschlossen</option>
+                                <option value="Partial">Teilweise</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div className="form-group">
-                        <label>Status:</label>
-                        <select name="status" value={formData.status} onChange={handleInputChange}>
-                            <option value="Pending">Ausstehend</option>
-                            <option value="Completed">Abgeschlossen</option>
-                            <option value="Partial">Teilweise</option>
-                        </select>
-                    </div>
-
-                    <h3>Products</h3>
+                    <h3>Produkte</h3>
                     {formData.products.map((product, index) => (
                         <div key={index} className="form-group">
-                            {/* Produktname anzeigen */}
-                            <p>
-                                <strong>Produkt:</strong> {product.name}
-                            </p>
+                            <div className="input-row">
+                                <p>
+                                    <strong>Produkt:</strong> {product.name}
+                                </p>
 
-                            {/* Bestellte Menge anzeigen */}
-                            <p>
-                                <strong>Bestellte Menge:</strong> {product.orderedQuantity || 'N/A'}
-                            </p>
+                                <div>
+                                    <label>Erhaltene Menge:</label>
+                                    <input
+                                        type="number"
+                                        name="receivedQuantity"
+                                        value={product.receivedQuantity}
+                                        onChange={(e) => handleProductChange(index, e)}
+                                        required
+                                    />
+                                </div>
 
-                            {/* Erhaltene Menge bearbeiten */}
-                            <div>
-                                <label>Erhaltene Menge:</label>
-                                <input
-                                    type="number"
-                                    name="receivedQuantity"
-                                    value={product.receivedQuantity}
-                                    onChange={(e) => handleProductChange(index, e)}
-                                    required
-                                />
-                            </div>
-
-                            {/* Differenzen bearbeiten */}
-                            <div>
-                                <label>Differenzen:</label>
-                                <input
-                                    type="text"
-                                    name="discrepancies"
-                                    value={product.discrepancies}
-                                    onChange={(e) => handleProductChange(index, e)}
-                                />
+                                <div>
+                                    <label>Differenzen:</label>
+                                    <input
+                                        type="text"
+                                        name="discrepancies"
+                                        value={product.discrepancies}
+                                        onChange={(e) => handleProductChange(index, e)}
+                                    />
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -128,9 +115,10 @@ function EditReceiptModal({ isOpen, onClose, onUpdate, initialData }) {
                         </button>
                     </div>
                 </form>
+                </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default EditReceiptModal;
+export default EditReceiptModal

@@ -1,6 +1,5 @@
 import React from "react";
-import StatsGrid from "../StatsGrid";
-import TransactionChart from "../TransactionChart";
+
 import Introduction from "../Introduction";
 import "../../styles/Dashboard.css";
 
@@ -10,10 +9,7 @@ function Dashboard() {
        
         <div className="dashboard">
             <Introduction />
-            <StatsGrid />
-            <div className="chart-container">
-                <TransactionChart />
-            </div>
+            
         </div>
     );
 }

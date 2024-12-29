@@ -3,7 +3,9 @@ import AddComplaintModal from '../AddComplaintModal'
 import Pagination from '../Pagination'
 import '../../styles/Table.css'
 import '../../styles/Complaints.css'
+import EditComplaintModal from '../EditComplaintModal'
 import { BsFillPencilFill, BsFillTrashFill } from 'react-icons/bs'
+import DeleteModal from '../DeleteModal'
 
 function Complaints() {
     const [complaints, setComplaints] = useState([])
@@ -13,11 +15,10 @@ function Complaints() {
     const [isEditModalOpen, setEditModalOpen] = useState(false)
     const [selectedComplaint, setSelectedComplaint] = useState(null)
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
-    const [deleteComplaintId, setDeleteComplaintId] = useState(null)
+    const [complaintToDelete, setComplaintToDelete] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     const complaintsPerPage = 5
 
-    // Berechnung für Pagination
     const indexOfLastComplaint = currentPage * complaintsPerPage
     const indexOfFirstComplaint = indexOfLastComplaint - complaintsPerPage
     const currentComplaints = complaints.slice(indexOfFirstComplaint, indexOfLastComplaint)
@@ -55,7 +56,6 @@ function Complaints() {
     }, [])
 
     const handleAddComplaint = async (newComplaint) => {
-        console.log('Neue Beschwerde:', newComplaint)
         try {
             const response = await fetch('https://localhost:3001/api/complaint/', {
                 method: 'POST',
@@ -64,8 +64,6 @@ function Complaints() {
             })
             if (!response.ok) throw new Error('Error beim Erstellen der Beschwerde')
             const data = await response.json()
-            console.log('API-Antwort:', data)
-
             setComplaints((prev) => [...prev, data])
             setAddModalOpen(false)
         } catch (error) {
@@ -73,9 +71,49 @@ function Complaints() {
         }
     }
 
-    const openDeleteModal = (complaintId) => {
-        setDeleteComplaintId(complaintId)
+    const editComplaint = async (updatedComplaint) => {
+        try {
+            const response = await fetch(`https://localhost:3001/api/complaint/${updatedComplaint.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedComplaint)
+            })
+            if (!response.ok) throw new Error('Fehler beim Aktualisieren der Beschwerde')
+
+            const updatedData = await response.json()
+            setComplaints((prevComplaints) =>
+                prevComplaints.map((complaint) => (complaint._id === updatedComplaint._id ? updatedData : complaint))
+            )
+            setEditModalOpen(false)
+        } catch (error) {
+            console.error('Fehler beim Aktualisieren der Beschwerde:', error)
+        }
+    }
+
+    const deleteComplaint = async (complaintId) => {
+        try {
+            const response = await fetch(`https://localhost:3001/api/complaint/${complaintId}`, {
+                method: 'DELETE'
+            })
+
+            if (response.ok) {
+                setComplaints((prevComplaints) => prevComplaints.filter((complaint) => complaint._id !== complaintId))
+                setDeleteModalOpen(false)
+                setComplaintToDelete(null)
+            }
+        } catch (error) {
+            console.error('Fehler beim Löschen der Reklamation:', error)
+        }
+    }
+
+    const openDeleteModal = (complaint) => {
+        setComplaintToDelete(complaint)
         setDeleteModalOpen(true)
+    }
+
+    const closeDeleteModal = () => {
+        setDeleteModalOpen(false)
+        setComplaintToDelete(null)
     }
 
     const referenceTypeMapping = {
@@ -89,7 +127,7 @@ function Complaints() {
     }
 
     return (
-        <div>
+        <div className="complaint-container">
             <div className="complaints-header">
                 <h1 className="complaints-title">Reklamationen</h1>
                 <button className="add-complaint-button" onClick={() => setAddModalOpen(true)}>
@@ -103,6 +141,24 @@ function Complaints() {
                 onAdd={handleAddComplaint}
                 products={products}
             />
+            <EditComplaintModal
+                isOpen={isEditModalOpen}
+                onClose={() => setEditModalOpen(false)}
+                onEdit={editComplaint}
+                complaint={selectedComplaint}
+                products={products}
+            />
+
+            {isDeleteModalOpen && complaintToDelete && (
+                <DeleteModal
+                    closeModal={closeDeleteModal}
+                    onConfirm={() => deleteComplaint(complaintToDelete.id)}
+                    title="Reklamation löschen"
+                    message={`Möchten Sie die Reklamation mit der Referenz wirklich löschen?`}
+                    confirmText="Ja, löschen"
+                    cancelText="Abbrechen"
+                />
+            )}
 
             <div className="table-wrapper">
                 <table className="table">
@@ -121,7 +177,7 @@ function Complaints() {
                                 <td>
                                     {complaint.products.map((product, index) => (
                                         <div key={index}>
-                                            <p>Name: {product.name}</p>
+                                            <p>{product.name}</p>
                                             <p>Menge: {product.quantity}</p>
                                             <p>Grund: {product.reason}</p>
                                         </div>
@@ -139,7 +195,7 @@ function Complaints() {
                                         />
                                         <BsFillTrashFill
                                             className="delete-btn"
-                                            onClick={() => openDeleteModal(complaint._id)}
+                                            onClick={() => openDeleteModal(complaint)}
                                         />
                                     </span>
                                 </td>

@@ -1,9 +1,14 @@
+.products-container{
+  padding: 5%;
+}
+
 .products-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
   }
+  
   
   .products-title {
     font-size: 2rem;

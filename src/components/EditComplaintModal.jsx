@@ -1,93 +1,178 @@
+import React, { useState, useEffect } from 'react';
+import '../styles/Modal.css';
 
-import React, { useState, useEffect } from 'react'
-
-
-function EditComplaintModal({ isOpen, onClose, onUpdate, initialData }) {
-    const [referenceId, setReferenceId] = useState('')
-    const [referenceType, setReferenceType] = useState('GoodsReceipt')
-    const [reason, setReason] = useState('')
-    const [quantity, setQuantity] = useState(1)
-    const [status, setStatus] = useState('Open')
+const EditComplaintModal = ({ isOpen, onClose, complaint, onEdit }) => {
+    const [products, setProducts] = useState([]); // Für die Produktauswahl
+    const [formData, setFormData] = useState({
+        referenceId: '',
+        referenceType: 'GoodsReceipt',
+        products: [{ productId: '', quantity: 1, reason: '' }],
+        status: 'Open',
+    });
 
     useEffect(() => {
-        if (initialData) {
-            setReferenceId(initialData.referenceId)
-            setReferenceType(initialData.referenceType)
-            setReason(initialData.reason)
-            setQuantity(initialData.quantity)
-            setStatus(initialData.status)
+        if (complaint) {
+            setFormData({
+                ...complaint,
+                referenceId: complaint.referenceId || '',
+                referenceType: complaint.referenceType || 'GoodsReceipt',
+                products: complaint.products || [{ productId: '', quantity: 1, reason: '' }],
+                status: complaint.status || 'Open',
+            });
         }
-    }, [initialData])
+    }, [complaint]);
 
-    if (!isOpen) return null
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('https://localhost:3001/api/product/all');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const productsData = await response.json();
+                setProducts(productsData);
+            } catch (err) {
+                console.error('Failed to load products:', err);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({ ...prevState, [name]: value }));
+    };
+
+    const handleProductChange = (index, field, value) => {
+        const updatedProducts = [...formData.products];
+        updatedProducts[index][field] = field === 'quantity' ? parseInt(value, 10) : value;
+        setFormData((prevState) => ({ ...prevState, products: updatedProducts }));
+    };
+
+    const addProductField = () => {
+        setFormData((prevState) => ({
+            ...prevState,
+            products: [...prevState.products, { productId: '', quantity: 1, reason: '' }],
+        }));
+    };
+
+    const removeProductField = (index) => {
+        setFormData((prevState) => ({
+            ...prevState,
+            products: prevState.products.filter((_, i) => i !== index),
+        }));
+    };
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        onUpdate({ _id: initialData._id, referenceId, referenceType, reason, quantity, status })
-    }
+        e.preventDefault();
+        onEdit({ ...formData, _id: complaint._id });
+    };
+
+    if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay">
+        <div className="modal-container">
             <div className="modal">
                 <h2>Reklamation bearbeiten</h2>
+                <div className='form-container'>
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <label>Referenz ID:</label>
-                        <input
-                            type="text"
-                            value={referenceId}
-                            onChange={(e) => setReferenceId(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
+
+                    <div className="form-group">
                         <label>Referenztyp:</label>
                         <select
-                            value={referenceType}
-                            onChange={(e) => setReferenceType(e.target.value)}
+                            name="referenceType"
+                            value={formData.referenceType}
+                            onChange={handleInputChange}
                         >
                             <option value="GoodsReceipt">GoodsReceipt</option>
                             <option value="Sales">Sales</option>
                             <option value="PurchaseOrder">PurchaseOrder</option>
                         </select>
                     </div>
-                    <div>
-                        <label>Grund:</label>
-                        <input
-                            type="text"
-                            value={reason}
-                            onChange={(e) => setReason(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label>Menge:</label>
-                        <input
-                            type="number"
-                            value={quantity}
-                            onChange={(e) => setQuantity(Number(e.target.value))}
-                            min="1"
-                            required
-                        />
-                    </div>
-                    <div>
+
+                    <h3>Produkte</h3>
+                    {formData.products.map((product, index) => (
+                        <div key={index} className="product-group">
+                            <div className="form-group">
+                                <label>Produkt:</label>
+                                <select
+                                    className="form-control"
+                                    value={product.productId}
+                                    onChange={(e) => handleProductChange(index, 'productId', e.target.value)}
+                                    required
+                                >
+                                    <option value="">Produkt auswählen</option>
+                                    {products.map((prod) => (
+                                        <option key={prod.id} value={prod.id}>
+                                            {prod.name} - {prod.size}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="form-group">
+                                <label>Menge:</label>
+                                <input
+                                    type="number"
+                                    value={product.quantity}
+                                    onChange={(e) => handleProductChange(index, 'quantity', e.target.value)}
+                                    min="1"
+                                    required
+                                    className="form-control"
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Grund:</label>
+                                <input
+                                    type="text"
+                                    value={product.reason}
+                                    onChange={(e) => handleProductChange(index, 'reason', e.target.value)}
+                                    required
+                                    className="form-control"
+                                />
+                            </div>
+                            {formData.products.length > 1 && (
+                                <button
+                                    type="button"
+                                    onClick={() => removeProductField(index)}
+                                    className="remove-btn"
+                                >
+                                    Entfernen
+                                </button>
+                            )}
+                        </div>
+                    ))}
+
+                    <button type="button" onClick={addProductField} className="add-product-btn">
+                        Weiteres Produkt hinzufügen
+                    </button>
+
+                    <div className="form-group">
                         <label>Status:</label>
                         <select
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
+                            className="form-control"
+                            name="status"
+                            value={formData.status}
+                            onChange={handleInputChange}
+                            required
                         >
-                            <option value="Open">Open</option>
-                            <option value="Resolved">Resolved</option>
+                            <option value="Open">Offen</option>
+                            <option value="Resolved">Gelöst</option>
                         </select>
                     </div>
-                    <div className="modal-actions">
-                        <button type="submit">Aktualisieren</button>
-                        <button type="button" onClick={onClose}>Abbrechen</button>
+
+                    <div className="button-group">
+                        <button type="button" onClick={onClose} className="cancel-btn">
+                            Abbrechen
+                        </button>
+                        <button type="submit" className="submit-btn">
+                            Aktualisieren
+                        </button>
                     </div>
                 </form>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default EditComplaintModal
+export default EditComplaintModal;

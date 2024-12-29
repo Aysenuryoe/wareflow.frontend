@@ -1,80 +1,121 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/Modal.css';
+import React, { useState, useEffect } from 'react'
+import '../styles/Modal.css'
 
 export default function PurchaseAddModal({ onClose, onSave }) {
-    const [products, setProducts] = useState([]);
-    const [purchaseItems, setPurchaseItems] = useState([{ productId: '', quantity: 1 }]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [products, setProducts] = useState([])
+    const [purchaseData, setPurchaseData] = useState({
+        supplier: '',
+        status: '',
+        orderDate: '',
+        receivedDate: '',
+        products: [{ productId: '', quantity: 1, size: '' }]
+    })
+    const [errors, setErrors] = useState({})
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState('')
+    const [successMessage, setSuccessMessage] = useState('')
+    const [submitError, setSubmitError] = useState('')
 
-    // Fetch available products
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('https://localhost:3001/api/product/all');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const productsData = await response.json();
-                setProducts(productsData);
-                setLoading(false);
+                const response = await fetch('https://localhost:3001/api/product/all')
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
+                const productsData = await response.json()
+                setProducts(productsData)
+                setLoading(false)
             } catch (err) {
-                setError('Failed to load products.');
-                setLoading(false);
+                setError('Produkte konnten nicht geladen werden.')
+                setLoading(false)
             }
-        };
-        fetchProducts();
-    }, []);
+        }
+        fetchProducts()
+    }, [])
+
+    const validateField = (name, value) => {
+        let error = ''
+        if (name === 'supplier' && !value.trim()) {
+            error = 'Lieferant ist erforderlich.'
+        } else if (name === 'status' && !value) {
+            error = 'Status ist erforderlich.'
+        } else if (name === 'orderDate' && !value) {
+            error = 'Bestelldatum ist erforderlich.'
+        } else if (name === 'products') {
+            value.forEach((item, index) => {
+                if (!item.productId) error = `Produkt ${index + 1} ist erforderlich.`
+                if (!item.quantity || item.quantity <= 0) error = `Menge für Produkt ${index + 1} muss positiv sein.`
+                if (!item.size) error = `Größe für Produkt ${index + 1} ist erforderlich.`
+            })
+        }
+        return error
+    }
+
+    const validateForm = () => {
+        const newErrors = {}
+        newErrors.supplier = validateField('supplier', purchaseData.supplier)
+        newErrors.status = validateField('status', purchaseData.status)
+        newErrors.orderDate = validateField('orderDate', purchaseData.orderDate)
+        newErrors.products = validateField('products', purchaseData.products)
+
+        setErrors(newErrors)
+        return Object.values(newErrors).every((err) => !err)
+    }
+
+    const handleInputChange = (name, value) => {
+        setPurchaseData((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: validateField(name, value)
+        }))
+    }
 
     const handleProductChange = (index, field, value) => {
-      const updatedItems = [...purchaseItems];
-      
-      if (field === 'productId') {
-          const selectedProduct = products.find((p) => p.id === value); // Finde das Produkt aus der Liste
-          updatedItems[index].productId = value;
-          updatedItems[index].name = selectedProduct ? selectedProduct.name : ''; // Speichere den Namen
-      } else {
-          updatedItems[index][field] = value;
-      }
-      
-      setPurchaseItems(updatedItems);
-  };
-  
+        const updatedProducts = [...purchaseData.products]
+        updatedProducts[index][field] = value
+        setPurchaseData((prev) => ({ ...prev, products: updatedProducts }))
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            products: validateField('products', updatedProducts)
+        }))
+    }
 
     const addProduct = () => {
-        setPurchaseItems([...purchaseItems, { productId: '', quantity: 1 }]);
-    };
+        setPurchaseData((prev) => ({
+            ...prev,
+            products: [...prev.products, { productId: '', quantity: 1, size: '' }]
+        }))
+    }
 
     const removeProduct = (index) => {
-        setPurchaseItems(purchaseItems.filter((_, i) => i !== index));
-    };
+        setPurchaseData((prev) => ({
+            ...prev,
+            products: prev.products.filter((_, i) => i !== index)
+        }))
+    }
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
+        setSubmitError('')
+        setSuccessMessage('')
 
-        const supplier = e.target.supplier.value.trim();
-        const status = e.target.status.value;
-        const orderDate = e.target.orderDate.value;
-
-        if (!supplier || !orderDate || purchaseItems.some(item => !item.productId || !item.quantity)) {
-            alert('Bitte alle Felder ausfüllen.');
-            return;
+        if (validateForm()) {
+            const result = await onSave(purchaseData)
+            if (result.success) {
+                setSuccessMessage('Bestellung erfolgreich erstellt.')
+                setTimeout(() => {
+                    setSuccessMessage('')
+                    onClose()
+                }, 2000)
+            } else {
+                setSubmitError(result.message || 'Fehler beim Erstellen der Bestellung.')
+            }
+        } else {
+            setSubmitError('Bitte überprüfen Sie die Eingabefelder.')
         }
-
-        const purchaseData = {
-            supplier,
-            status,
-            orderDate,
-            products: purchaseItems.map(({ productId, quantity, name }) => ({
-                productId,
-                name,
-                quantity: parseInt(quantity, 10),
-            })),
-        };
-        
-
-        onSave(purchaseData);
-    };
+    }
 
     return (
         <div className="modal-container">
@@ -83,92 +124,137 @@ export default function PurchaseAddModal({ onClose, onSave }) {
                 {loading ? (
                     <p>Produkte werden geladen...</p>
                 ) : error ? (
-                    <p className="error">{error}</p>
+                    <p className="error-message">{error}</p>
                 ) : (
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label>Lieferant:</label>
-                            <input
-                                type="text"
-                                name="supplier"
-                                className="form-control"
-                                placeholder="Lieferant eingeben"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label>Status:</label>
-                            <select name="status" className="form-control">
-                                <option value="">Status auswählen</option>
-                                <option value="Ordered">Bestellt</option>
-                                <option value="Pending">Ausstehend</option>
-                                <option value="Arrived">Angekommen</option>
-                                <option value="Cancelled">Storniert</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label>Bestelldatum:</label>
-                            <input
-                                type="date"
-                                name="orderDate"
-                                className="form-control"
-                            />
-                        </div>
-
-                        {purchaseItems.map((item, index) => (
-                            <div key={index} className="product-row">
-                                <div className="form-group">
-                                    <label>Produkt:</label>
-                                    <select
-                                        className="form-control"
-                                        value={item.productId}
-                                        onChange={(e) =>
-                                            handleProductChange(index, 'productId', e.target.value)
-                                        }
-                                    >
-                                        <option value="">Produkt auswählen</option>
-                                        {products.map((product) => (
-                                            <option key={product.id} value={product.id}>
-                                                {product.name} -- {product.size}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="form-group">
-                                    <label>Menge:</label>
+                    <form onSubmit={handleSubmit} noValidate>
+                        <div className="form-container">
+                            {/* Lieferant */}
+                            <div className="form-group">
+                                <div className="input-row">
+                                    <label htmlFor="supplier">Lieferant:</label>
                                     <input
-                                        type="number"
-                                        className="form-control"
-                                        value={item.quantity}
-                                        min="1"
-                                        onChange={(e) =>
-                                            handleProductChange(index, 'quantity', e.target.value)
-                                        }
+                                        id="supplier"
+                                        type="text"
+                                        name="supplier"
+                                        value={purchaseData.supplier}
+                                        onChange={(e) => handleInputChange('supplier', e.target.value)}
+                                        className={errors.supplier ? 'input-error' : ''}
                                     />
                                 </div>
-                                <button
-                                    type="button"
-                                    onClick={() => removeProduct(index)}
-                                    className="remove-btn"
-                                >
-                                    Entfernen
+                                {errors.supplier && <span className="error-message">{errors.supplier}</span>}
+                            </div>
+
+                            {/* Status */}
+                            <div className="form-group">
+                                <div className="input-row">
+                                    <label htmlFor="status">Status:</label>
+                                    <select
+                                        id="status"
+                                        name="status"
+                                        value={purchaseData.status}
+                                        onChange={(e) => handleInputChange('status', e.target.value)}
+                                        className={errors.status ? 'input-error' : ''}
+                                    >
+                                        <option value="">Status auswählen</option>
+                                        <option value="Ordered">Bestellt</option>
+                                        <option value="Pending">Ausstehend</option>
+                                        <option value="Arrived">Angekommen</option>
+                                        <option value="Cancelled">Storniert</option>
+                                    </select>
+                                </div>
+                                {errors.status && <span className="error-message">{errors.status}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <div className="input-row">
+                                    <label htmlFor="orderDate">Bestelldatum:</label>
+                                    <input
+                                        id="orderDate"
+                                        type="date"
+                                        name="orderDate"
+                                        value={purchaseData.orderDate}
+                                        onChange={(e) => handleInputChange('orderDate', e.target.value)}
+                                        className={errors.orderDate ? 'input-error' : ''}
+                                    />
+                                </div>
+                                {errors.orderDate && <span className="error-message">{errors.orderDate}</span>}
+                            </div>
+
+                            <h3>Produkte</h3>
+                            {purchaseData.products.map((item, index) => (
+                                <div key={index} className="product-row">
+                                    <div className="form-group">
+                                        <div className="input-row">
+                                            <label>Produkt:</label>
+                                            <select
+                                                value={item.productId}
+                                                onChange={(e) =>
+                                                    handleProductChange(index, 'productId', e.target.value)
+                                                }
+                                                className="form-control"
+                                            >
+                                                <option value="">Produkt auswählen</option>
+                                                {products.map((product) => (
+                                                    <option key={product.id} value={product.id}>
+                                                        {product.name} -- Größe: {product.size}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-row">
+                                            <label>Menge:</label>
+                                            <input
+                                                type="number"
+                                                value={item.quantity}
+                                                min="1"
+                                                onChange={(e) => handleProductChange(index, 'quantity', e.target.value)}
+                                                className="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-row">
+                                            <label>Größe:</label>
+                                            <input
+                                                type="text"
+                                                value={item.size}
+                                                onChange={(e) => handleProductChange(index, 'size', e.target.value)}
+                                                className="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="button-group">
+                                        <button
+                                            type="button"
+                                            onClick={() => removeProduct(index)}
+                                            className="remove-btn"
+                                        >
+                                            Entfernen
+                                        </button>
+                                        <button type="button" onClick={addProduct} className="add-product-btn">
+                                            Produkt hinzufügen
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+
+                            {submitError && <div className="submit-error-message">{submitError}</div>}
+                            {successMessage && <div className="success-message">{successMessage}</div>}
+
+                            <div className="button-group">
+                                <button type="button" onClick={onClose} className="cancel-btn">
+                                    Abbrechen
+                                </button>
+                                <button type="submit" className="submit-btn">
+                                    Speichern
                                 </button>
                             </div>
-                        ))}
-                        <button type="button" onClick={addProduct} className="add-product-btn">
-                            Neues Produkt hinzufügen
-                        </button>
-
-                        <div className="button-group">
-                            <button type="button" onClick={onClose} className="cancel-btn">
-                                Abbrechen
-                            </button>
-                            <button type="submit" className="submit-btn">
-                                Speichern
-                            </button>
                         </div>
                     </form>
                 )}
             </div>
         </div>
-    );
+    )
 }

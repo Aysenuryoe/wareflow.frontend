@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
-
 import DeleteModal from '../DeleteModal'
 import SalesAddModal from '../SalesAddModal'
-
 import '../../styles/Sales.css'
-
 import { BsFillTrashFill } from 'react-icons/bs'
 
 export default function Sales() {
@@ -12,6 +9,7 @@ export default function Sales() {
     const [currentSale, setCurrentSale] = useState(null)
     const [isAddModalOpen, setAddModalOpen] = useState(false)
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [successMessage, setSuccessMessage] = useState('') // Erfolgsmeldung State
 
     const fetchSales = async () => {
         try {
@@ -35,12 +33,21 @@ export default function Sales() {
             if (response.ok) {
                 const savedSale = await response.json()
                 setSales((prevSales) => [...prevSales, savedSale])
-                setAddModalOpen(false)
+                setSuccessMessage('Verkauf erfolgreich hinzugefügt.') // Erfolgsmeldung setzen
+                return true // Erfolg zurückgeben
+            } else {
+                const errorText = await response.text()
+                console.error('Error creating sale:', errorText)
+                setSuccessMessage('Fehler beim Hinzufügen des Verkaufs.') // Fehlernachricht setzen
+                return false // Fehler zurückgeben
             }
         } catch (err) {
             console.error('Error creating sale:', err)
+            setSuccessMessage('Fehler beim Hinzufügen des Verkaufs.') // Fehlernachricht setzen
+            return false // Fehler zurückgeben
         }
     }
+
     const handleDeleteSale = async () => {
         if (!currentSale) return
 
@@ -64,10 +71,11 @@ export default function Sales() {
         fetchSales()
     }, [])
 
+
     return (
         <div>
             <div className="sales-container">
-                <div className="sales-card-header">
+                <div className="sales-header">
                     <h1 className="sales-title">Alle Verkäufe</h1>
                     <button className="add-sale-btn" onClick={() => setAddModalOpen(true)}>
                         Neuen Verkauf hinzufügen

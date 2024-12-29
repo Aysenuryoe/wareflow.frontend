@@ -31,6 +31,23 @@
   position: sticky; 
   top: 0;
   z-index: 1; 
+  text-align: center;
+}
+
+.table thead th:first-of-type{
+  text-align: left;
+}
+
+.table tbody td:first-of-type{
+  text-align: left;
+}
+
+.table thead th:nth-child(2){
+  text-align: left;
+}
+
+.table tbody td:nth-child(2){
+  text-align: left;
 }
 
 .table tbody tr {
@@ -48,6 +65,7 @@
 .table tbody td {
   padding: 0.75rem 1rem;
   vertical-align: middle;
+  text-align: center;
 }
 
 .table tbody td:last-child {

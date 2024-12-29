@@ -5,11 +5,11 @@ import { BsFillPencilFill, BsFillTrashFill } from 'react-icons/bs'
 import '../../styles/GoodsReceipt.css'
 import EditReceiptModal from '../EditReceiptModal'
 import DeleteModal from '../DeleteModal'
-                   
+
 function GoodsReceipt() {
     const [goodsReceipts, setGoodsReceipts] = useState([])
     const [error, setError] = useState(null)
-    const [purchaseOrders, setPurchaseOrders] = useState([]) 
+    const [purchaseOrders, setPurchaseOrders] = useState([])
     const [isModalOpen, setModalOpen] = useState(false)
     const [isEditModalOpen, setEditModalOpen] = useState(false)
     const [selectedReceipt, setSelectedReceipt] = useState(null)
@@ -120,15 +120,16 @@ function GoodsReceipt() {
             console.error('Failed to delete goods receipt:', err)
             alert(`Error: ${err.message}`)
         }
-    };
+    }
 
-    const getPurchaseOrderNumber = (purchaseOrderId) => {
-        const orderIndex = purchaseOrders.findIndex((order) => order._id === purchaseOrderId)
-        return orderIndex !== -1 ? orderIndex + 1 : 'Unbekannt'
+    const statusMap = {
+        Pending: 'Ausstehend',
+        Completed: 'Abgeschlossen',
+        Partial: 'Teilweise'
     }
 
     return (
-        <div>
+        <div className='goods-container'>
             <div className="goods-header">
                 <h1 className="goods-title">Wareneingang</h1>
                 <button className="add-receipt-button" onClick={() => setModalOpen(true)}>
@@ -136,12 +137,7 @@ function GoodsReceipt() {
                 </button>
             </div>
 
-
-            <AddReceiptModal 
-            isOpen={isModalOpen} 
-            onClose={() => 
-            setModalOpen(false)}onAdd={handleAddGoodsReceipt}
-            />
+            <AddReceiptModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAdd={handleAddGoodsReceipt} />
             {isEditModalOpen && selectedReceipt && (
                 <EditReceiptModal
                     isOpen={isEditModalOpen}
@@ -161,59 +157,57 @@ function GoodsReceipt() {
                 />
             )}
 
-<div className="table-wrapper">
-    {error && <p className="error">{error}</p>}
-    <table className="table">
-        <thead>
-            <tr>
-                <th>Produkte</th>
-                <th>Empfangsdatum</th>
-                <th>Status</th>
-                <th>Bemerkungen</th>
-                <th>Aktionen</th>
-            </tr>
-        </thead>
-        <tbody>
-            {goodsReceipts.map((receipt) => (
-                <tr key={receipt.id}>
-                    {/* Produkte anzeigen */}
-                    <td>
-                        {receipt.products?.length > 0 ? (
-                            <ul>
-                                {receipt.products.map((product, index) => (
-                                    <li key={index}>
-                                        {product.name} - Menge: {product.receivedQuantity}
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <span>Keine Produkte</span>
-                        )}
-                    </td>
-                    <td>{new Date(receipt.receivedDate).toLocaleDateString()}</td>
-                    <td>{receipt.status}</td>
-                    <td>{receipt.remarks || 'Keine Bemerkung'}</td>
-                    <td>
-                        <span className="actions">
-                            <BsFillPencilFill
-                                className="edit-btn"
-                                onClick={() => {
-                                    setSelectedReceipt(receipt)
-                                    setEditModalOpen(true)
-                                }}
-                            />
-                            <BsFillTrashFill
-                                className="delete-btn"
-                                onClick={() => openDeleteModal(receipt.id)}
-                            />
-                        </span>
-                    </td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
-</div>
-
+            <div className="table-wrapper">
+                {error && <p className="error">{error}</p>}
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>Produkte</th>
+                            <th>Empfangsdatum</th>
+                            <th>Status</th>
+                            <th>Bemerkungen</th>
+                            <th>Aktionen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {goodsReceipts.map((receipt) => (
+                            <tr key={receipt.id}>
+                                <td>
+                                    {receipt.products?.length > 0 ? (
+                                        <ul className="goods-list">
+                                            {receipt.products.map((product, index) => (
+                                                <li key={index}>
+                                                    {product.name}, {product.size} - Menge: {product.receivedQuantity}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <span>Keine Produkte</span>
+                                    )}
+                                </td>
+                                <td>{new Date(receipt.receivedDate).toLocaleDateString()}</td>
+                                <td>{statusMap[receipt.status] || receipt.status}</td>
+                                <td>{receipt.remarks || 'Keine Bemerkung'}</td>
+                                <td>
+                                    <span className="actions">
+                                        <BsFillPencilFill
+                                            className="edit-btn"
+                                            onClick={() => {
+                                                setSelectedReceipt(receipt)
+                                                setEditModalOpen(true)
+                                            }}
+                                        />
+                                        <BsFillTrashFill
+                                            className="delete-btn"
+                                            onClick={() => openDeleteModal(receipt.id)}
+                                        />
+                                    </span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }

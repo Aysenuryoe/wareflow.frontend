@@ -40,11 +40,4 @@
     z-index: 1000;
   }
   
-  .content {
-    margin-top: 60px;
-    padding: 1rem;
-    height: calc(100vh - 60px);
-    overflow-y: auto;
-    background-color: #f8f9fa;
-  }
   

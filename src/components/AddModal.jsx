@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/Modal.css';
+import "../styles/Modal.css";
 
-const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
+const AddModal = ({ closeModal, onSubmit, defaultValue }) => {
   const [product, setProduct] = useState({
-    id: '',
     name: '',
     size: '',
     price: '',
@@ -26,15 +25,7 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
 
   useEffect(() => {
     if (defaultValue) {
-      setProduct({
-        id: defaultValue.id || '',
-        name: defaultValue.name || '',
-        size: defaultValue.size || '',
-        price: defaultValue.price !== undefined ? defaultValue.price : '',
-        color: defaultValue.color || '',
-        stock: defaultValue.stock !== undefined ? defaultValue.stock : '',
-        description: defaultValue.description || '',
-      });
+      setProduct({ ...defaultValue });
     }
   }, [defaultValue]);
 
@@ -108,7 +99,7 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
     // Update product state
     setProduct((prevProduct) => ({
       ...prevProduct,
-      [name]: ['price', 'stock'].includes(name) ? value : value,
+      [name]: name === 'price' || name === 'stock' ? value : value,
     }));
 
     // Validate the field
@@ -160,13 +151,22 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
       };
       const result = await onSubmit(formattedProduct);
       if (result.success) {
-        setSuccessMessage('Produkt erfolgreich aktualisiert.');
+        setSuccessMessage('Produkt erfolgreich erstellt.');
+        // Optional: Setze das Formular zurück
+        setProduct({
+          name: '',
+          size: '',
+          price: '',
+          color: '',
+          stock: '',
+          description: '',
+        });
         // Optional: Schließe das Modal nach einigen Sekunden
         setTimeout(() => {
           closeModal();
         }, 2000);
       } else {
-        setSubmitError(result.message || 'Fehler beim Aktualisieren des Produkts.');
+        setSubmitError(result.message || 'Fehler beim Erstellen des Produkts.');
       }
     }
   };
@@ -174,7 +174,7 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
   return (
     <div className="modal-container">
       <div className="modal">
-        <h2>Produkt bearbeiten</h2>
+        <h2>{defaultValue ? 'Produkt bearbeiten' : 'Neues Produkt erstellen'}</h2>
         <div className='form-container'>
         <form onSubmit={handleSubmit} noValidate>
           {/* Name */}
@@ -246,7 +246,6 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
             {errors.price && <span className="error-message">{errors.price}</span>}
           </div>
 
-          {/* Farbe */}
           <div className="form-group">
             <div className="input-row">
               <label htmlFor="color">Farbe:</label>
@@ -262,7 +261,6 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
             {errors.color && <span className="error-message">{errors.color}</span>}
           </div>
 
-          {/* Lagerbestand */}
           <div className="form-group">
             <div className="input-row">
               <label htmlFor="stock">Lagerbestand:</label>
@@ -279,7 +277,6 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
             {errors.stock && <span className="error-message">{errors.stock}</span>}
           </div>
 
-          {/* Beschreibung */}
           <div className="form-group">
             <div className="input-row">
               <label htmlFor="description">Beschreibung:</label>
@@ -295,13 +292,10 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
             {errors.description && <span className="error-message">{errors.description}</span>}
           </div>
 
-          {/* Allgemeine Fehlermeldung anzeigen */}
           {submitError && <div className="submit-error-message">{submitError}</div>}
 
-          {/* Erfolgsmeldung anzeigen */}
           {successMessage && <div className="success-message">{successMessage}</div>}
 
-          {/* Buttons */}
           <div className="button-group">
             <button type="button" onClick={closeModal} className="cancel-btn">
               Abbrechen
@@ -317,4 +311,4 @@ const EditModal = ({ closeModal, onSubmit, defaultValue }) => {
   );
 };
 
-export default EditModal;
+export default AddModal;
