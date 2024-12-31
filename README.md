@@ -1,4 +1,3 @@
-````markdown
 # wareflow-frontend
 
 **wareflow-frontend** ist das Frontend des Warenwirtschaftssystems (WWS) **wareflow**, das speziell für kleinere Boutiquen entwickelt wurde. Gemeinsam mit dem **wareflow-backend** (siehe eigenes Repository/Projekt) bildet es das Herzstück einer schlanken, übersichtlichen und leicht zu bedienenden Lösung. Dieses Projekt entstand als Teil der Bachelorarbeit von Aysenur Yoleri.
