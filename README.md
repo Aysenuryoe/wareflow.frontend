@@ -40,6 +40,7 @@ Durch eine einfache **UI/UX**-Konzeption können Mitarbeiter\*innen ohne großen
     git clone <URL_zum_Repository>
     cd wareflow.frontend
     ```
+
 ````
 
 2. **Abhängigkeiten installieren**
@@ -53,6 +54,7 @@ Durch eine einfache **UI/UX**-Konzeption können Mitarbeiter\*innen ohne großen
     ```bash
     yarn install
     ```
+````
 
 3. **Starten im Entwicklungsmodus**
 
@@ -68,11 +70,12 @@ Durch eine einfache **UI/UX**-Konzeption können Mitarbeiter\*innen ohne großen
 
     Die Anwendung wird in der Regel auf `http://localhost:3000/` oder `http://localhost:3001/` (abhängig von deiner Konfiguration) erreichbar sein.
 
+````
 ---
 
 ## Konfiguration
 
-Je nachdem, wie du dein Frontend konfigurierst, kann es erforderlich sein, den **API-Endpunkt** des Backends festzulegen.  
+Je nachdem, wie du dein Frontend konfigurierst, kann es erforderlich sein, den **API-Endpunkt** des Backends festzulegen.
 Falls du eine `.env`-Datei verwendest, könntest du dort etwa Folgendes eintragen:
 
 ```bash
@@ -118,3 +121,4 @@ REACT_APP_API_BASE_URL=http://localhost:3000/api
 ## Lizenz
 
 Dieses Projekt ist Teil der Bachelorarbeit von Aysenur Yoleri. Genaue Lizenzbedingungen sind derzeit nicht festgelegt. Für eventuelle Wieder- oder Weiterverwendung wende dich bitte an die Projektverantwortlichen.
+````
