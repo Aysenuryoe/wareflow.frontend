@@ -1,3 +1,4 @@
+````markdown
 # wareflow-frontend
 
 **wareflow-frontend** ist das Frontend des Warenwirtschaftssystems (WWS) **wareflow**, das speziell für kleinere Boutiquen entwickelt wurde. Gemeinsam mit dem **wareflow-backend** (siehe eigenes Repository/Projekt) bildet es das Herzstück einer schlanken, übersichtlichen und leicht zu bedienenden Lösung. Dieses Projekt entstand als Teil der Bachelorarbeit von Aysenur Yoleri.
@@ -40,7 +41,6 @@ Durch eine einfache **UI/UX**-Konzeption können Mitarbeiter\*innen ohne großen
     git clone <URL_zum_Repository>
     cd wareflow.frontend
     ```
-
 ````
 
 2. **Abhängigkeiten installieren**
@@ -69,7 +69,7 @@ Durch eine einfache **UI/UX**-Konzeption können Mitarbeiter\*innen ohne großen
 
 ## Konfiguration
 
-Je nachdem, wie du dein Frontend konfigurierst, kann es erforderlich sein, den **API-Endpunkt** des Backends festzulegen.
+Je nachdem, wie du dein Frontend konfigurierst, kann es erforderlich sein, den **API-Endpunkt** des Backends festzulegen.  
 Falls du eine `.env`-Datei verwendest, könntest du dort etwa Folgendes eintragen:
 
 ```bash
@@ -117,4 +117,5 @@ REACT_APP_API_BASE_URL=http://localhost:3000/api
 Dieses Projekt ist Teil der Bachelorarbeit von Aysenur Yoleri. Genaue Lizenzbedingungen sind derzeit nicht festgelegt. Für eventuelle Wieder- oder Weiterverwendung wende dich bitte an die Projektverantwortlichen.
 
 ```
-````
+
+```
