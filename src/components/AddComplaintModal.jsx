@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/Modal.css';
+import React, { useState, useEffect } from 'react'
+import '../styles/Modal.css'
 
 function AddComplaintModal({ isOpen, onClose, onAdd }) {
-    const [products, setProducts] = useState([]); 
+    const [products, setProducts] = useState([])
     const [formData, setFormData] = useState({
         referenceType: 'GoodsReceipt',
         products: [{ productId: '', quantity: 1, reason: '' }],
-        status: 'Open',
-    });
+        status: 'Open'
+    })
 
-    const [loading, setLoading] = useState(false); 
-    const [error, setError] = useState(null); 
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -30,41 +30,39 @@ function AddComplaintModal({ isOpen, onClose, onAdd }) {
         fetchProducts()
     }, [])
 
-
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevState) => ({ ...prevState, [name]: value }));
-    };
+        const { name, value } = e.target
+        setFormData((prevState) => ({ ...prevState, [name]: value }))
+    }
 
     const handleProductChange = (index, field, value) => {
-        const updatedProducts = [...formData.products];
-        updatedProducts[index][field] = field === 'quantity' ? parseInt(value, 10) : value;
-        setFormData((prevState) => ({ ...prevState, products: updatedProducts }));
-    };
+        const updatedProducts = [...formData.products]
+        updatedProducts[index][field] = field === 'quantity' ? parseInt(value, 10) : value
+        setFormData((prevState) => ({ ...prevState, products: updatedProducts }))
+    }
 
     const addProductField = () => {
         setFormData((prevState) => ({
             ...prevState,
-            products: [...prevState.products, { productId: '', quantity: 1, reason: '' }],
-        }));
-    };
+            products: [...prevState.products, { productId: '', quantity: 1, reason: '' }]
+        }))
+    }
 
     const removeProductField = (index) => {
         setFormData((prevState) => ({
             ...prevState,
-            products: prevState.products.filter((_, i) => i !== index),
-        }));
-    };
+            products: prevState.products.filter((_, i) => i !== index)
+        }))
+    }
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Formulardaten:', formData);
-        onAdd(formData);
-        onClose();
-    };
-    
+        e.preventDefault()
+        console.log('Formulardaten:', formData)
+        onAdd(formData)
+        onClose()
+    }
 
-    if (!isOpen) return null;
+    if (!isOpen) return null
 
     return (
         <div className="modal-container">
@@ -172,7 +170,7 @@ function AddComplaintModal({ isOpen, onClose, onAdd }) {
                 )}
             </div>
         </div>
-    );
+    )
 }
 
-export default AddComplaintModal;
+export default AddComplaintModal

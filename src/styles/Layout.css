@@ -3,28 +3,28 @@
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-  }
-  
-  .sidebar {
+}
+
+.sidebar {
     width: 240px;
     height: 100vh;
-  
+
     color: white;
     display: flex;
     flex-direction: column;
     padding: 1rem;
     z-index: 100;
-  }
-  
-  .main {
+}
+
+.main {
     flex: 1;
     position: relative;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-  }
-  
-  .header {
+}
+
+.header {
     position: fixed;
     top: 0;
     left: 240px;
@@ -38,6 +38,4 @@
     border-bottom: 1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     z-index: 1000;
-  }
-  
-  
+}

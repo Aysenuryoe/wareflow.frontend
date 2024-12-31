@@ -29,57 +29,57 @@ const InventoryMovement = () => {
 
     return (
         <>
-        <div className='inventory-container'>
-            <div className="inventory-header">
-                <h2 className="inventory-title">Bestandsbewegungen</h2>
-            </div>
-            <div className="table-wrapper">
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Datum</th>
-                            <th>Artikel</th>
-                            <th>Bewegungsart</th>
-                            <th>Menge</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map((item) => (
-                            <tr key={item.id}>
-                                <td>{new Date(item.date).toLocaleDateString()}</td>
-                                <td>{item.name}</td>
-                                <td>
-                                    <span
-                                        className={`type-badge ${
-                                            item.type === 'Inbound'
-                                                ? 'type-inbound'
-                                                : item.type === 'Outbound'
-                                                ? 'type-outbound'
-                                                : item.type === 'Return'
-                                                ? 'type-return'
-                                                : item.type === 'Adjustment'
-                                                ? 'type-adjustment'
-                                                : 'type-default'
-                                        }`}
-                                    >
-                                        {item.type === 'Inbound'
-                                            ? 'Wareneingang'
-                                            : item.type === 'Outbound'
-                                            ? 'Warenausgang'
-                                            : item.type === 'Return'
-                                            ? 'Rückgabe'
-                                            : item.type === 'Adjustment'
-                                            ? 'Abschreibung'
-                                            : item.type}
-                                    </span>
-                                </td>
-
-                                <td>{item.quantity}</td>
+            <div className="inventory-container">
+                <div className="inventory-header">
+                    <h2 className="inventory-title">Bestandsbewegungen</h2>
+                </div>
+                <div className="table-wrapper">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Datum</th>
+                                <th>Artikel</th>
+                                <th>Bewegungsart</th>
+                                <th>Menge</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {data.map((item) => (
+                                <tr key={item.id}>
+                                    <td>{new Date(item.date).toLocaleDateString()}</td>
+                                    <td>{item.name}</td>
+                                    <td>
+                                        <span
+                                            className={`type-badge ${
+                                                item.type === 'Inbound'
+                                                    ? 'type-inbound'
+                                                    : item.type === 'Outbound'
+                                                    ? 'type-outbound'
+                                                    : item.type === 'Return'
+                                                    ? 'type-return'
+                                                    : item.type === 'Adjustment'
+                                                    ? 'type-adjustment'
+                                                    : 'type-default'
+                                            }`}
+                                        >
+                                            {item.type === 'Inbound'
+                                                ? 'Wareneingang'
+                                                : item.type === 'Outbound'
+                                                ? 'Warenausgang'
+                                                : item.type === 'Return'
+                                                ? 'Rückgabe'
+                                                : item.type === 'Adjustment'
+                                                ? 'Abschreibung'
+                                                : item.type}
+                                        </span>
+                                    </td>
+
+                                    <td>{item.quantity}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </>
     )

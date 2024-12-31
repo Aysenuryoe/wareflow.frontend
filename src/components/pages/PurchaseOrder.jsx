@@ -133,7 +133,7 @@ export default function PurchaseOrder() {
                                         <ul className="purchase-list">
                                             {order.products.map((product, idx) => (
                                                 <li key={idx}>
-                                                    {product.name}, {product.size}, <br/> Menge: {product.quantity}
+                                                    {product.name}, {product.size}, <br /> Menge: {product.quantity}
                                                 </li>
                                             ))}
                                         </ul>
@@ -196,4 +196,4 @@ export default function PurchaseOrder() {
             )}
         </div>
     )
-} 
+}

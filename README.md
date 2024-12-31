@@ -1,70 +1,121 @@
-# Getting Started with Create React App
+````markdown
+# wareflow-frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**wareflow-frontend** ist das Frontend des Warenwirtschaftssystems (WWS) **wareflow**, das speziell für kleinere Boutiquen entwickelt wurde. Gemeinsam mit dem **wareflow-backend** (siehe eigenes Repository/Projekt) bildet es das Herzstück einer schlanken, übersichtlichen und leicht zu bedienenden Lösung. Dieses Projekt entstand als Teil der Bachelorarbeit von Aysenur Yoleri.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Überblick
 
-### `npm start`
+**wareflow-frontend** dient als grafische Benutzeroberfläche, um die Funktionen des **wareflow-backends** intuitiv abzubilden.  
+Zielgruppe sind **kleinere Boutiquen**, die ihren Lagerbestand, Bestellungen, Retouren und Verkaufsprozesse effizient managen möchten.  
+Durch eine einfache **UI/UX**-Konzeption können Mitarbeiter\*innen ohne großen Schulungsaufwand direkt durchstarten.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+-   **Übersichtliches UI**: Anzeige und Verwaltung von Produkten, Bestellungen, Beschwerden, Retouren etc.
+-   **Anbindung an Backend**: Kommuniziert über REST-APIs mit dem **wareflow-backend**.
+-   **Benutzerverwaltung**: Login und Authentifizierung (JWT-basiert) sowie Verwaltung von Benutzern und Berechtigungen.
+-   **Responsives Design**: Damit auch auf Tablets oder Smartphones eine gute Bedienbarkeit gewährleistet ist.
+-   **Einfache Navigation**: Übersichtliche Menüführung für kurze Einarbeitungszeit.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Voraussetzungen
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+-   **Node.js** (empfohlen Version 14 oder höher)
+-   **npm** oder **yarn** (für das Dependency Management)
+-   **Zugriff auf das wareflow-backend**
+    -   Stelle sicher, dass das Backend korrekt läuft (standardmäßig z. B. `http://localhost:3000/`).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> **Tipp**: Richte das Backend zuerst ein und verifiziere, dass es ordnungsgemäß erreichbar ist.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+## Installation & Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. **Repository klonen**
+    ```bash
+    git clone <URL_zum_Repository>
+    cd wareflow.frontend
+    ```
+````
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+2. **Abhängigkeiten installieren**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    ```bash
+    npm install
+    ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    oder
 
-## Learn More
+    ```bash
+    yarn install
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. **Starten im Entwicklungsmodus**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    ```bash
+    npm start
+    ```
 
-### Code Splitting
+    oder
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    ```bash
+    yarn start
+    ```
 
-### Analyzing the Bundle Size
+    Die Anwendung wird in der Regel auf `http://localhost:3000/` oder `http://localhost:3001/` (abhängig von deiner Konfiguration) erreichbar sein.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+## Konfiguration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Je nachdem, wie du dein Frontend konfigurierst, kann es erforderlich sein, den **API-Endpunkt** des Backends festzulegen.  
+Falls du eine `.env`-Datei verwendest, könntest du dort etwa Folgendes eintragen:
 
-### Advanced Configuration
+```bash
+REACT_APP_API_BASE_URL=http://localhost:3000/api
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+> **Wichtig**: Achte darauf, den tatsächlichen Host und Port deines Backends anzugeben (z. B. Production-/Staging-URL).
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Integration mit dem Backend
 
-### `npm run build` fails to minify
+-   **API-Aufrufe**: In den `services/`-Dateien werden die Endpunkte des Backends (z. B. `/api/login`, `/api/product`, `/api/sales`) aufgerufen.
+-   **JWT-Handling**:
+    -   Bei erfolgreichem Login erhältst du einen **JWT** (JSON Web Token).
+    -   Dieser sollte in lokalem Speicher (z. B. `localStorage`, `sessionStorage`) oder einem globalen State verwaltet werden, um ihn bei Bedarf im `Authorization`-Header (`Bearer <TOKEN>`) mitzusenden.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+## Routing & Screens
+
+Üblicherweise arbeitet man im Frontend mit einem **Router** (z. B. `react-router-dom` bei React). Folgende Screens könnten exemplarisch vorhanden sein:
+
+1. **Login**
+    - Formular für E-Mail/Passwort, Kommunikation mit `/api/login`.
+2. **Dashboard**
+    - Zeigt eine Kurzübersicht über Lagerbestände, neue Bestellungen etc.
+3. **Produkte**
+    - Liste aller Produkte, Filter/Suche, Detailansicht für ein Produkt.
+4. **Bestellungen (Purchase Orders)**
+    - Auflistung von getätigten Bestellungen, Detailansicht und Status.
+5. **Wareneingänge (Goods Receipts)**
+    - Verwaltung und Erfassung von Wareneingängen.
+6. **Verkäufe (Sales Orders)**
+    - Übersicht über Verkaufsaufträge.
+7. **Complaints / Returns**
+    - Verwaltung von Beschwerden und Retouren.
+8. **Benutzerverwaltung**
+    - Übersicht aller User, Erstellung, Bearbeitung, Löschung.
+
+---
+
+## Lizenz
+
+Dieses Projekt ist Teil der Bachelorarbeit von Aysenur Yoleri. Genaue Lizenzbedingungen sind derzeit nicht festgelegt. Für eventuelle Wieder- oder Weiterverwendung wende dich bitte an die Projektverantwortlichen.

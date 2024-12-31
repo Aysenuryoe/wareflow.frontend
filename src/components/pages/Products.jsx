@@ -213,8 +213,7 @@ export default function Products() {
                 onPageChange={(page) => setCurrentPage(page)}
             />
 
-            {isModalOpen && 
-                <AddModal closeModal={() => setModalOpen(false)} onSubmit={saveProduct} />}
+            {isModalOpen && <AddModal closeModal={() => setModalOpen(false)} onSubmit={saveProduct} />}
 
             {isEditModalOpen && (
                 <EditModal

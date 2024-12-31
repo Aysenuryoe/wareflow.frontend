@@ -71,7 +71,6 @@ export default function Sales() {
         fetchSales()
     }, [])
 
-
     return (
         <div>
             <div className="sales-container">

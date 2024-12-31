@@ -46,7 +46,6 @@ body {
     gap: 2rem;
     margin: 10% auto;
     max-width: 800px;
-
 }
 
 .feature-item {
@@ -82,7 +81,7 @@ body {
 
 @media (max-width: 768px) {
     .features-grid {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
     }
 
     .introduction-header h1 {

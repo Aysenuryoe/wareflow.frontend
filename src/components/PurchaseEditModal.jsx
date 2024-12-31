@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/Modal.css';
+import React, { useState, useEffect } from 'react'
+import '../styles/Modal.css'
 
 function PurchaseEditModal({ closeModal, onSubmit, defaultValue }) {
     const [formData, setFormData] = useState({
@@ -7,11 +7,11 @@ function PurchaseEditModal({ closeModal, onSubmit, defaultValue }) {
         supplier: '',
         status: '',
         orderDate: '',
-        receivedDate: '',
-    });
-    const [errors, setErrors] = useState({});
-    const [successMessage, setSuccessMessage] = useState('');
-    const [submitError, setSubmitError] = useState('');
+        receivedDate: ''
+    })
+    const [errors, setErrors] = useState({})
+    const [successMessage, setSuccessMessage] = useState('')
+    const [submitError, setSubmitError] = useState('')
 
     useEffect(() => {
         if (defaultValue) {
@@ -20,98 +20,96 @@ function PurchaseEditModal({ closeModal, onSubmit, defaultValue }) {
                 products: defaultValue.products || [],
                 supplier: defaultValue.supplier || '',
                 status: defaultValue.status || 'Ordered',
-                orderDate: defaultValue.orderDate
-                    ? new Date(defaultValue.orderDate).toISOString().split('T')[0]
-                    : '',
+                orderDate: defaultValue.orderDate ? new Date(defaultValue.orderDate).toISOString().split('T')[0] : '',
                 receivedDate: defaultValue.receivedDate
                     ? new Date(defaultValue.receivedDate).toISOString().split('T')[0]
-                    : '',
-            });
+                    : ''
+            })
         }
-    }, [defaultValue]);
+    }, [defaultValue])
 
     const validateField = (name, value) => {
-        let error = '';
+        let error = ''
         if (name === 'supplier' && !value.trim()) {
-            error = 'Lieferant ist erforderlich.';
+            error = 'Lieferant ist erforderlich.'
         } else if (name === 'status' && !value) {
-            error = 'Status ist erforderlich.';
+            error = 'Status ist erforderlich.'
         } else if (name === 'orderDate' && !value) {
-            error = 'Bestelldatum ist erforderlich.';
+            error = 'Bestelldatum ist erforderlich.'
         } else if (name === 'receivedDate' && !value) {
-            error = 'Empfangsdatum ist erforderlich.';
+            error = 'Empfangsdatum ist erforderlich.'
         } else if (name === 'products') {
             value.forEach((product, index) => {
                 if (!product.quantity || product.quantity <= 0) {
-                    error = `Menge für Produkt ${index + 1} muss positiv sein.`;
+                    error = `Menge für Produkt ${index + 1} muss positiv sein.`
                 }
-            });
+            })
         }
-        return error;
-    };
+        return error
+    }
 
     const validateForm = () => {
-        const newErrors = {};
-        newErrors.supplier = validateField('supplier', formData.supplier);
-        newErrors.status = validateField('status', formData.status);
-        newErrors.orderDate = validateField('orderDate', formData.orderDate);
-        newErrors.receivedDate = validateField('receivedDate', formData.receivedDate);
-        newErrors.products = validateField('products', formData.products);
+        const newErrors = {}
+        newErrors.supplier = validateField('supplier', formData.supplier)
+        newErrors.status = validateField('status', formData.status)
+        newErrors.orderDate = validateField('orderDate', formData.orderDate)
+        newErrors.receivedDate = validateField('receivedDate', formData.receivedDate)
+        newErrors.products = validateField('products', formData.products)
 
-        setErrors(newErrors);
-        return Object.values(newErrors).every((err) => !err);
-    };
+        setErrors(newErrors)
+        return Object.values(newErrors).every((err) => !err)
+    }
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const { name, value } = e.target
         setFormData((prev) => ({
             ...prev,
-            [name]: value,
-        }));
+            [name]: value
+        }))
         setErrors((prevErrors) => ({
             ...prevErrors,
-            [name]: validateField(name, value),
-        }));
-    };
+            [name]: validateField(name, value)
+        }))
+    }
 
     const handleProductChange = (index, field, value) => {
-        const updatedProducts = [...formData.products];
-        updatedProducts[index][field] = field === 'quantity' ? parseInt(value, 10) : value;
-        setFormData((prev) => ({ ...prev, products: updatedProducts }));
+        const updatedProducts = [...formData.products]
+        updatedProducts[index][field] = field === 'quantity' ? parseInt(value, 10) : value
+        setFormData((prev) => ({ ...prev, products: updatedProducts }))
         setErrors((prevErrors) => ({
             ...prevErrors,
-            products: validateField('products', updatedProducts),
-        }));
-    };
+            products: validateField('products', updatedProducts)
+        }))
+    }
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setSubmitError('');
-        setSuccessMessage('');
+        e.preventDefault()
+        setSubmitError('')
+        setSuccessMessage('')
 
         if (validateForm()) {
             const updatedOrder = {
                 ...formData,
                 orderDate: formData.orderDate ? new Date(formData.orderDate) : null,
-                receivedDate: formData.receivedDate ? new Date(formData.receivedDate) : null,
-            };
+                receivedDate: formData.receivedDate ? new Date(formData.receivedDate) : null
+            }
 
-            const result = await onSubmit(updatedOrder);
+            const result = await onSubmit(updatedOrder)
             if (result.success) {
-                setSuccessMessage('Bestellung erfolgreich aktualisiert.');
+                setSuccessMessage('Bestellung erfolgreich aktualisiert.')
                 setTimeout(() => {
-                    setSuccessMessage('');
-                    closeModal();
-                }, 2000);
+                    setSuccessMessage('')
+                    closeModal()
+                }, 2000)
             } else {
-                setSubmitError(result.message || 'Fehler beim Aktualisieren der Bestellung.');
+                setSubmitError(result.message || 'Fehler beim Aktualisieren der Bestellung.')
             }
         } else {
-            setSubmitError('Bitte überprüfen Sie die Eingabefelder.');
+            setSubmitError('Bitte überprüfen Sie die Eingabefelder.')
         }
-    };
+    }
 
-    if (!defaultValue) return null;
+    if (!defaultValue) return null
 
     return (
         <div className="modal-container">
@@ -125,12 +123,7 @@ function PurchaseEditModal({ closeModal, onSubmit, defaultValue }) {
                                 <div className="form-group">
                                     <div className="input-row">
                                         <label>Produktname:</label>
-                                        <input
-                                            type="text"
-                                            value={product.name}
-                                            readOnly
-                                            className="form-control"
-                                        />
+                                        <input type="text" value={product.name} readOnly className="form-control" />
                                     </div>
                                 </div>
 
@@ -228,7 +221,7 @@ function PurchaseEditModal({ closeModal, onSubmit, defaultValue }) {
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
-export default PurchaseEditModal;
+export default PurchaseEditModal

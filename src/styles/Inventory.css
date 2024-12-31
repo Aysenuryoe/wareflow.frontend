@@ -1,7 +1,6 @@
-.inventory-container{
+.inventory-container {
     padding: 5%;
 }
-
 
 .inventory-header {
     display: flex;
@@ -27,7 +26,6 @@
     text-align: center;
     color: white;
     border-radius: 5px;
-
 }
 
 .type-inbound {

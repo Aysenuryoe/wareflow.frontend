@@ -1,6 +1,5 @@
-.sales-container{
+.sales-container {
     padding: 5%;
-  
 }
 .sales-header {
     display: flex;
@@ -12,19 +11,17 @@
 .sales-title {
     font-size: 2rem;
     color: #333;
-  }
+}
 
-  .sales-cards {
+.sales-cards {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: flex-start;
     padding: 20px;
-    max-height: 600px; 
-    overflow-y: auto; 
-  
+    max-height: 600px;
+    overflow-y: auto;
 }
-
 
 .sales-card {
     background-color: #f9f9f9;
@@ -38,24 +35,20 @@
     flex-direction: column;
     justify-content: space-between;
     margin: auto;
-  
 }
-
 
 .sales-card-body {
     flex: 1;
     overflow-y: auto;
     margin-bottom: 10px;
     padding-right: 5px;
-  
 }
 
-.sales-card-header{
+.sales-card-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
-
 
 .sales-card-header p {
     margin: 0;

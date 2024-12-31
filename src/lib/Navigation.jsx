@@ -4,13 +4,10 @@ import {
     HiOutlineShoppingCart,
     HiOutlineShoppingBag,
     HiOutlineClipboardList,
-    HiOutlineDocumentText,
     HiOutlineArrowCircleLeft,
     HiOutlineExclamationCircle,
-    HiOutlineSwitchHorizontal,
-    HiOutlineCog,
-    HiOutlineQuestionMarkCircle
-} from 'react-icons/hi';
+    HiOutlineSwitchHorizontal
+} from 'react-icons/hi'
 
 export const DASHBOARD_SIDEBAR_LINKS = [
     {
@@ -61,5 +58,4 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         path: '/complaints',
         icon: <HiOutlineExclamationCircle />
     }
-];
-
+]

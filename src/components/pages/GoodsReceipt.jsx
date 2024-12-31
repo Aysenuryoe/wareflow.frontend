@@ -129,7 +129,7 @@ function GoodsReceipt() {
     }
 
     return (
-        <div className='goods-container'>
+        <div className="goods-container">
             <div className="goods-header">
                 <h1 className="goods-title">Wareneingang</h1>
                 <button className="add-receipt-button" onClick={() => setModalOpen(true)}>

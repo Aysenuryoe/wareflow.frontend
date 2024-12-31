@@ -3,38 +3,38 @@
 .login-container {
     width: 100%;
     max-width: 400px;
-margin: auto;
+    margin: auto;
     padding: 20px;
     background-color: #f7f7f7;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  h2 {
+}
+
+h2 {
     text-align: center;
     margin-bottom: 20px;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     margin-bottom: 15px;
-  }
-  
-  label {
+}
+
+label {
     display: block;
     font-size: 14px;
     margin-bottom: 5px;
     color: #333;
-  }
-  
-  input {
+}
+
+input {
     width: 100%;
     padding: 10px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
-  }
-  
-  button.login-btn {
+}
+
+button.login-btn {
     width: 100%;
     padding: 10px;
     font-size: 16px;
@@ -44,13 +44,13 @@ margin: auto;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease;
-  }
-  
-  button.login-btn:hover {
+}
+
+button.login-btn:hover {
     background-color: #0056b3;
-  }
-  
-  .error-message {
+}
+
+.error-message {
     color: #c80000;
     background-color: #fad7d7;
     border-radius: 4px;
@@ -58,5 +58,4 @@ margin: auto;
     font-size: 14px;
     padding: 10px;
     text-align: center;
-  }
-  
+}
