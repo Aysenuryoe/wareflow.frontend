@@ -1,11 +1,19 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FcBullish } from 'react-icons/fc';
 import { HiOutlineLogout } from 'react-icons/hi';
 import { DASHBOARD_SIDEBAR_LINKS } from '../../lib/Navigation';
 import '../../styles/Sidebar.css';
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+
+    navigate('/login');
+  };
+
   return (
     <div className="sidebar">
       <div className="logo">
@@ -18,7 +26,7 @@ export default function Sidebar() {
         ))}
       </div>
       <div className="bottom-links">
-        <div className="logout-link">
+        <div className="logout-link" onClick={handleLogout}>
           <span className="icon"><HiOutlineLogout /></span>
           Logout
         </div>

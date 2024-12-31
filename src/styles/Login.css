@@ -3,7 +3,7 @@
 .login-container {
     width: 100%;
     max-width: 400px;
-    margin: 50px auto;
+margin: auto;
     padding: 20px;
     background-color: #f7f7f7;
     border-radius: 8px;
@@ -51,8 +51,12 @@
   }
   
   .error-message {
-    color: red;
+    color: #c80000;
+    background-color: #fad7d7;
+    border-radius: 4px;
     margin-bottom: 15px;
     font-size: 14px;
+    padding: 10px;
+    text-align: center;
   }
   

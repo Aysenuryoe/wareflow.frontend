@@ -215,4 +215,4 @@ function Complaints() {
     )
 }
 
-export default Complaints
+export default Complaints;
