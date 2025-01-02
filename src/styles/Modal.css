@@ -22,8 +22,8 @@
 }
 
 .form-container {
-    height: 400px;
-    overflow-y: scroll;
+    height: auto;
+    overflow: hidden;
     padding-right: 0.5rem;
 }
 
@@ -67,6 +67,11 @@
 .input-row textarea {
     resize: none;
     height: 80px;
+}
+
+.sale-product-group,
+.product-row {
+    margin-bottom: 2rem;
 }
 
 .button-group {

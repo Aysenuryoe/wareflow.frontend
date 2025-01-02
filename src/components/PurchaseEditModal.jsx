@@ -122,13 +122,6 @@ function PurchaseEditModal({ closeModal, onSubmit, defaultValue }) {
                             <div key={index} className="product-group">
                                 <div className="form-group">
                                     <div className="input-row">
-                                        <label>Produktname:</label>
-                                        <input type="text" value={product.name} readOnly className="form-control" />
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <div className="input-row">
                                         <label>Menge:</label>
                                         <input
                                             type="number"

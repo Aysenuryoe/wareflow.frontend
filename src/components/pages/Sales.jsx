@@ -97,13 +97,13 @@ export default function Sales() {
                                     </button>
                                 </div>
                             </div>
+                            <strong>Produkte:</strong>
+
                             <div className="sales-card-body">
                                 <div className="sales-card-products">
                                     {sale.products.map((product, index) => (
                                         <div key={index} className="product-card">
-                                            <p>
-                                                <strong>Produkte:</strong> {product.name}
-                                            </p>
+                                            <p>Name: {product.name}</p>
                                             <p>Preis: {product.price.toFixed(2)}€</p>
                                             <p>Menge: {product.quantity}</p>
                                         </div>

@@ -32,7 +32,7 @@ const AddModal = ({ closeModal, onSubmit, defaultValue }) => {
     // Validierungsfunktionen
     const validateField = (name, value) => {
         let error = ''
-        const lettersAndSpacesRegex = /^[A-Za-z\s]+$/
+        const lettersAndSpacesRegex = /^[A-Za-z\s-.]+$/
         const lettersOnlyRegex = /^[A-Za-z]+$/
 
         switch (name) {

@@ -7,7 +7,6 @@ export default function PurchaseAddModal({ onClose, onSave }) {
         supplier: '',
         status: '',
         orderDate: '',
-        receivedDate: '',
         products: [{ productId: '', quantity: 1, size: '' }]
     })
     const [errors, setErrors] = useState({})
@@ -74,7 +73,11 @@ export default function PurchaseAddModal({ onClose, onSave }) {
 
     const handleProductChange = (index, field, value) => {
         const updatedProducts = [...purchaseData.products]
-        updatedProducts[index][field] = value
+        if (field === 'quantity') {
+            updatedProducts[index][field] = parseInt(value, 10)
+        } else {
+            updatedProducts[index][field] = value
+        }
         setPurchaseData((prev) => ({ ...prev, products: updatedProducts }))
         setErrors((prevErrors) => ({
             ...prevErrors,

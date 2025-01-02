@@ -9,6 +9,8 @@ import DeleteModal from '../DeleteModal'
 
 export default function PurchaseOrder() {
     const [purchaseOrders, setPurchaseOrders] = useState([])
+    const [products, setProducts] = useState([])
+    const [error, setError] = useState(null)
     const [currentOrder, setCurrentOrder] = useState(null)
     const [isAddModalOpen, setAddModalOpen] = useState(false)
     const [isEditModalOpen, setEditModalOpen] = useState(false)
@@ -23,7 +25,21 @@ export default function PurchaseOrder() {
 
     useEffect(() => {
         fetchPurchaseOrders()
+        fetchProducts()
     }, [])
+
+    const fetchProducts = async () => {
+        try {
+            const response = await fetch(`https://localhost:3001/api/product/all`)
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`)
+            }
+            const data = await response.json()
+            setProducts(data)
+        } catch (err) {
+            setError(err.message)
+        }
+    }
 
     const fetchPurchaseOrders = async () => {
         try {
@@ -40,37 +56,48 @@ export default function PurchaseOrder() {
     }
 
     const createNewPurchase = async (purchaseData) => {
-        const response = await fetch('https://localhost:3001/api/purchase', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(purchaseData)
-        })
-        if (!response.ok) {
-            console.error('Fehler beim Erstellen des Einkaufs')
-        } else {
-            console.log('Einkauf erfolgreich erstellt')
+        try {
+            const response = await fetch('https://localhost:3001/api/purchase', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(purchaseData)
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}))
+                throw new Error(errorData.message || 'Fehler beim Erstellen des Einkaufs')
+            }
             fetchPurchaseOrders()
             setAddModalOpen(false)
+            return { success: true }
+        } catch (err) {
+            console.error(err)
+            return { success: false, message: err.message }
         }
     }
 
     const updatePurchaseOrder = async (updatedData) => {
-        console.log('Updated Data:', updatedData)
-        console.log('Updated Data ID:', updatedData.id)
+        try {
+            const response = await fetch(`https://localhost:3001/api/purchase/${updatedData.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData)
+            })
 
-        const response = await fetch(`https://localhost:3001/api/purchase/${updatedData.id}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updatedData)
-        })
-        if (!response.ok) {
-            console.error('Fehler beim Aktualisieren des Einkaufs')
-        } else {
+            if (!response.ok) {
+                console.error('Fehler beim Aktualisieren des Einkaufs')
+                return { success: false, message: 'Fehler beim Aktualisieren des Einkaufs' }
+            }
+
             console.log('Einkauf erfolgreich aktualisiert')
             fetchPurchaseOrders()
             setEditModalOpen(false)
+            return { success: true }
+        } catch (err) {
+            console.error(err)
+            return { success: false, message: err.message }
         }
     }
 
@@ -131,11 +158,24 @@ export default function PurchaseOrder() {
                                 <td>
                                     {order.products?.length > 0 ? (
                                         <ul className="purchase-list">
-                                            {order.products.map((product, idx) => (
-                                                <li key={idx}>
-                                                    {product.name}, {product.size}, <br /> Menge: {product.quantity}
-                                                </li>
-                                            ))}
+                                            {order.products.map((prodRef, idx) => {
+                                                // Hier findst du das passende Produkt aus dem products-State:
+                                                const matchingProduct = products.find((p) => p.id === prodRef.productId)
+                                                // Falls nicht gefunden, setze Namen auf "Unbekannt"
+                                                const productName = matchingProduct ? matchingProduct.name : 'Unbekannt'
+
+                                                return (
+                                                    <li key={idx}>
+                                                        {/* 
+                                                            Zeige den gefundenen Namen oder "Unbekannt",
+                                                            plus Größe & Menge:
+                                                        */}
+                                                        {productName}, {prodRef.size}
+                                                        <br />
+                                                        Menge: {prodRef.quantity}
+                                                    </li>
+                                                )
+                                            })}
                                         </ul>
                                     ) : (
                                         <span>Keine Produkte</span>
