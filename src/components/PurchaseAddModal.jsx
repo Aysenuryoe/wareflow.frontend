@@ -41,9 +41,16 @@ export default function PurchaseAddModal({ onClose, onSave }) {
             error = 'Bestelldatum ist erforderlich.'
         } else if (name === 'products') {
             value.forEach((item, index) => {
-                if (!item.productId) error = `Produkt ${index + 1} ist erforderlich.`
-                if (!item.quantity || item.quantity <= 0) error = `Menge für Produkt ${index + 1} muss positiv sein.`
-                if (!item.size) error = `Größe für Produkt ${index + 1} ist erforderlich.`
+                if (!item.productId) {
+                    error = `Produkt ${index + 1} ist erforderlich.`
+                }
+                if (!item.quantity || item.quantity <= 0) {
+                    error = `Menge für Produkt ${index + 1} muss positiv sein.`
+                }
+                // Falls du die Größe dennoch validierst, obwohl sie nur automatisch gesetzt wird:
+                if (!item.size) {
+                    error = `Größe für Produkt ${index + 1} ist erforderlich.`
+                }
             })
         }
         return error
@@ -73,11 +80,22 @@ export default function PurchaseAddModal({ onClose, onSave }) {
 
     const handleProductChange = (index, field, value) => {
         const updatedProducts = [...purchaseData.products]
+
         if (field === 'quantity') {
             updatedProducts[index][field] = parseInt(value, 10)
-        } else {
-            updatedProducts[index][field] = value
+        } else if (field === 'productId') {
+            // ProduktId wird gesetzt
+            updatedProducts[index].productId = value
+
+            // Automatisch die Größe aus dem jeweiligen Produkt übernehmen
+            const foundProduct = products.find((p) => p.id === value)
+            if (foundProduct) {
+                updatedProducts[index].size = foundProduct.size || ''
+            } else {
+                updatedProducts[index].size = ''
+            }
         }
+
         setPurchaseData((prev) => ({ ...prev, products: updatedProducts }))
         setErrors((prevErrors) => ({
             ...prevErrors,
@@ -217,17 +235,10 @@ export default function PurchaseAddModal({ onClose, onSave }) {
                                             />
                                         </div>
                                     </div>
-                                    <div className="form-group">
-                                        <div className="input-row">
-                                            <label>Größe:</label>
-                                            <input
-                                                type="text"
-                                                value={item.size}
-                                                onChange={(e) => handleProductChange(index, 'size', e.target.value)}
-                                                className="form-control"
-                                            />
-                                        </div>
-                                    </div>
+
+                                    {/* Das Eingabefeld für Größe entfällt nun, 
+                                        weil sie automatisch gesetzt wird. */}
+
                                     <div className="button-group">
                                         <button
                                             type="button"

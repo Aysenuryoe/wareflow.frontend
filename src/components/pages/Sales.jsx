@@ -9,6 +9,7 @@ export default function Sales() {
     const [currentSale, setCurrentSale] = useState(null)
     const [isAddModalOpen, setAddModalOpen] = useState(false)
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
+    const [products, setProducts] = useState([])
     const [successMessage, setSuccessMessage] = useState('') // Erfolgsmeldung State
 
     const fetchSales = async () => {
@@ -22,6 +23,22 @@ export default function Sales() {
             console.error('Error fetching sales:', err)
         }
     }
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('https://localhost:3001/api/product/all')
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`)
+                }
+                const productsData = await response.json()
+                setProducts(productsData)
+            } catch (err) {
+                console.error('Failed to load products:', err)
+            }
+        }
+        fetchProducts()
+    }, [])
 
     const handleAddSale = async (newSale) => {
         try {
@@ -101,13 +118,24 @@ export default function Sales() {
 
                             <div className="sales-card-body">
                                 <div className="sales-card-products">
-                                    {sale.products.map((product, index) => (
-                                        <div key={index} className="product-card">
-                                            <p>Name: {product.name}</p>
-                                            <p>Preis: {product.price.toFixed(2)}€</p>
-                                            <p>Menge: {product.quantity}</p>
-                                        </div>
-                                    ))}
+                                    {sale.products.map((saleProduct, index) => {
+                                        const matchingProduct = products.find((p) => p.id === saleProduct.productId)
+
+                                        const productName = matchingProduct
+                                            ? matchingProduct.name
+                                            : saleProduct.name || 'Unbekannt'
+                                        const productSize = matchingProduct ? matchingProduct.size : 'n/A'
+
+                                        return (
+                                            <div key={index} className="product-card">
+                                                <p>
+                                                    Name: {productName} {productSize && `(Größe: ${productSize})`}
+                                                </p>
+                                                <p>Preis: {saleProduct.price.toFixed(2)}€</p>
+                                                <p>Menge: {saleProduct.quantity}</p>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             </div>
                             <div className="sales-card-footer">

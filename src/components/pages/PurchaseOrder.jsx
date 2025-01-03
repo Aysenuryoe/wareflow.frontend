@@ -108,7 +108,7 @@ export default function PurchaseOrder() {
             })
 
             if (response.ok) {
-                setPurchaseOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId))
+                setPurchaseOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId))
                 setDeleteModalOpen(false)
                 setOrderToDelete(null)
             }
