@@ -1,0 +1,15 @@
+:root {
+    --primary-color: #3498db;
+    --accent-color: #2ecc71;
+    --sidebar-bg: #e8e8e8;
+    --sidebar-text: #000000;
+    --sidebar-hover-bg: #bbbbbb;
+    --header-bg: #ffffff;
+    --header-text: #333333;
+    --search-bg: #f0f2f5;
+    --search-icon: #888888;
+    --user-icon-color: #3498db;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    padding: 0;
+}

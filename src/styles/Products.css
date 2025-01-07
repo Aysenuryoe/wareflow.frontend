@@ -1,0 +1,41 @@
+.products-container {
+    padding: 5%;
+}
+
+.products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.products-title {
+    font-size: 2rem;
+    color: #333;
+}
+
+.add-product-button {
+    display: inline-block;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px ;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-product-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.add-product-button:active {
+    background-color: #3e8e41;
+    transform: translateY(0);
+}
+
+.add-product-button:focus {
+    outline: 2px solid #34a853;
+}

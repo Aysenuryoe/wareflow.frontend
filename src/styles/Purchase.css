@@ -1,0 +1,35 @@
+.purchase-order-container {
+    padding: 5%;
+}
+
+.purchase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.purchase-order-title {
+    font-size: 2rem;
+    color: #333;
+}
+
+.purchase-list {
+    list-style: none;
+}
+
+.add-purchase-button {
+    display: inline-block;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-purchase-button:hover {
+    background-color: #3e8e41;
+    transform: translateY(-2px);
+}
