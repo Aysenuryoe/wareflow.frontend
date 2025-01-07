@@ -117,7 +117,7 @@ export default function Return() {
 
     return (
         <div className="return-container">
-            <h2 className="return-title">Rückgabeformular</h2>
+            <h1 className="return-title">Rückgabeformular</h1>
             {loadingProducts ? (
                 <p>Produkte werden geladen...</p>
             ) : fetchError ? (

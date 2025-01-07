@@ -7,7 +7,7 @@
     justify-content: center;
     padding: 10px;
     border-radius: 8px;
-    z-index: 1000;
+
 }
 
 .pagination {
@@ -19,7 +19,7 @@
 
 .pagination button {
     padding: 0.5rem 1rem;
-    background-color: #2563eb;
+    background-color: #14429d;
     color: white;
     border: none;
     border-radius: 4px;
@@ -29,7 +29,7 @@
 }
 
 .pagination button:hover {
-    background-color: #1e40af;
+    background-color: #0f347f;
 }
 
 .pagination button:disabled {

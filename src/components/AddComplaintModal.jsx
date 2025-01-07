@@ -76,86 +76,97 @@ function AddComplaintModal({ isOpen, onClose, onAdd }) {
                 ) : (
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Referenztyp:</label>
-                            <select
-                                className="form-control"
-                                name="referenceType"
-                                value={formData.referenceType}
-                                onChange={handleInputChange}
-                                required
-                            >
-                                <option value="GoodsReceipt">Wareneingang</option>
-                                <option value="Sales">Verkauf</option>
-                            </select>
+                            <div className="input-row">
+                                <label>Referenztyp:</label>
+
+                                <select
+                                    className="form-control"
+                                    name="referenceType"
+                                    value={formData.referenceType}
+                                    onChange={handleInputChange}
+                                    required
+                                >
+                                    <option value="GoodsReceipt">Wareneingang</option>
+                                    <option value="Sales">Verkauf</option>
+                                </select>
+                            </div>
                         </div>
 
                         {formData.products.map((product, index) => (
                             <div key={index} className="product-group">
                                 <div className="form-group">
-                                    <label>Produkt:</label>
-                                    <select
-                                        className="form-control"
-                                        value={product.productId}
-                                        onChange={(e) => handleProductChange(index, 'productId', e.target.value)}
-                                        required
-                                    >
-                                        <option value="">Produkt auswählen</option>
-                                        {products.map((prod) => (
-                                            <option key={prod.id} value={prod.id}>
-                                                {prod.name} - {prod.size}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <div className="input-row">
+                                        <label>Produkt:</label>
+                                        <select
+                                            className="form-control"
+                                            value={product.productId}
+                                            onChange={(e) => handleProductChange(index, 'productId', e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Produkt auswählen</option>
+                                            {products.map((prod) => (
+                                                <option key={prod.id} value={prod.id}>
+                                                    {prod.name} - {prod.size}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                                 <div className="form-group">
-                                    <label>Menge:</label>
-                                    <input
-                                        type="number"
-                                        value={product.quantity}
-                                        onChange={(e) => handleProductChange(index, 'quantity', e.target.value)}
-                                        min="1"
-                                        required
-                                        className="form-control"
-                                    />
+                                    <div className="input-row">
+                                        <label>Menge:</label>
+                                        <input
+                                            type="number"
+                                            value={product.quantity}
+                                            onChange={(e) => handleProductChange(index, 'quantity', e.target.value)}
+                                            min="1"
+                                            required
+                                            className="form-control"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="form-group">
-                                    <label>Grund:</label>
-                                    <input
-                                        type="text"
-                                        value={product.reason}
-                                        onChange={(e) => handleProductChange(index, 'reason', e.target.value)}
-                                        required
-                                        className="form-control"
-                                    />
+                                    <div className="input-row">
+                                        <label>Grund:</label>
+                                        <input
+                                            type="text"
+                                            value={product.reason}
+                                            onChange={(e) => handleProductChange(index, 'reason', e.target.value)}
+                                            required
+                                            className="form-control"
+                                        />
+                                    </div>
                                 </div>
-                                {formData.products.length > 1 && (
+
+                                <div className="button-group">
                                     <button
                                         type="button"
                                         onClick={() => removeProductField(index)}
-                                        className="remove-btn"
-                                    >
+                                        className="remove-btn">
                                         Entfernen
                                     </button>
-                                )}
+
+                                    <button type="button" onClick={addProductField} className="add-product-btn">
+                                        Produkt hinzufügen
+                                    </button>
+                                </div>
                             </div>
                         ))}
 
-                        <button type="button" onClick={addProductField} className="add-product-btn">
-                            Weiteres Produkt hinzufügen
-                        </button>
-
                         <div className="form-group">
-                            <label>Status:</label>
-                            <select
-                                className="form-control"
-                                name="status"
-                                value={formData.status}
-                                onChange={handleInputChange}
-                                required
-                            >
-                                <option value="Open">Offen</option>
-                                <option value="Resolved">Gelöst</option>
-                            </select>
+                            <div className="input-row">
+                                <label>Status:</label>
+                                <select
+                                    className="form-control"
+                                    name="status"
+                                    value={formData.status}
+                                    onChange={handleInputChange}
+                                    required
+                                >
+                                    <option value="Open">Offen</option>
+                                    <option value="Resolved">Gelöst</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div className="button-group">

@@ -16,7 +16,7 @@ export default function PurchaseOrder() {
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false)
     const [orderToDelete, setOrderToDelete] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
-    const ordersPerPage = 7
+    const ordersPerPage = 3
 
     const indexOfLastOrder = currentPage * ordersPerPage
     const indexOfFirstOrder = indexOfLastOrder - ordersPerPage

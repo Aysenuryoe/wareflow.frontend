@@ -18,7 +18,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 20px;
-    padding: 20px;
+    
     overflow-y: scroll;
     max-height: 600px;
 }
@@ -93,13 +93,14 @@
 }
 
 .sales-card-footer {
-    background-color: #1f2d3b;
+    background-color: #14429d;
     text-align: center;
     padding: 10px;
     color: #fff;
     font-size: 1rem;
     font-weight: bold;
     border-top: 1px solid #ccc;
+   border-radius: 7px;
 }
 
 .add-sale-btn {

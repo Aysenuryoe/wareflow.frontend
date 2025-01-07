@@ -18,8 +18,8 @@ body {
 }
 
 .introduction-header .highlight {
-    color: #3b82f6;
-    font-weight: bold;
+    color: #14429d;
+    font-style: italic;
 }
 
 .introduction-header p {
@@ -62,7 +62,7 @@ body {
 
 .feature-icon {
     font-size: 2.5rem;
-    color: #3b82f6;
+    color: #14429d;
     margin-bottom: 1rem;
 }
 
